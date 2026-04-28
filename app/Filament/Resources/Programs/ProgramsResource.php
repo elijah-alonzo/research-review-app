@@ -8,6 +8,7 @@ use App\Filament\Resources\Programs\Pages\ListPrograms;
 use App\Filament\Resources\Programs\Schemas\ProgramsForm;
 use App\Filament\Resources\Programs\Tables\ProgramsTable;
 use App\Models\Program;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,7 +19,9 @@ class ProgramsResource extends Resource
 {
     protected static ?string $model = Program::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Academic Management';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
     public static function form(Schema $schema): Schema
     {

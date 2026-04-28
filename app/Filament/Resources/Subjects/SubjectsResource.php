@@ -8,6 +8,7 @@ use App\Filament\Resources\Subjects\Pages\ListSubjects;
 use App\Filament\Resources\Subjects\Schemas\SubjectsForm;
 use App\Filament\Resources\Subjects\Tables\SubjectsTable;
 use App\Models\Subject;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,7 +19,9 @@ class SubjectsResource extends Resource
 {
     protected static ?string $model = Subject::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static UnitEnum|string|null $navigationGroup = 'Academic Management';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookOpen;
 
     public static function form(Schema $schema): Schema
     {
@@ -30,6 +33,16 @@ class SubjectsResource extends Resource
         return SubjectsTable::configure($table);
     }
 
+    public static function getModelLabel(): string
+    {
+        return 'Course';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Courses';
+    }
+    
     public static function getRelations(): array
     {
         return [

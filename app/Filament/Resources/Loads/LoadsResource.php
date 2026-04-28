@@ -18,7 +18,7 @@ class LoadsResource extends Resource
 {
     protected static ?string $model = Load::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookmarkSquare;
 
     public static function form(Schema $schema): Schema
     {
@@ -28,6 +28,16 @@ class LoadsResource extends Resource
     public static function table(Table $table): Table
     {
         return LoadsTable::configure($table);
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Class Load';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Class Loads';
     }
 
     public static function getRelations(): array

@@ -3,171 +3,42 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
-/* =====================
-   Primary Color Palette
-   ===================== */
 :root {
-    --primary-50: #036635;
-    --primary-100: #036635;
-    --primary-200: #036635;
-    --primary-300: #036635;
-    --primary-400: #036635;
-    --primary-500: #036635;
-    --primary-600: #036635;
-    --primary-700: #036635;
-    --primary-800: #036635;
+    --brand-green: #03522a;
+    --brand-yellow: #facc15;
+
+    --primary-50: #03522a;
+    --primary-100: #03522a;
+    --primary-200: #03522a;
+    --primary-300: #03522a;
+    --primary-400: #03522a;
+    --primary-500: #03522a;
+    --primary-600: #03522a;
+    --primary-700: #03522a;
+    --primary-800: #03522a;
     --primary-900: #ffffff;
-    --primary-950: #036635;
+    --primary-950: #03522a;
 }
 
-/* =====================
-   Global Body & Topbar
-   ===================== */
-.fi-body {
-    background-color: #ffffff !important;
+.fi-topbar {
+    background-color: #03522a;
 }
 
-/* =====================
-   Sidebar Base
-   ===================== */
-.fi-sidebar {
-    background-color: #ffffff !important;
-    border-right: 1px solid rgb(229 231 235) !important;
-}
-/* =====================
-   Sidebar Header
-   ===================== */
-.fi-sidebar-header,
-.fi-sidebar-header * {
-    color: #ffffff !important;
+.fi-sidebar-nav {
+    background-color: #ffffff;
+    border-right: 1px solid #e0e0e1;
 }
 
-/* =====================
-   Sidebar Brand Logo
-   ===================== */
-:not(.fi-body-has-topbar) .fi-sidebar-header {
-    height: auto !important;
-    min-height: 8.5rem;
-    padding: 1.25rem 1.25rem 0.25rem !important;
-}
-
-:not(.fi-body-has-topbar) .fi-sidebar-header-logo-ctn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-}
-
-:not(.fi-body-has-topbar) .fi-sidebar-header .fi-logo {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100%;
-    justify-content: center;
-}
-
-:not(.fi-body-has-topbar) .fi-sidebar-header .fi-logo img {
-    max-height: 6.5rem;
-    width: auto;
-    object-fit: contain;
-}
-
-:not(.fi-body-has-topbar) .fi-sidebar-nav {
-    padding-top: 1.25rem !important;
-}
-
-/* =====================
-   Sidebar Navigation Items
-   ===================== */
-.fi-sidebar-item-btn {
-    border-radius: 0.5rem !important;
-    transition:
-        background-color 0.15s ease,
-        color 0.15s ease !important;
-}
-
-.fi-sidebar-item-btn:hover {
-    background-color: #036635 !important;
-}
-
-.fi-sidebar-item-btn:hover .fi-sidebar-item-label {
-    color: #ffffff !important;
-}
-
-.fi-sidebar-item-btn:hover > .fi-icon {
-    color: #ffffff !important;
-}
-
-.fi-sidebar-item-label {
-    color: #036635 !important;
-}
-
-.fi-sidebar-item-btn > .fi-icon {
-    color: #036635 !important;
-}
-
-/* =====================
-   Sidebar Active State
-   ===================== */
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-    background-color: #036635 !important;
-    border-radius: 0.5rem !important;
+    background-color: var(--brand-green);
 }
 
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
-    background-color: #025a2e !important;
-}
-
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label {
-    color: #ffffff !important;
-}
-
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
-    color: #ffffff !important;
-}
-
-/* =====================
-   Table
-   ===================== */
-.fi-ta-ctn {
-    background-color: rgb(255 255 255) !important;
-    border-radius: 0.5rem !important;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
-    border: 1px solid rgb(229 231 235) !important;
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon {
+    color: var(--brand-yellow);
 }
 
 .fi-ta-header-toolbar {
-    background-color: #036635 !important;
-    border-radius: 0.5rem 0.5rem 0 0 !important;
-    padding: 0.75rem 1rem !important;
-}
-
-.fi-ta-header-toolbar * {
-    color: #ffffff !important;
-}
-
-/* =====================
-   Form Section
-   ===================== */
-.fi-section {
-    border-radius: 0.5rem !important;
-}
-
-.fi-section-header {
-    background-color: #036635 !important;
-    border-radius: 0.5rem 0.5rem 0 0 !important;
-    padding: 1rem 1.5rem !important;
-}
-
-.fi-section-header-heading {
-    color: #ffffff !important;
-}
-
-.fi-section-header-description {
-    color: #ffffff !important;
-    opacity: 0.85 !important;
-}
-
-.fi-simple-header-heading {
-    display: none !important;
+    background-color: #03522a;
+    border-radius: 0.5rem 0.5rem 0 0;
 }
