@@ -16,22 +16,24 @@ class SubjectsTable
     {
         return $table
             ->columns([
+                TextColumn::make('code')
+                    ->label('Course Code')
+                    ->searchable()
+                    ->badge()
+                    ->color('success'),
+                TextColumn::make('name')
+                    ->label('Course')
+                    ->searchable(),
                 TextColumn::make('program.name')
                     ->label('Program')
                     ->searchable(),
-                TextColumn::make('code')
-                    ->searchable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('description')
-                    ->limit(50)
-                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label('Date Created')
                     ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),

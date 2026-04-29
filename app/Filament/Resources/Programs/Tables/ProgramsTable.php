@@ -17,7 +17,9 @@ class ProgramsTable
         return $table
             ->columns([
                 TextColumn::make('code')
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->color('success'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('subjects_count')

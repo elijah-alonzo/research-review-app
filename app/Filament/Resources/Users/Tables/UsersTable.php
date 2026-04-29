@@ -21,6 +21,7 @@ class UsersTable
             ->columns([
                 ImageColumn::make('avatar')
                     ->circular()
+                    ->label(' ')
                     ->imageSize(40)
                     ->grow(false)
                     ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=0F172A&color=FFFFFF'),

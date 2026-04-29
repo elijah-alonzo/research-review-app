@@ -18,12 +18,14 @@ class LoadsForm
             ->components([
                 Section::make('Load Details')
                     ->columnSpanFull()
+                    ->description('These are the details for the teaching load assignment.')
                     ->schema([
                         Select::make('program_id')
                             ->label('Program')
                             ->relationship('program', 'name')
                             ->searchable()
                             ->preload()
+                            ->prefixIcon('heroicon-m-academic-cap')
                             ->required()
                             ->live()
                             ->afterStateUpdated(function ($set): void {
@@ -38,6 +40,7 @@ class LoadsForm
                                 ->pluck('name', 'id'))
                             ->searchable()
                             ->preload()
+                            ->prefixIcon('heroicon-m-book-open')
                             ->required()
                             ->disabled(fn ($get) => blank($get('program_id'))),
 
@@ -48,12 +51,14 @@ class LoadsForm
                                 '2nd Term' => '2nd Term',
                                 '3rd Term' => '3rd Term',
                             ])
+                            ->prefixIcon('heroicon-m-calendar')
                             ->required(),
 
                         Select::make('academic_year')
                             ->label('Academic Year')
                             ->options(AcademicYear::options())
                             ->default(AcademicYear::current()->value)
+                            ->prefixIcon('heroicon-m-calendar-days')
                             ->required(),
 
                         Select::make('user_id')
@@ -61,11 +66,14 @@ class LoadsForm
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload()
+                            ->prefixIcon('heroicon-m-user')
                             ->required(),
 
                         Toggle::make('is_submitted')
                             ->label('Submitted')
-                            ->default(false),
+                            ->default(false)
+                            ->onIcon('heroicon-m-check-circle')
+                            ->offIcon('heroicon-m-x-circle'),
 
                         Select::make('submission_status')
                             ->label('Submission Status')
@@ -75,13 +83,16 @@ class LoadsForm
                                 'late' => 'Late',
                             ])
                             ->default('pending')
+                            ->prefixIcon('heroicon-m-flag')
                             ->required(),
 
                         DateTimePicker::make('submission_deadline')
                             ->label('Submission Deadline')
+                            ->prefixIcon('heroicon-m-calendar-days')
+                            ->native(false)
                             ->required(),
                     ])
-                    ->columns(1),
+                    ->columns(2),
             ]);
     }
 }

@@ -21,8 +21,10 @@ class SubjectsRelationManager extends RelationManager
             ->description('These are the courses offered under this program.')
             ->columns([
                 TextColumn::make('code')
+                    ->label('Course Code')
                     ->searchable(),
                 TextColumn::make('name')
+                    ->label('Course')
                     ->searchable(),
                 TextColumn::make('description')
                     ->limit(50)

@@ -16,10 +16,11 @@ class UserForm
             ->components([
                 Section::make('User Information')
                     ->columnSpanFull()
+                    ->description('These are the details for the user account.')
+                    ->columns(2)
                     ->schema([
                         FileUpload::make('avatar')
-                            ->label('Avatar')
-                            ->avatar()
+                            ->label('Profile Picture')
                             ->image()
                             ->disk('public')
                             ->directory('avatars')
@@ -27,23 +28,21 @@ class UserForm
 
                         TextInput::make('name')
                             ->required()
+                            ->prefixIcon('heroicon-m-user')
                             ->placeholder('Enter full name'),
 
                         TextInput::make('email')
                             ->label('Email address')
                             ->email()
                             ->required()
+                            ->prefixIcon('heroicon-m-envelope')
                             ->placeholder('Enter email address'),
 
                         TextInput::make('contact_number')
                             ->label('Contact Number')
                             ->tel()
+                            ->prefixIcon('heroicon-m-phone')
                             ->placeholder('Enter contact number'),
-
-                        TextInput::make('password')
-                            ->password()
-                            ->required()
-                            ->placeholder('Enter password'),
 
                         Select::make('role')
                             ->label('Role')
@@ -51,10 +50,16 @@ class UserForm
                                 'dean' => 'Dean (Admin)',
                                 'faculty' => 'Faculty',
                             ])
+                            ->prefixIcon('heroicon-m-shield-check')
                             ->required()
                             ->default('faculty'),
+                            
+                        TextInput::make('password')
+                            ->password()
+                            ->required()
+                            ->prefixIcon('heroicon-m-key')
+                            ->placeholder('Enter password'),
                     ])
-                    ->columns(1),
             ]);
     }
 }

@@ -12,7 +12,7 @@ class LoadPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->isDean() || $user->isFaculty();
     }
 
     /**

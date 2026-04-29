@@ -63,7 +63,7 @@ class LoadsTable
                         ->label('Submitted')
                         ->badge()
                         ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
-                        ->color(fn (bool $state): string => $state ? 'success' : 'gray'),
+                        ->color(fn (bool $state): string => $state ? 'success' : 'danger'),
                     TextColumn::make('submission_status')
                         ->label('Status')
                         ->badge()

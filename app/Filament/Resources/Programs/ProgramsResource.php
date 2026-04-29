@@ -16,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramsResource extends Resource
 {
@@ -28,6 +29,18 @@ class ProgramsResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return ProgramsForm::configure($schema);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = Auth::user();
+
+        return $user?->isDean() ?? false;
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::canViewAny();
     }
 
     public static function table(Table $table): Table

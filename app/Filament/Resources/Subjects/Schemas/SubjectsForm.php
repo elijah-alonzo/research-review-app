@@ -17,22 +17,26 @@ class SubjectsForm
             ->components([
                 Section::make('Subject Information')
                     ->columnSpanFull()
+                    ->description('These are the details and information for the courses offered.')
                     ->schema([
                         Select::make('program_id')
                             ->label('Program')
                             ->relationship('program', 'name')
                             ->searchable()
                             ->preload()
+                            ->prefixIcon('heroicon-m-academic-cap')
                             ->required(),
 
                         TextInput::make('code')
                             ->required()
                             ->maxLength(255)
+                            ->prefixIcon('heroicon-m-tag')
                             ->placeholder('Enter subject code (e.g. GS-501)'),
 
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255)
+                            ->prefixIcon('heroicon-m-bookmark-square')
                             ->placeholder('Enter subject name'),
 
                         Textarea::make('description')
@@ -43,7 +47,9 @@ class SubjectsForm
 
                         Toggle::make('is_active')
                             ->label('Active')
-                            ->default(true),
+                            ->default(true)
+                            ->onIcon('heroicon-m-check-circle')
+                            ->offIcon('heroicon-m-x-circle'),
                     ])
                     ->columns(2),
             ]);
