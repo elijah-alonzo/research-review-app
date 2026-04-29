@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources\Loads\Tables;
 
+use App\Enums\AcademicYear;
+use App\Models\Load;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ColumnGroup;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class LoadsTable
 {
@@ -16,31 +20,66 @@ class LoadsTable
     {
         return $table
             ->columns([
-                TextColumn::make('program.name')
-                    ->label('Program')
-                    ->searchable(),
-                TextColumn::make('subject.name')
-                    ->label('Subject')
-                    ->searchable(),
-                TextColumn::make('term'),
-                TextColumn::make('user.name')
-                    ->label('Faculty')
-                    ->searchable(),
-                IconColumn::make('is_submitted')
-                    ->label('Submitted')
-                    ->boolean(),
-                TextColumn::make('submission_status')
-                    ->label('Status')
-                    ->badge()
-                    ->color('info'),
-                TextColumn::make('submission_deadline')
-                    ->label('Deadline')
-                    ->dateTime(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ColumnGroup::make('Faculty', [
+                    ImageColumn::make('user.avatar')
+                        ->label('Picture')
+                        ->circular()
+                        ->imageSize(40)
+                        ->getStateUsing(function (Load $record) {
+                            $name = $record->user?->name ?? 'Faculty';
+                            $avatar = $record->user?->avatar;
+
+                            return $avatar
+                                ? (str_starts_with($avatar, 'http')
+                                    ? $avatar
+                                    : asset('storage/'.$avatar))
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=0F172A&color=FFFFFF';
+                        }),
+                    TextColumn::make('user.name')
+                        ->label('Username')
+                        ->weight('medium')
+                        ->placeholder('Unassigned')
+                        ->searchable(query: function (Builder $query, string $search) {
+                            $query->whereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$search}%"));
+                        }),
+                ]),
+                ColumnGroup::make('Course Information', [
+                    TextColumn::make('program.name')
+                        ->label('Program')
+                        ->searchable(),
+                    TextColumn::make('subject.name')
+                        ->label('Subject')
+                        ->searchable(),
+                    TextColumn::make('academic_year')
+                        ->label('Academic Year')
+                        ->formatStateUsing(fn (AcademicYear|string|null $state): string => $state instanceof AcademicYear ? $state->value : (string) $state)
+                        ->badge()
+                        ->color('gray'),
+                    TextColumn::make('term')
+                        ->searchable(),
+                ]),
+                ColumnGroup::make('Submission Status', [
+                    TextColumn::make('is_submitted')
+                        ->label('Submitted')
+                        ->badge()
+                        ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No')
+                        ->color(fn (bool $state): string => $state ? 'success' : 'gray'),
+                    TextColumn::make('submission_status')
+                        ->label('Status')
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'submitted' => 'success',
+                            'late' => 'danger',
+                            default => 'gray',
+                        }),
+                    TextColumn::make('submission_deadline')
+                        ->label('Deadline')
+                        ->dateTime(),
+                ]),
                 TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

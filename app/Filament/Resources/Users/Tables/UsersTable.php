@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -16,10 +19,21 @@ class UsersTable
     {
         return $table
             ->columns([
+                ImageColumn::make('avatar')
+                    ->circular()
+                    ->imageSize(40)
+                    ->grow(false)
+                    ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=0F172A&color=FFFFFF'),
                 TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('contact_number')
+                    ->label('Contact Number')
+                    ->icon('heroicon-m-phone')
+                    ->placeholder('No contact number'),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email Address')
+                    ->icon('heroicon-m-envelope')
                     ->searchable(),
                 BadgeColumn::make('role')
                     ->label('Role')
@@ -28,13 +42,10 @@ class UsersTable
                         'info' => 'faculty',
                     ])
                     ->formatStateUsing(fn ($state) => ucfirst($state)),
-                TextColumn::make('email_verified_at')
+                TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

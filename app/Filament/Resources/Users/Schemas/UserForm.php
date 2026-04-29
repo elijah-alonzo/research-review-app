@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -16,6 +17,14 @@ class UserForm
                 Section::make('User Information')
                     ->columnSpanFull()
                     ->schema([
+                        FileUpload::make('avatar')
+                            ->label('Avatar')
+                            ->avatar()
+                            ->image()
+                            ->disk('public')
+                            ->directory('avatars')
+                            ->columnSpanFull(),
+
                         TextInput::make('name')
                             ->required()
                             ->placeholder('Enter full name'),
@@ -25,6 +34,11 @@ class UserForm
                             ->email()
                             ->required()
                             ->placeholder('Enter email address'),
+
+                        TextInput::make('contact_number')
+                            ->label('Contact Number')
+                            ->tel()
+                            ->placeholder('Enter contact number'),
 
                         TextInput::make('password')
                             ->password()

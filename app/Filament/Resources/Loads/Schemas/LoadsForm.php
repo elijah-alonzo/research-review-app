@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Loads\Schemas;
 
+use App\Enums\AcademicYear;
 use App\Models\Subject;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -47,6 +48,12 @@ class LoadsForm
                                 '2nd Term' => '2nd Term',
                                 '3rd Term' => '3rd Term',
                             ])
+                            ->required(),
+
+                        Select::make('academic_year')
+                            ->label('Academic Year')
+                            ->options(AcademicYear::options())
+                            ->default(AcademicYear::current()->value)
                             ->required(),
 
                         Select::make('user_id')

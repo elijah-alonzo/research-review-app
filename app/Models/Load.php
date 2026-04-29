@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AcademicYear;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'program_id',
     'subject_id',
+    'academic_year',
     'term',
     'user_id',
     'is_submitted',
@@ -35,6 +37,7 @@ class Load extends Model
     protected function casts(): array
     {
         return [
+            'academic_year' => AcademicYear::class,
             'is_submitted' => 'boolean',
             'submission_deadline' => 'datetime',
         ];
