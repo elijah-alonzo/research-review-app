@@ -29,8 +29,29 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => 'faculty',
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Indicate that the user is a dean (admin).
+     */
+    public function dean(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'dean',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is faculty.
+     */
+    public function faculty(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'faculty',
+        ]);
     }
 
     /**

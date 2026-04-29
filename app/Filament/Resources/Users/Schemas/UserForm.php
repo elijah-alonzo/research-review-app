@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -29,6 +30,15 @@ class UserForm
                             ->password()
                             ->required()
                             ->placeholder('Enter password'),
+
+                        Select::make('role')
+                            ->label('Role')
+                            ->options([
+                                'dean' => 'Dean (Admin)',
+                                'faculty' => 'Faculty',
+                            ])
+                            ->required()
+                            ->default('faculty'),
                     ])
                     ->columns(1),
             ]);

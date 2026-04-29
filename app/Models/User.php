@@ -11,12 +11,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public function isDean(): bool
+    {
+        return $this->role === 'dean';
+    }
+
+    public function isFaculty(): bool
+    {
+        return $this->role === 'faculty';
+    }
 
     public function loads(): HasMany
     {

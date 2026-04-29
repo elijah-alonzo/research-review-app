@@ -16,9 +16,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create a dean (admin) user
         User::firstOrCreate(
-            ['email' => 'admin@example.com'],
-            ['name' => 'Admin User', 'password' => Hash::make('password')]
+            ['email' => 'dean@example.com'],
+            [
+                'name' => 'Dean User',
+                'password' => Hash::make('password'),
+                'role' => 'dean',
+            ]
+        );
+
+        // Create a faculty user
+        User::firstOrCreate(
+            ['email' => 'faculty@example.com'],
+            [
+                'name' => 'Faculty User',
+                'password' => Hash::make('password'),
+                'role' => 'faculty',
+            ]
         );
     }
 }

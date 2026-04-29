@@ -6,6 +6,7 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -20,6 +21,13 @@ class UsersTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
+                BadgeColumn::make('role')
+                    ->label('Role')
+                    ->colors([
+                        'danger' => 'dean',
+                        'info' => 'faculty',
+                    ])
+                    ->formatStateUsing(fn ($state) => ucfirst($state)),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
