@@ -15,6 +15,7 @@ class ProgramsForm
         return $schema
             ->components([
                 Section::make('Program Information')
+                    ->description('Program details and settings.')
                     ->columnSpanFull()
                     ->schema([
                         TextInput::make('code')

@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Programs;
 
+use App\Filament\Resources\Programs\Pages\ViewPrograms;
 use App\Filament\Resources\Programs\Pages\CreatePrograms;
 use App\Filament\Resources\Programs\Pages\EditPrograms;
 use App\Filament\Resources\Programs\Pages\ListPrograms;
+use App\Filament\Resources\Programs\RelationManagers\SubjectsRelationManager;
 use App\Filament\Resources\Programs\Schemas\ProgramsForm;
 use App\Filament\Resources\Programs\Tables\ProgramsTable;
 use App\Models\Program;
@@ -36,7 +38,7 @@ class ProgramsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SubjectsRelationManager::class,
         ];
     }
 
@@ -46,6 +48,7 @@ class ProgramsResource extends Resource
             'index' => ListPrograms::route('/'),
             'create' => CreatePrograms::route('/create'),
             'edit' => EditPrograms::route('/{record}/edit'),
+            'view' => ViewPrograms::route('/{record}'),
         ];
     }
 }

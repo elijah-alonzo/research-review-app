@@ -20,6 +20,11 @@ class ProgramsTable
                     ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('subjects_count')
+                    ->label('Courses')
+                    ->counts('subjects')
+                    ->badge()
+                    ->color('warning'),
                 TextColumn::make('description')
                     ->limit(50)
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -27,8 +32,9 @@ class ProgramsTable
                     ->label('Active')
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label('Date Created')
                     ->dateTime()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),

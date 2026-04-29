@@ -54,14 +54,26 @@
     color: var(--brand-yellow);
 }
 
-.fi-ta-header-toolbar {
+.fi-ta-header {
     background-color: #03522a;
     border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.fi-ta-header-heading {
+    color: var(--brand-yellow);
+}
+
+.fi-ta-header-description {
+    color: #ffffff;
 }
 
 .fi-section-header {
     background-color: #03522a;
     border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.fi-section-header-description {
+    color: #ffffff;
 }
 
 .fi-section-header-heading {
