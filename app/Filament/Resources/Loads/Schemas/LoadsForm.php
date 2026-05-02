@@ -69,12 +69,6 @@ class LoadsForm
                             ->prefixIcon('heroicon-m-user')
                             ->required(),
 
-                        Toggle::make('is_submitted')
-                            ->label('Submitted')
-                            ->default(false)
-                            ->onIcon('heroicon-m-check-circle')
-                            ->offIcon('heroicon-m-x-circle'),
-
                         Select::make('submission_status')
                             ->label('Submission Status')
                             ->options([

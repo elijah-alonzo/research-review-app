@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'academic_year',
     'term',
     'user_id',
-    'is_submitted',
     'submission_status',
     'submission_deadline',
 ])]
@@ -38,7 +37,6 @@ class Load extends Model
     {
         return [
             'academic_year' => AcademicYear::class,
-            'is_submitted' => 'boolean',
             'submission_deadline' => 'datetime',
         ];
     }
