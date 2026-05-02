@@ -15,6 +15,8 @@ class SubjectsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Offered Courses')
+            ->description('Detailed listing of courses available in the university’s graduate programs.')
             ->columns([
                 TextColumn::make('code')
                     ->label('Course Code')

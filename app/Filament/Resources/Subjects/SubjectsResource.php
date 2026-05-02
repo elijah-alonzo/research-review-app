@@ -8,13 +8,13 @@ use App\Filament\Resources\Subjects\Pages\ListSubjects;
 use App\Filament\Resources\Subjects\Schemas\SubjectsForm;
 use App\Filament\Resources\Subjects\Tables\SubjectsTable;
 use App\Models\Subject;
-use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class SubjectsResource extends Resource
 {
@@ -55,7 +55,7 @@ class SubjectsResource extends Resource
     {
         return 'Courses';
     }
-    
+
     public static function getRelations(): array
     {
         return [

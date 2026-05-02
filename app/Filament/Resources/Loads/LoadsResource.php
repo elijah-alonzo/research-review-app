@@ -14,12 +14,17 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class LoadsResource extends Resource
 {
     protected static ?string $model = Load::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookmarkSquare;
+
+    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
+
+    protected static ?string $navigationLabel = 'Faculty Loads';
 
     public static function form(Schema $schema): Schema
     {
@@ -45,12 +50,12 @@ class LoadsResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Class Load';
+        return 'Faculty Load';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Class Loads';
+        return 'Faculty Loads';
     }
 
     public static function getRelations(): array

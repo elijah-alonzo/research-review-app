@@ -37,6 +37,7 @@ class AppPanelProvider extends PanelProvider
             ->navigationGroups([
                 'User Management',
                 'Submission Management',
+                'Grading Sheet Management',
                 'Academic Management',
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')

@@ -10,7 +10,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -18,13 +17,15 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Users')
+            ->description('Overview of the users present in the system.')
             ->columns([
                 ImageColumn::make('avatar')
                     ->circular()
                     ->label(' ')
                     ->imageSize(40)
                     ->grow(false)
-                    ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=0F172A&color=FFFFFF'),
+                    ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name='.urlencode($record->name).'&background=0F172A&color=FFFFFF'),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),

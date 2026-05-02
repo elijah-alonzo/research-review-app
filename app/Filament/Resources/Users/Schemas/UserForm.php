@@ -53,13 +53,13 @@ class UserForm
                             ->prefixIcon('heroicon-m-shield-check')
                             ->required()
                             ->default('faculty'),
-                            
+
                         TextInput::make('password')
                             ->password()
                             ->required()
                             ->prefixIcon('heroicon-m-key')
                             ->placeholder('Enter password'),
-                    ])
+                    ]),
             ]);
     }
 }

@@ -15,6 +15,8 @@ class ProgramsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Graduate School Programs')
+            ->description('Overview of the university’s graduate programs, including key details and course offerings.')
             ->columns([
                 TextColumn::make('code')
                     ->searchable()

@@ -33,7 +33,7 @@ class LoadsTable
                                 ? (str_starts_with($avatar, 'http')
                                     ? $avatar
                                     : asset('storage/'.$avatar))
-                                : 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=0F172A&color=FFFFFF';
+                                : 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=0F172A&color=FFFFFF';
                         }),
                     TextColumn::make('user.name')
                         ->label('Username')

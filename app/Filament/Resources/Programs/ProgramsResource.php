@@ -2,21 +2,21 @@
 
 namespace App\Filament\Resources\Programs;
 
-use App\Filament\Resources\Programs\Pages\ViewPrograms;
 use App\Filament\Resources\Programs\Pages\CreatePrograms;
 use App\Filament\Resources\Programs\Pages\EditPrograms;
 use App\Filament\Resources\Programs\Pages\ListPrograms;
+use App\Filament\Resources\Programs\Pages\ViewPrograms;
 use App\Filament\Resources\Programs\RelationManagers\SubjectsRelationManager;
 use App\Filament\Resources\Programs\Schemas\ProgramsForm;
 use App\Filament\Resources\Programs\Tables\ProgramsTable;
 use App\Models\Program;
-use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class ProgramsResource extends Resource
 {
