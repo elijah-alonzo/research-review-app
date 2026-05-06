@@ -19,15 +19,7 @@ class LoadPolicy
 
     public function view(AuthUser $authUser, Load $load): bool
     {
-        if (! $authUser->can('View:Load')) {
-            return false;
-        }
-
-        if ($authUser->can('ViewAny:Load')) {
-            return true;
-        }
-
-        return $load->user_id === $authUser->id;
+        return $authUser->can('View:Load');
     }
 
     public function create(AuthUser $authUser): bool
@@ -37,28 +29,12 @@ class LoadPolicy
 
     public function update(AuthUser $authUser, Load $load): bool
     {
-        if (! $authUser->can('Update:Load')) {
-            return false;
-        }
-
-        if ($authUser->can('ViewAny:Load')) {
-            return true;
-        }
-
-        return $load->user_id === $authUser->id;
+        return $authUser->can('Update:Load');
     }
 
     public function delete(AuthUser $authUser, Load $load): bool
     {
-        if ($authUser->can('DeleteAny:Load')) {
-            return true;
-        }
-
-        if (! $authUser->can('Delete:Load')) {
-            return false;
-        }
-
-        return $load->user_id === $authUser->id;
+        return $authUser->can('Delete:Load');
     }
 
     public function deleteAny(AuthUser $authUser): bool

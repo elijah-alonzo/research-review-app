@@ -19,6 +19,8 @@ class LoadsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Faculty Teaching Loads')
+            ->description('A list of your teaching loads of all users in the system.')
             ->columns([
                 ColumnGroup::make('Faculty', [
                     ImageColumn::make('user.avatar')
