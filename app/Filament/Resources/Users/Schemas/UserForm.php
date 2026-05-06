@@ -68,6 +68,14 @@ class UserForm
                             ->prefixIcon('heroicon-m-shield-check')
                             ->required()
                             ->default('faculty')
+                            ->afterStateHydrated(function ($set, $record): void {
+                                $role = $record?->roles?->pluck('name')->first();
+
+                                if ($role) {
+                                    $set('role', $role);
+                                }
+                            })
+                            ->dehydrated(false)
                             ->columnSpan(3),
 
                         TextInput::make('password')

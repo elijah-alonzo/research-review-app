@@ -1,74 +1,99 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Load;
-use App\Models\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class LoadPolicy
 {
-    /**
-     * Determine whether the user can view any loads.
-     */
-    public function viewAny(User $user): bool
+    use HandlesAuthorization;
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->isDean() || $user->isFaculty();
+        return $authUser->can('ViewAny:Load');
     }
 
-    /**
-     * Determine whether the user can view the load.
-     */
-    public function view(User $user, Load $load): bool
+    public function view(AuthUser $authUser, Load $load): bool
     {
-        // Deans can view any load
-        if ($user->isDean()) {
-            return true;
+        if (! $authUser->can('View:Load')) {
+            return false;
         }
 
-        // Faculty can only view their own loads
-        return $user->id === $load->user_id;
+        if ($authUser->hasRole('faculty')) {
+            return $load->user_id === $authUser->id;
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can create loads.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        // Only deans can create loads
-        return $user->isDean();
+        return $authUser->can('Create:Load');
     }
 
-    /**
-     * Determine whether the user can update the load.
-     */
-    public function update(User $user, Load $load): bool
+    public function update(AuthUser $authUser, Load $load): bool
     {
-        // Only deans can update loads
-        return $user->isDean();
+        if (! $authUser->can('Update:Load')) {
+            return false;
+        }
+
+        if ($authUser->hasRole('faculty')) {
+            return $load->user_id === $authUser->id;
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can delete the load.
-     */
-    public function delete(User $user, Load $load): bool
+    public function delete(AuthUser $authUser, Load $load): bool
     {
-        // Only deans can delete loads
-        return $user->isDean();
+        if (! $authUser->can('Delete:Load')) {
+            return false;
+        }
+
+        if ($authUser->hasRole('faculty')) {
+            return $load->user_id === $authUser->id;
+        }
+
+        return true;
     }
 
-    /**
-     * Determine whether the user can restore the load.
-     */
-    public function restore(User $user, Load $load): bool
+    public function deleteAny(AuthUser $authUser): bool
     {
-        return $user->isDean();
+        return $authUser->can('DeleteAny:Load');
     }
 
-    /**
-     * Determine whether the user can permanently delete the load.
-     */
-    public function forceDelete(User $user, Load $load): bool
+    public function restore(AuthUser $authUser, Load $load): bool
     {
-        return $user->isDean();
+        return $authUser->can('Restore:Load');
     }
+
+    public function forceDelete(AuthUser $authUser, Load $load): bool
+    {
+        return $authUser->can('ForceDelete:Load');
+    }
+
+    public function forceDeleteAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('ForceDeleteAny:Load');
+    }
+
+    public function restoreAny(AuthUser $authUser): bool
+    {
+        return $authUser->can('RestoreAny:Load');
+    }
+
+    public function replicate(AuthUser $authUser, Load $load): bool
+    {
+        return $authUser->can('Replicate:Load');
+    }
+
+    public function reorder(AuthUser $authUser): bool
+    {
+        return $authUser->can('Reorder:Load');
+    }
+
 }

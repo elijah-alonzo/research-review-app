@@ -10,22 +10,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['avatar', 'first_name', 'middle_initial', 'last_name', 'email', 'contact_number', 'password', 'role'])]
+#[Fillable(['avatar', 'first_name', 'middle_initial', 'last_name', 'email', 'contact_number', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     public function isDean(): bool
     {
-        return $this->role === 'dean';
+        return $this->hasRole('dean');
     }
 
     public function isFaculty(): bool
     {
-        return $this->role === 'faculty';
+        return $this->hasRole('faculty');
     }
 
     public function getFullNameAttribute(): string

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('contact_number')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['dean', 'faculty'])->default('faculty');
             $table->rememberToken();
             $table->timestamps();
         });

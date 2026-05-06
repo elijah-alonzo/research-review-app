@@ -87,7 +87,7 @@ class LoadsTable
                     ViewAction::make(),
                     EditAction::make()->color('info'),
                     DeleteAction::make()
-                        ->visible(fn (): bool => auth()->user()?->isDean() ?? false),
+                        ->visible(fn (Load $record): bool => auth()->user()?->can('delete', $record) ?? false),
                 ])
                     ->iconButton()
                     ->icon('heroicon-m-ellipsis-vertical')

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,28 +17,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $deanRole = Role::firstOrCreate(['name' => 'dean']);
+        $facultyRole = Role::firstOrCreate(['name' => 'faculty']);
+
         // Create a dean (admin) user
-        User::firstOrCreate(
+        $dean = User::firstOrCreate(
             ['email' => 'dean@example.com'],
             [
                 'first_name' => 'Dean',
                 'middle_initial' => null,
                 'last_name' => 'User',
                 'password' => Hash::make('password'),
-                'role' => 'dean',
             ]
         );
+        $dean->syncRoles([$deanRole]);
 
         // Create a faculty user
-        User::firstOrCreate(
+        $faculty = User::firstOrCreate(
             ['email' => 'faculty@example.com'],
             [
                 'first_name' => 'Faculty',
                 'middle_initial' => null,
                 'last_name' => 'User',
                 'password' => Hash::make('password'),
-                'role' => 'faculty',
             ]
         );
+        $faculty->syncRoles([$facultyRole]);
     }
 }

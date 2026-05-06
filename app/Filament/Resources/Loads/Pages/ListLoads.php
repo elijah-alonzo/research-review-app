@@ -14,13 +14,10 @@ class ListLoads extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        if (Auth::user()?->isDean()) {
-            return [
-                CreateAction::make(),
-            ];
-        }
-
-        return [];
+        return [
+            CreateAction::make()
+                ->visible(fn (): bool => static::getResource()::canCreate()),
+        ];
     }
 
     protected function getTableQuery(): Builder
@@ -28,8 +25,7 @@ class ListLoads extends ListRecords
         $query = parent::getTableQuery();
         $user = Auth::user();
 
-        // Faculty users can only see their own loads
-        if ($user && $user->isFaculty()) {
+        if ($user && ! $user->can('ViewAny:Load')) {
             $query->where('user_id', $user->id);
         }
 

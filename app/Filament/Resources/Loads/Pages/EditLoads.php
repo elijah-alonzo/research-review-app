@@ -14,7 +14,7 @@ class EditLoads extends EditRecord
     {
         return [
             DeleteAction::make()
-                ->visible(fn (): bool => auth()->user()?->isDean() ?? false),
+                ->visible(fn (): bool => static::getResource()::canDelete($this->getRecord())),
         ];
     }
 

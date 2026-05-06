@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Loads\Schemas;
 
 use App\Enums\AcademicYear;
+use App\Models\Load;
 use App\Models\User;
 use App\Models\Subject;
 use Filament\Forms\Components\FileUpload;
@@ -14,6 +15,21 @@ use Illuminate\Support\Facades\Auth;
 
 class LoadsForm
 {
+    private static function canManageLoad(?Load $record): bool
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return false;
+        }
+
+        if ($record) {
+            return $user->can('update', $record);
+        }
+
+        return $user->can('create', Load::class);
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -28,8 +44,8 @@ class LoadsForm
                             ->searchable()
                             ->preload()
                             ->prefixIcon('heroicon-m-academic-cap')
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false)
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record))
                             ->live()
                             ->afterStateUpdated(function ($set): void {
                                 $set('subject_id', null);
@@ -44,8 +60,8 @@ class LoadsForm
                             ->searchable()
                             ->preload()
                             ->prefixIcon('heroicon-m-book-open')
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn ($get): bool => blank($get('program_id')) || (Auth::user()?->isFaculty() ?? false)),
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn ($get, ?Load $record): bool => blank($get('program_id')) || ! self::canManageLoad($record)),
 
                         Select::make('term')
                             ->label('Term')
@@ -55,16 +71,16 @@ class LoadsForm
                                 '3rd Term' => '3rd Term',
                             ])
                             ->prefixIcon('heroicon-m-calendar')
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
 
                         Select::make('academic_year')
                             ->label('Academic Year')
                             ->options(AcademicYear::options())
                             ->default(AcademicYear::current()->value)
                             ->prefixIcon('heroicon-m-calendar-days')
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
 
                         Select::make('user_id')
                             ->label('Faculty')
@@ -84,21 +100,22 @@ class LoadsForm
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => User::find($value)?->full_name)
                             ->prefixIcon('heroicon-m-user')
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
 
                         DateTimePicker::make('submission_deadline')
                             ->label('Submission Deadline')
                             ->prefixIcon('heroicon-m-calendar-days')
                             ->native(false)
-                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
-                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
+                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
 
 
                         FileUpload::make('grading_sheet')
                             ->label('Grading Sheet File')
                             ->disk('public')
                             ->directory('grading-sheets')
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record))
                             ->acceptedFileTypes([
                                 'application/pdf',
                                 'application/vnd.ms-excel',
