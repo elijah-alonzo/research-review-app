@@ -19,16 +19,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
-    public function isDean(): bool
-    {
-        return $this->hasRole('dean');
-    }
-
-    public function isFaculty(): bool
-    {
-        return $this->hasRole('faculty');
-    }
-
     public function getFullNameAttribute(): string
     {
         $middleInitial = $this->middle_initial

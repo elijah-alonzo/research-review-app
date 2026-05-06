@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -61,13 +62,13 @@ class UserForm
 
                         Select::make('role')
                             ->label('Role')
-                            ->options([
-                                'dean' => 'Dean (Admin)',
-                                'faculty' => 'Faculty',
-                            ])
+                            ->options(fn (): array => Role::query()
+                                ->orderBy('name')
+                                ->pluck('name', 'name')
+                                ->all())
                             ->prefixIcon('heroicon-m-shield-check')
                             ->required()
-                            ->default('faculty')
+                            ->default(fn (): ?string => Role::query()->orderBy('name')->value('name'))
                             ->afterStateHydrated(function ($set, $record): void {
                                 $role = $record?->roles?->pluck('name')->first();
 

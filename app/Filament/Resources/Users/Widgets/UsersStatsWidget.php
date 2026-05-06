@@ -23,13 +23,13 @@ class UsersStatsWidget extends StatsOverviewWidget
                 ->color('info')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-user-group'),
-            Stat::make('Faculty', User::whereHas('roles', fn ($query) => $query->where('name', 'faculty'))->count())
-                ->description('Standard faculty users')
+            Stat::make('Users With Roles', User::has('roles')->count())
+                ->description('Assigned to at least one role')
                 ->color('success')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-users'),
-            Stat::make('Deans', User::whereHas('roles', fn ($query) => $query->where('name', 'dean'))->count())
-                ->description('Admin users')
+            Stat::make('Users Without Roles', User::doesntHave('roles')->count())
+                ->description('No role assigned yet')
                 ->color('warning')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-user'),

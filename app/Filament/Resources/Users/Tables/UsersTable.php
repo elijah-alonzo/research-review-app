@@ -62,11 +62,7 @@ class UsersTable
                 BadgeColumn::make('role')
                     ->label('Role')
                     ->getStateUsing(fn (User $record): string => $record->roles->pluck('name')->first() ?? 'none')
-                    ->colors([
-                        'danger' => 'dean',
-                        'info' => 'faculty',
-                        'gray' => 'none',
-                    ])
+                    ->color(fn (string $state): string => $state === 'none' ? 'gray' : 'warning')
                     ->formatStateUsing(fn ($state) => ucfirst($state)),
                 TextColumn::make('created_at')
                     ->label('Created At')

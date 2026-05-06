@@ -23,11 +23,11 @@ class LoadPolicy
             return false;
         }
 
-        if ($authUser->hasRole('faculty')) {
-            return $load->user_id === $authUser->id;
+        if ($authUser->can('ViewAny:Load')) {
+            return true;
         }
 
-        return true;
+        return $load->user_id === $authUser->id;
     }
 
     public function create(AuthUser $authUser): bool
@@ -41,24 +41,24 @@ class LoadPolicy
             return false;
         }
 
-        if ($authUser->hasRole('faculty')) {
-            return $load->user_id === $authUser->id;
+        if ($authUser->can('ViewAny:Load')) {
+            return true;
         }
 
-        return true;
+        return $load->user_id === $authUser->id;
     }
 
     public function delete(AuthUser $authUser, Load $load): bool
     {
+        if ($authUser->can('DeleteAny:Load')) {
+            return true;
+        }
+
         if (! $authUser->can('Delete:Load')) {
             return false;
         }
 
-        if ($authUser->hasRole('faculty')) {
-            return $load->user_id === $authUser->id;
-        }
-
-        return true;
+        return $load->user_id === $authUser->id;
     }
 
     public function deleteAny(AuthUser $authUser): bool

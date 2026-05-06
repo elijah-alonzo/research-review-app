@@ -40,11 +40,12 @@ class AppPanelProvider extends PanelProvider
                 'Submission Management',
                 'Grading Sheet Management',
                 'Academic Management',
+                'System Settings',
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
             ])
-            ->plugin(FilamentShieldPlugin::make())
+            ->plugin(FilamentShieldPlugin::make()->navigationGroup('System Settings'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

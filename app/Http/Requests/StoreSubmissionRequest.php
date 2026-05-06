@@ -13,7 +13,7 @@ class StoreSubmissionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->hasRole('faculty');
+        return auth()->check() && auth()->user()->can('Update:Load');
     }
 
     /**
