@@ -25,7 +25,7 @@ class LoadsResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
 
-    protected static ?string $navigationLabel = 'Faculty Loads';
+    protected static ?string $navigationLabel = 'Faculty\'s Grading Sheet';
 
     public static function form(Schema $schema): Schema
     {

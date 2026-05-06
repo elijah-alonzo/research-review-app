@@ -25,6 +25,17 @@ class UsersTable
                     ->label(' ')
                     ->imageSize(40)
                     ->grow(false)
+                    ->getStateUsing(function (User $record) {
+                        $avatar = $record->avatar;
+
+                        if (! $avatar) {
+                            return null;
+                        }
+
+                        return str_starts_with($avatar, 'http')
+                            ? $avatar
+                            : asset('storage/'.$avatar);
+                    })
                     ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name='.urlencode($record->name).'&background=0F172A&color=FFFFFF'),
                 TextColumn::make('name')
                     ->label('Name')
