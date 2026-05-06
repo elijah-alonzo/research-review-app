@@ -20,12 +20,12 @@ class ProgramsStatsWidget extends StatsOverviewWidget
         return [
             Stat::make('Programs', Program::count())
                 ->description('Total programs available')
-                ->color('info')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-academic-cap'),
             Stat::make('Active Programs', Program::where('is_active', true)->count())
                 ->description('Programs currently active')
-                ->color('success')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-check-badge'),
         ];

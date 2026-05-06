@@ -20,12 +20,12 @@ class SubjectsStatsWidget extends StatsOverviewWidget
         return [
             Stat::make('Total Courses', Subject::count())
                 ->description('All courses in the system')
-                ->color('info')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-book-open'),
             Stat::make('Active Courses', Subject::where('is_active', true)->count())
                 ->description('Courses currently active')
-                ->color('success')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-check-badge'),
         ];

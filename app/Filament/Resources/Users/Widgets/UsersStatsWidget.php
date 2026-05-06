@@ -20,17 +20,17 @@ class UsersStatsWidget extends StatsOverviewWidget
         return [
             Stat::make('Total Users', User::count())
                 ->description('All registered users')
-                ->color('info')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-user-group'),
             Stat::make('Users With Roles', User::has('roles')->count())
                 ->description('Assigned to at least one role')
-                ->color('success')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-users'),
             Stat::make('Users Without Roles', User::doesntHave('roles')->count())
                 ->description('No role assigned yet')
-                ->color('warning')
+                ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-user'),
 
