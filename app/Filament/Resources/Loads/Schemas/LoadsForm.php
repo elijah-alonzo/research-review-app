@@ -6,7 +6,6 @@ use App\Enums\AcademicYear;
 use App\Models\Load;
 use App\Models\User;
 use App\Models\Subject;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
@@ -109,21 +108,6 @@ class LoadsForm
                             ->native(false)
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))
                             ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
-
-
-                        FileUpload::make('grading_sheet')
-                            ->label('Grading Sheet File')
-                            ->disk('public')
-                            ->directory('grading-sheets')
-                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record))
-                            ->acceptedFileTypes([
-                                'application/pdf',
-                                'application/vnd.ms-excel',
-                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                                'text/csv',
-                            ])
-                            ->maxSize(10 * 1024)
-                            ->columnSpanfull(),
                     ])
                     ->columns(2),
             ]);

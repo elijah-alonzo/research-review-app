@@ -4,15 +4,16 @@ namespace App\Filament\Resources\Loads\Tables;
 
 use App\Enums\AcademicYear;
 use App\Models\Load;
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 
 class LoadsTable
 {
@@ -86,8 +87,14 @@ class LoadsTable
             ])
             ->recordActions([
                 ActionGroup::make([
-                    ViewAction::make(),
                     EditAction::make()->color('info'),
+                    Action::make('download_grading_sheet')
+                        ->label('Download')
+                        ->icon('heroicon-m-arrow-down-tray')
+                        ->url(fn (Load $record): ?string => $record->grading_sheet
+                            ? Storage::disk('public')->url($record->grading_sheet)
+                            : null, true)
+                        ->visible(fn (Load $record): bool => filled($record->grading_sheet)),
                     DeleteAction::make()
                         ->visible(fn (Load $record): bool => auth()->user()?->can('delete', $record) ?? false),
                 ])
