@@ -27,8 +27,19 @@ class UsersTable
                     ->grow(false)
                     ->defaultImageUrl(fn (User $record): string => 'https://ui-avatars.com/api/?name='.urlencode($record->name).'&background=0F172A&color=FFFFFF'),
                 TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                    ->label('Name')
+                    ->getStateUsing(fn (User $record): string => $record->full_name)
+                    ->searchable(query: function ($query, string $search): void {
+                        $query->where(function ($nameQuery) use ($search): void {
+                            $nameQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('middle_initial', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%");
+                        });
+                    })
+                    ->sortable(query: function ($query, string $direction): void {
+                        $query->orderBy('last_name', $direction)
+                            ->orderBy('first_name', $direction);
+                    }),
                 TextColumn::make('contact_number')
                     ->label('Contact Number')
                     ->icon('heroicon-m-phone')

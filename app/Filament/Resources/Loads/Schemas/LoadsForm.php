@@ -3,11 +3,14 @@
 namespace App\Filament\Resources\Loads\Schemas;
 
 use App\Enums\AcademicYear;
+use App\Models\User;
 use App\Models\Subject;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class LoadsForm
 {
@@ -25,7 +28,8 @@ class LoadsForm
                             ->searchable()
                             ->preload()
                             ->prefixIcon('heroicon-m-academic-cap')
-                            ->required()
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false)
                             ->live()
                             ->afterStateUpdated(function ($set): void {
                                 $set('subject_id', null);
@@ -40,8 +44,8 @@ class LoadsForm
                             ->searchable()
                             ->preload()
                             ->prefixIcon('heroicon-m-book-open')
-                            ->required()
-                            ->disabled(fn ($get) => blank($get('program_id'))),
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn ($get): bool => blank($get('program_id')) || (Auth::user()?->isFaculty() ?? false)),
 
                         Select::make('term')
                             ->label('Term')
@@ -51,39 +55,58 @@ class LoadsForm
                                 '3rd Term' => '3rd Term',
                             ])
                             ->prefixIcon('heroicon-m-calendar')
-                            ->required(),
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
 
                         Select::make('academic_year')
                             ->label('Academic Year')
                             ->options(AcademicYear::options())
                             ->default(AcademicYear::current()->value)
                             ->prefixIcon('heroicon-m-calendar-days')
-                            ->required(),
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
 
                         Select::make('user_id')
                             ->label('Faculty')
-                            ->relationship('user', 'name')
                             ->searchable()
-                            ->preload()
+                            ->getSearchResultsUsing(function (string $search): array {
+                                return User::query()
+                                    ->where(function ($query) use ($search) {
+                                        $query->where('first_name', 'like', "%{$search}%")
+                                            ->orWhere('middle_initial', 'like', "%{$search}%")
+                                            ->orWhere('last_name', 'like', "%{$search}%");
+                                    })
+                                    ->orderBy('last_name')
+                                    ->limit(50)
+                                    ->get()
+                                    ->mapWithKeys(fn (User $user) => [$user->id => $user->full_name])
+                                    ->all();
+                            })
+                            ->getOptionLabelUsing(fn ($value): ?string => User::find($value)?->full_name)
                             ->prefixIcon('heroicon-m-user')
-                            ->required(),
-
-                        Select::make('submission_status')
-                            ->label('Submission Status')
-                            ->options([
-                                'pending' => 'Pending',
-                                'submitted' => 'Submitted',
-                                'late' => 'Late',
-                            ])
-                            ->default('pending')
-                            ->prefixIcon('heroicon-m-flag')
-                            ->required(),
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
 
                         DateTimePicker::make('submission_deadline')
                             ->label('Submission Deadline')
                             ->prefixIcon('heroicon-m-calendar-days')
                             ->native(false)
-                            ->required(),
+                            ->required(fn (): bool => ! (Auth::user()?->isFaculty() ?? false))
+                            ->disabled(fn (): bool => Auth::user()?->isFaculty() ?? false),
+
+
+                        FileUpload::make('grading_sheet')
+                            ->label('Grading Sheet File')
+                            ->disk('public')
+                            ->directory('grading-sheets')
+                            ->acceptedFileTypes([
+                                'application/pdf',
+                                'application/vnd.ms-excel',
+                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'text/csv',
+                            ])
+                            ->maxSize(10 * 1024)
+                            ->columnSpanfull(),
                     ])
                     ->columns(2),
             ]);

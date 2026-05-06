@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('academic_year', AcademicYear::values());
             $table->enum('term', ['First Term', '2nd Term', '3rd Term']);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('submission_status', ['pending', 'submitted', 'late'])->default('pending');
+            $table->string('grading_sheet')->nullable();
             $table->dateTime('submission_deadline');
             $table->timestamps();
 

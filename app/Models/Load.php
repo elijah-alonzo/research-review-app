@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'academic_year',
     'term',
     'user_id',
-    'submission_status',
+    'grading_sheet',
     'submission_deadline',
 ])]
 class Load extends Model
@@ -31,6 +31,11 @@ class Load extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getSubmissionStatusAttribute(): string
+    {
+        return $this->grading_sheet ? 'submitted' : 'pending';
     }
 
     protected function casts(): array

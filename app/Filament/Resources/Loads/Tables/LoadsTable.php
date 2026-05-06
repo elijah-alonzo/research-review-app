@@ -26,7 +26,7 @@ class LoadsTable
                         ->circular()
                         ->imageSize(40)
                         ->getStateUsing(function (Load $record) {
-                            $name = $record->user?->name ?? 'Faculty';
+                            $name = $record->user?->full_name ?? 'Faculty';
                             $avatar = $record->user?->avatar;
 
                             return $avatar
@@ -35,12 +35,17 @@ class LoadsTable
                                     : asset('storage/'.$avatar))
                                 : 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=0F172A&color=FFFFFF';
                         }),
-                    TextColumn::make('user.name')
-                        ->label('Username')
+                    TextColumn::make('user_name')
+                        ->label('Faculty')
                         ->weight('medium')
                         ->placeholder('Unassigned')
+                        ->getStateUsing(fn (Load $record): string => $record->user?->full_name ?? 'Unassigned')
                         ->searchable(query: function (Builder $query, string $search) {
-                            $query->whereHas('user', fn ($userQuery) => $userQuery->where('name', 'like', "%{$search}%"));
+                            $query->whereHas('user', function ($userQuery) use ($search) {
+                                $userQuery->where('first_name', 'like', "%{$search}%")
+                                    ->orWhere('middle_initial', 'like', "%{$search}%")
+                                    ->orWhere('last_name', 'like', "%{$search}%");
+                            });
                         }),
                 ]),
                 ColumnGroup::make('Course Information', [
@@ -62,11 +67,8 @@ class LoadsTable
                     TextColumn::make('submission_status')
                         ->label('Status')
                         ->badge()
-                        ->color(fn (string $state): string => match ($state) {
-                            'submitted' => 'success',
-                            'late' => 'danger',
-                            default => 'gray',
-                        }),
+                        ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                        ->color(fn (string $state): string => $state === 'submitted' ? 'success' : 'gray'),
                     TextColumn::make('submission_deadline')
                         ->label('Deadline')
                         ->dateTime(),
@@ -84,7 +86,8 @@ class LoadsTable
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make()->color('info'),
-                    DeleteAction::make(),
+                    DeleteAction::make()
+                        ->visible(fn (): bool => auth()->user()?->isDean() ?? false),
                 ])
                     ->iconButton()
                     ->icon('heroicon-m-ellipsis-vertical')

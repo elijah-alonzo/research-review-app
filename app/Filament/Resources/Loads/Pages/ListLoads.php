@@ -14,9 +14,13 @@ class ListLoads extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        if (Auth::user()?->isDean()) {
+            return [
+                CreateAction::make(),
+            ];
+        }
+
+        return [];
     }
 
     protected function getTableQuery(): Builder

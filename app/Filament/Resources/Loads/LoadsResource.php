@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
@@ -41,6 +42,36 @@ class LoadsResource extends Resource
     public static function canAccess(): bool
     {
         return static::canViewAny();
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()?->isDean() ?? false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return false;
+        }
+
+        if ($user->isDean()) {
+            return true;
+        }
+
+        return $user->isFaculty() && $record->user_id === $user->id;
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return Auth::user()?->isDean() ?? false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return Auth::user()?->isDean() ?? false;
     }
 
     public static function table(Table $table): Table

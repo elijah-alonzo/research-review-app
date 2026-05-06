@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'dean@example.com'],
             [
-                'name' => 'Dean User',
+                'first_name' => 'Dean',
+                'middle_initial' => null,
+                'last_name' => 'User',
                 'password' => Hash::make('password'),
                 'role' => 'dean',
             ]
@@ -30,7 +32,9 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'faculty@example.com'],
             [
-                'name' => 'Faculty User',
+                'first_name' => 'Faculty',
+                'middle_initial' => null,
+                'last_name' => 'User',
                 'password' => Hash::make('password'),
                 'role' => 'faculty',
             ]

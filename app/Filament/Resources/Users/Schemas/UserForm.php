@@ -17,7 +17,7 @@ class UserForm
                 Section::make('User Information')
                     ->columnSpanFull()
                     ->description('These are the details for the user account.')
-                    ->columns(2)
+                    ->columns(3)
                     ->schema([
                         FileUpload::make('avatar')
                             ->label('Profile Picture')
@@ -26,23 +26,38 @@ class UserForm
                             ->directory('avatars')
                             ->columnSpanFull(),
 
-                        TextInput::make('name')
+                        TextInput::make('first_name')
+                            ->label('First Name')
                             ->required()
                             ->prefixIcon('heroicon-m-user')
-                            ->placeholder('Enter full name'),
+                            ->placeholder('Enter first name'),
+
+                        TextInput::make('middle_initial')
+                            ->label('Middle Initial')
+                            ->maxLength(1)
+                            ->prefixIcon('heroicon-m-user')
+                            ->placeholder('Enter middle initial'),
+
+                        TextInput::make('last_name')
+                            ->label('Last Name')
+                            ->required()
+                            ->prefixIcon('heroicon-m-user')
+                            ->placeholder('Enter last name'),
 
                         TextInput::make('email')
                             ->label('Email address')
                             ->email()
                             ->required()
                             ->prefixIcon('heroicon-m-envelope')
-                            ->placeholder('Enter email address'),
+                            ->placeholder('Enter email address')
+                            ->columnSpan(3),
 
                         TextInput::make('contact_number')
                             ->label('Contact Number')
                             ->tel()
                             ->prefixIcon('heroicon-m-phone')
-                            ->placeholder('Enter contact number'),
+                            ->placeholder('Enter contact number')
+                            ->columnSpan(3),
 
                         Select::make('role')
                             ->label('Role')
@@ -52,13 +67,17 @@ class UserForm
                             ])
                             ->prefixIcon('heroicon-m-shield-check')
                             ->required()
-                            ->default('faculty'),
+                            ->default('faculty')
+                            ->columnSpan(3),
 
                         TextInput::make('password')
                             ->password()
-                            ->required()
+                            ->default('password')
+                            ->required(fn (string $context): bool => $context === 'create')
+                            ->dehydrated(fn ($state): bool => filled($state))
                             ->prefixIcon('heroicon-m-key')
-                            ->placeholder('Enter password'),
+                            ->placeholder('Enter password')
+                            ->columnSpan(3),
                     ]),
             ]);
     }
