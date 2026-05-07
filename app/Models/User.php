@@ -17,12 +17,12 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, HasRoles, Notifiable;
 
     public function getFullNameAttribute(): string
     {
         $middleInitial = $this->middle_initial
-            ? rtrim($this->middle_initial, '.') . '.'
+            ? rtrim($this->middle_initial, '.').'.'
             : null;
 
         return trim(collect([

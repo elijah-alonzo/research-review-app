@@ -25,8 +25,8 @@ class ListLoads extends ListRecords
         $query = parent::getTableQuery();
         $user = Auth::user();
 
-        if ($user && ! $user->can('ViewAny:Load')) {
-            $query->where('user_id', $user->id);
+        if (! $user || ! static::getResource()::canViewAny()) {
+            return $query->whereRaw('1 = 0');
         }
 
         return $query;

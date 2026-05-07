@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use App\Filament\Resources\Loads\LoadsResource;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Pages\Dashboard;
 use Filament\Widgets\AccountWidget;
@@ -178,7 +179,7 @@ return [
             ],
         ],
         'exclude' => [
-            //
+            LoadsResource::class,
         ],
     ],
 
@@ -234,6 +235,7 @@ return [
 
     'custom_permissions' => [
         'ViewDashboardStats',
+        'ManageFacultyLoads',
     ],
 
     /*

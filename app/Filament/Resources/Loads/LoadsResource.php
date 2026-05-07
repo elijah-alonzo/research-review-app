@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 class LoadsResource extends Resource
@@ -24,6 +25,47 @@ class LoadsResource extends Resource
     protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
 
     protected static ?string $navigationLabel = 'Faculty Loads';
+
+    protected static function canManageLoads(): bool
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasRole('dean') || $user->can('ManageFacultyLoads');
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::canManageLoads();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::canManageLoads();
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::canManageLoads();
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canManageLoads();
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return static::canManageLoads();
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return static::canManageLoads();
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\GradingSheets\Tables;
 
 use App\Enums\AcademicYear;
-use App\Models\Load;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ColumnGroup;

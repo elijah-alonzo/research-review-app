@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Loads\Schemas;
 
 use App\Enums\AcademicYear;
 use App\Models\Load;
-use App\Models\User;
 use App\Models\Subject;
+use App\Models\User;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
