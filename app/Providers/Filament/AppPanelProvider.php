@@ -64,6 +64,8 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->breadcrumbs(false)
+            ->font('Figtree')
             ->brandLogo(asset('sys-logo.png'))
             ->brandLogoHeight('3rem');
     }
