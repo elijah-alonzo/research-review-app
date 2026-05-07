@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $deanRole = Role::firstOrCreate(['name' => 'Dean']);
 
         $dean = User::firstOrCreate(
-            ['email' => 'dean@spup.com'],
+            ['email' => 'dean@spup.edu.ph'],
             [
                 'first_name' => 'Dean',
                 'middle_initial' => null,

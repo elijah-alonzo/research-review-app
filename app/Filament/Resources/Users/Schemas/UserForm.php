@@ -55,6 +55,7 @@ class UserForm
 
                         TextInput::make('contact_number')
                             ->label('Contact Number')
+                            ->required()
                             ->tel()
                             ->prefixIcon('heroicon-m-phone')
                             ->placeholder('Enter contact number')
@@ -62,6 +63,7 @@ class UserForm
 
                         Select::make('role')
                             ->label('Role')
+                            ->required()
                             ->options(fn (): array => Role::query()
                                 ->orderBy('name')
                                 ->pluck('name', 'name')
