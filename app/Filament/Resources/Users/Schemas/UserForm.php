@@ -76,7 +76,7 @@ class UserForm
                                     $set('role', $role);
                                 }
                             })
-                            ->dehydrated(false)
+                            ->dehydrated()
                             ->columnSpan(3),
 
                         TextInput::make('password')

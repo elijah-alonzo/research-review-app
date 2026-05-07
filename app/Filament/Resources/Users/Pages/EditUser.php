@@ -26,9 +26,10 @@ class EditUser extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $record->update($data);
+        $roleName = $data['role'] ?? null;
+        unset($data['role']);
 
-        $roleName = $this->form->getState()['role'] ?? null;
+        $record->update($data);
 
         if ($roleName) {
             $role = Role::findOrCreate($roleName);

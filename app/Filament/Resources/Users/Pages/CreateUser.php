@@ -19,6 +19,9 @@ class CreateUser extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
+        $roleName = $data['role'] ?? null;
+        unset($data['role']);
+
         $user = new User;
 
         $user->forceFill([
@@ -27,8 +30,6 @@ class CreateUser extends CreateRecord
         ]);
 
         $user->save();
-
-        $roleName = $this->form->getState()['role'] ?? null;
 
         if ($roleName) {
             $role = Role::findOrCreate($roleName);
