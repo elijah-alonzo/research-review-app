@@ -22,6 +22,7 @@ class SubjectsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('code')
                     ->label('Course Code')
+                    ->badge()
                     ->searchable(),
                 TextColumn::make('name')
                     ->label('Course')
