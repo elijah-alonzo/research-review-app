@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -19,18 +21,92 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $deanRole = Role::firstOrCreate(['name' => 'Dean']);
+        $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
+        $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
-        $dean = User::firstOrCreate(
-            ['email' => 'dean@spup.edu.ph'],
+        $allPermissions = Permission::query()->pluck('name')->all();
+        $nonRolePermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => ! Str::contains($permission, ':Role')
+        ));
+        $gradingSheetPermissions = Permission::query()
+            ->whereIn('name', ['ViewAny:Load', 'View:Load', 'Update:Load'])
+            ->pluck('name')
+            ->all();
+
+        $adminRole->syncPermissions($allPermissions);
+        $deanRole->syncPermissions($nonRolePermissions);
+        $associateDeanRole->syncPermissions($nonRolePermissions);
+        $facultyRole->syncPermissions($gradingSheetPermissions);
+
+        $users = [
             [
+                'email' => 'dean@spup.edu.ph',
                 'first_name' => 'Dean',
                 'middle_initial' => null,
                 'last_name' => 'User',
-                'password' => Hash::make('password'),
-            ]
-        );
-        $dean->syncRoles([$deanRole]);
+                'role' => $deanRole,
+            ],
+            [
+                'email' => 'associatedean@spup.edu.ph',
+                'first_name' => 'Associate',
+                'middle_initial' => null,
+                'last_name' => 'Dean',
+                'role' => $associateDeanRole,
+            ],
+            [
+                'email' => 'admin@spup.edu.ph',
+                'first_name' => 'Admin',
+                'middle_initial' => null,
+                'last_name' => 'User',
+                'role' => $adminRole,
+            ],
+            [
+                'email' => 'faculty@spup.edu.ph',
+                'first_name' => 'Faculty',
+                'middle_initial' => null,
+                'last_name' => 'User',
+                'role' => $facultyRole,
+            ],
+            [
+                'email' => 'faculty1@spup.edu.ph',
+                'first_name' => 'Faculty',
+                'middle_initial' => null,
+                'last_name' => 'One',
+                'role' => $facultyRole,
+            ],
+            [
+                'email' => 'faculty2@spup.edu.ph',
+                'first_name' => 'Faculty',
+                'middle_initial' => null,
+                'last_name' => 'Two',
+                'role' => $facultyRole,
+            ],
+            [
+                'email' => 'faculty3@spup.edu.ph',
+                'first_name' => 'Faculty',
+                'middle_initial' => null,
+                'last_name' => 'Three',
+                'role' => $facultyRole,
+            ],
+        ];
+
+        foreach ($users as $userData) {
+            $role = $userData['role'];
+            unset($userData['role']);
+
+            $user = User::firstOrCreate(
+                ['email' => $userData['email']],
+                [
+                    ...$userData,
+                    'password' => Hash::make('password'),
+                ]
+            );
+
+            $user->syncRoles([$role]);
+        }
 
         $programs = [
             [
