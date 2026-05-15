@@ -2,11 +2,9 @@
 
 namespace App\Providers\Filament;
 
- use App\Filament\Pages\Auth\EditProfile;
- use App\Filament\Pages\Auth\Login;
- use App\Filament\Pages\Auth\Register;
- use App\Filament\Widgets\DashboardStatsWidget;
- use App\Filament\Widgets\UnsubmittedGradingSheetsWidget;
+use App\Filament\Pages\Auth\Login;
+use App\Filament\Widgets\DashboardStatsWidget;
+use App\Filament\Widgets\UnsubmittedGradingSheetsWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -34,7 +32,7 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
-            ->profile(EditProfile::class)
+            ->profile(null)
             ->darkmode(false)
             ->globalSearch(false)
             ->collapsibleNavigationGroups(false)
