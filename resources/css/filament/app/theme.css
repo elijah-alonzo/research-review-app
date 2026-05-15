@@ -20,10 +20,6 @@
     --primary-950: #03522a;
 }
 
-.fi-simple-header-heading {
-    display: none !important;
-}
-
 .fi-simple-main-ctn {
     background: linear-gradient(
         135deg,
