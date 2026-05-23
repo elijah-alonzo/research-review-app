@@ -10,6 +10,8 @@ class EditLoads extends EditRecord
 {
     protected static string $resource = LoadsResource::class;
 
+    protected ?string $subheading = 'Edit faculty load details.';
+
     protected function getHeaderActions(): array
     {
         return [

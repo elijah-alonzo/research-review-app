@@ -12,6 +12,8 @@ class ListLoads extends ListRecords
 {
     protected static string $resource = LoadsResource::class;
 
+    protected ?string $subheading = 'Browse, create, and manage faculty loads.';
+
     protected function getHeaderActions(): array
     {
         return [
