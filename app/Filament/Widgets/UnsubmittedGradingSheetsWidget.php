@@ -29,9 +29,15 @@ class UnsubmittedGradingSheetsWidget extends TableWidget
                     ->searchable(),
                 TextColumn::make('program.name')
                     ->label('Program')
+                    ->badge()
+                    ->color('success')
+                    ->icon('heroicon-m-academic-cap')
                     ->searchable(),
                 TextColumn::make('subject.name')
                     ->label('Course')
+                    ->badge()
+                    ->color('info')
+                    ->icon('heroicon-m-book-open')
                     ->searchable(),
                 TextColumn::make('term')
                     ->label('Term')

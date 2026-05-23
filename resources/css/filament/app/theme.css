@@ -79,6 +79,7 @@
 }
 
 .fi-section-header {
+    border-radius: 0.5rem 0.5rem 0 0;
     background: linear-gradient(
         135deg,
         #03542b 0%,
