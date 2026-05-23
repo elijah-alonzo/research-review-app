@@ -11,6 +11,8 @@ class ListPrograms extends ListRecords
 {
     protected static string $resource = ProgramsResource::class;
 
+    protected ?string $subheading = 'Browse, create, and manage graduate programs.';
+
     protected function getHeaderWidgets(): array
     {
         return [
