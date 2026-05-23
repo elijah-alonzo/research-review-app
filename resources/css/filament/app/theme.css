@@ -42,34 +42,12 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.fi-main-sidebar {
-    background: linear-gradient(
-        135deg,
-        #03542b 0%,
-        #226443 35%,
-        #237345 65%,
-        #014d26 100%
-    );
-    border-right: 1px solid #e0e0e1;
-    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-    top: 0 !important;
-    height: 100dvh !important;
-    z-index: 30;
+.fi-sidebar-nav {
+    background: "#ffffff";
+    border-right: 2px solid #e5e7eb;
 }
 
-.fi-sidebar-group-label {
-    color: #d6d6d6;
-    font-weight: 50;
-}
-
-.fi-sidebar-item-label {
-    color: #ffffff;
-}
-
-.fi-sidebar-item-icon {
-    color: #ffffff;
-}
-
+/* Sidebar hover state — green icon & text, subtle lift */
 .fi-sidebar-item > .fi-sidebar-item-btn {
     transition:
         transform 0.2s ease,
@@ -77,13 +55,20 @@
 }
 
 .fi-sidebar-item > .fi-sidebar-item-btn:hover {
-    background: transparent !important;
+    background: var(--primary-500) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     transform: scale(1.04);
 }
 
+.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
+.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-icon {
+    color: #ffffff;
+}
+
+/* Sidebar active/selected state — yellow icon & text */
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
-    background: transparent;
+    background: var(--primary-500);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     border-radius: 0.5rem;
 }

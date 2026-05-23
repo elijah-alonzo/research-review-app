@@ -20,6 +20,7 @@ class SubjectsTable
             ->columns([
                 TextColumn::make('code')
                     ->label('Course Code')
+                    ->icon('heroicon-m-book-open')
                     ->searchable()
                     ->badge()
                     ->color('success'),
@@ -27,6 +28,9 @@ class SubjectsTable
                     ->label('Course')
                     ->searchable(),
                 TextColumn::make('program.name')
+                    ->badge()
+                    ->color('primary')
+                    ->icon('heroicon-m-academic-cap')
                     ->label('Program')
                     ->searchable(),
                 IconColumn::make('is_active')

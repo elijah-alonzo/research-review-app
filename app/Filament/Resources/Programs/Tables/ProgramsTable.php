@@ -19,8 +19,10 @@ class ProgramsTable
             ->description('Overview of the university’s graduate programs, including key details and course offerings.')
             ->columns([
                 TextColumn::make('code')
+                    ->label('Program Code')
                     ->searchable()
                     ->badge()
+                    ->icon('heroicon-m-academic-cap')
                     ->color('success'),
                 TextColumn::make('name')
                     ->searchable(),

@@ -31,12 +31,6 @@ class ProgramsForm
                             ->prefixIcon('heroicon-m-bookmark-square')
                             ->placeholder('Enter program name'),
 
-                        Textarea::make('description')
-                            ->rows(3)
-                            ->maxLength(65535)
-                            ->placeholder('Optional program description')
-                            ->columnSpanFull(),
-
                         Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)

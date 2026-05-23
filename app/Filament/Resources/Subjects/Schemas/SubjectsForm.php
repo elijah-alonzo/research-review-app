@@ -24,6 +24,7 @@ class SubjectsForm
                             ->relationship('program', 'name')
                             ->searchable()
                             ->preload()
+                            ->columnSpanFull()
                             ->prefixIcon('heroicon-m-academic-cap')
                             ->required(),
 
@@ -38,12 +39,6 @@ class SubjectsForm
                             ->maxLength(255)
                             ->prefixIcon('heroicon-m-bookmark-square')
                             ->placeholder('Enter subject name'),
-
-                        Textarea::make('description')
-                            ->rows(3)
-                            ->maxLength(65535)
-                            ->placeholder('Optional subject description')
-                            ->columnSpanFull(),
 
                         Toggle::make('is_active')
                             ->label('Active')
