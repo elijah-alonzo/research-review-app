@@ -29,7 +29,6 @@
         #014d26 100%
     );
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-    border-radius: 0 !important;
 }
 
 .fi-topbar {
@@ -111,20 +110,8 @@
     color: #ffffff;
 }
 
-.fi-section {
-    border-radius: 0 !important;
-}
-
 .fi-ta {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.fi-ta-header {
-    border-radius: 0 !important;
-}
-
-.fi-ta-ctn {
-    border-radius: 0 !important;
 }
 
 .fi-ta-header {
@@ -173,11 +160,6 @@
     --color-800: var(--primary-800);
     --color-900: var(--primary-900);
     --color-950: var(--primary-950);
-}
-
-.fi-wi-widget,
-.fi-wi-stats-overview-stat {
-    border-radius: 0 !important;
 }
 
 .fi-btn {

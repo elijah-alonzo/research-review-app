@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Load;
+use App\Models\Program;
+use App\Models\Subject;
+use App\Models\User;
+use App\Observers\ModelActionObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,5 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        Load::observe(ModelActionObserver::class);
+        Program::observe(ModelActionObserver::class);
+        Subject::observe(ModelActionObserver::class);
+        User::observe(ModelActionObserver::class);
     }
 }
