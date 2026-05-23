@@ -11,6 +11,8 @@ class ListGradingSheets extends ListRecords
 {
     protected static string $resource = GradingSheetsResource::class;
 
+    protected ?string $subheading = 'Browse, create, and manage your grading sheets.';
+
     protected function getTableQuery(): Builder
     {
         $query = parent::getTableQuery();

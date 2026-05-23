@@ -9,6 +9,8 @@ class EditGradingSheet extends EditRecord
 {
     protected static string $resource = GradingSheetsResource::class;
 
+    protected ?string $subheading = 'Submit your grading sheet file.';
+
     protected function getHeaderActions(): array
     {
         return [];
