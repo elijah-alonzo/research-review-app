@@ -12,6 +12,8 @@ class ViewRole extends ViewRecord
 {
     protected static string $resource = RoleResource::class;
 
+    protected ?string $subheading = 'View details and permissions for this role.';
+
     protected function getActions(): array
     {
         return [

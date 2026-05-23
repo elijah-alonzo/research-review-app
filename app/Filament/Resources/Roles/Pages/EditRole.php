@@ -18,6 +18,8 @@ class EditRole extends EditRecord
 
     protected static string $resource = RoleResource::class;
 
+    protected ?string $subheading = 'Edit role details and manage permissions.';
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');

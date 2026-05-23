@@ -19,6 +19,7 @@ class ViewAccount extends ViewRecord
         return 'Account Management';
     }
 
+    protected ?string $subheading = 'Your personal account and information management page.';
     
 
     protected function getHeaderActions(): array
