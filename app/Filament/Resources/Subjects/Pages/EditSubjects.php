@@ -10,6 +10,8 @@ class EditSubjects extends EditRecord
 {
     protected static string $resource = SubjectsResource::class;
 
+    protected ?string $subheading = 'Edit course details.';
+
     protected function getHeaderActions(): array
     {
         return [
