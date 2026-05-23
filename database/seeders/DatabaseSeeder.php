@@ -2,15 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AcademicYear;
+use App\Models\Load;
 use App\Models\Program;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,77 +25,89 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (Permission::query()->count() === 0) {
+            Artisan::call('shield:generate', [
+                '--all' => true,
+                '--option' => 'permissions',
+                '--panel' => 'app',
+                '--no-interaction' => true,
+                '--quiet' => true,
+            ]);
+        }
+
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
-        $deanRole = Role::firstOrCreate(['name' => 'Dean']);
-        $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
-        $nonRolePermissions = array_values(array_filter(
+        $restrictedPermissions = array_values(array_filter(
             $allPermissions,
-            fn (string $permission): bool => ! Str::contains($permission, ':Role')
+            fn (string $permission): bool => Str::contains($permission, [':Role', ':SystemLog', ':SystemLogs'])
         ));
-        $gradingSheetPermissions = Permission::query()
-            ->whereIn('name', ['ViewAny:Load', 'View:Load', 'Update:Load'])
-            ->pluck('name')
-            ->all();
+        $adminPermissions = array_values(array_diff($allPermissions, $restrictedPermissions));
+        $facultyPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':Load', ':GradingSheet', ':Account'])
+        ));
 
-        $adminRole->syncPermissions($allPermissions);
-        $deanRole->syncPermissions($nonRolePermissions);
-        $associateDeanRole->syncPermissions($nonRolePermissions);
-        $facultyRole->syncPermissions($gradingSheetPermissions);
+        $superAdminRole->syncPermissions($allPermissions);
+        $adminRole->syncPermissions($adminPermissions);
+        $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
             [
-                'email' => 'dean@spup.edu.ph',
-                'first_name' => 'Dean',
+                'email' => 'root@spup.com',
+                'first_name' => 'Root',
                 'middle_initial' => null,
                 'last_name' => 'User',
-                'role' => $deanRole,
+                'contact_number' => '123456789',
+                'role' => $superAdminRole,
             ],
             [
-                'email' => 'associatedean@spup.edu.ph',
-                'first_name' => 'Associate',
-                'middle_initial' => null,
-                'last_name' => 'Dean',
-                'role' => $associateDeanRole,
-            ],
-            [
-                'email' => 'admin@spup.edu.ph',
-                'first_name' => 'Admin',
-                'middle_initial' => null,
-                'last_name' => 'User',
+                'email' => 'dean@spup.com',
+                'first_name' => 'Inicia',
+                'middle_initial' => 'C',
+                'last_name' => 'Bansig',
+                'contact_number' => '123456789',
                 'role' => $adminRole,
             ],
             [
-                'email' => 'faculty@spup.edu.ph',
-                'first_name' => 'Faculty',
-                'middle_initial' => null,
-                'last_name' => 'User',
+                'email' => 'faculty1@spup.com',
+                'first_name' => 'Marifel',
+                'middle_initial' => 'G',
+                'last_name' => 'Kummer',
+                'contact_number' => '123456789',
                 'role' => $facultyRole,
             ],
             [
-                'email' => 'faculty1@spup.edu.ph',
-                'first_name' => 'Faculty',
-                'middle_initial' => null,
-                'last_name' => 'One',
+                'email' => 'faculty2@spup.com',
+                'first_name' => 'Evelyn',
+                'middle_initial' => 'E',
+                'last_name' => 'Pacquing',
+                'contact_number' => '123456789',
                 'role' => $facultyRole,
             ],
             [
-                'email' => 'faculty2@spup.edu.ph',
-                'first_name' => 'Faculty',
+                'email' => 'faculty3@spup.com',
+                'first_name' => 'Charito',
                 'middle_initial' => null,
-                'last_name' => 'Two',
+                'last_name' => 'Guillermo',
+                'contact_number' => '123456789',
                 'role' => $facultyRole,
             ],
             [
-                'email' => 'faculty3@spup.edu.ph',
-                'first_name' => 'Faculty',
+                'email' => 'faculty4@spup.com',
+                'first_name' => 'Genalin',
                 'middle_initial' => null,
-                'last_name' => 'Three',
+                'last_name' => 'Taguiam',
+                'contact_number' => '123456789',
                 'role' => $facultyRole,
             ],
         ];
+
+        $seededUsers = [];
 
         foreach ($users as $userData) {
             $role = $userData['role'];
@@ -106,6 +122,7 @@ class DatabaseSeeder extends Seeder
             );
 
             $user->syncRoles([$role]);
+            $seededUsers[$user->email] = $user;
         }
 
         $programs = [
@@ -272,15 +289,47 @@ class DatabaseSeeder extends Seeder
             );
 
             foreach ($programData['subjects'] as $subjectData) {
+                $subjectName = $subjectData['name'];
+
+                if (Subject::where('name', $subjectName)->exists()) {
+                    $subjectName = $programData['code'].' - '.$subjectName;
+                }
+
                 Subject::updateOrCreate(
                     [
-                        'program_id' => $program->id,
                         'code' => $subjectData['code'],
                     ],
                     [
-                        'name' => $subjectData['name'],
+                        'program_id' => $program->id,
+                        'name' => $subjectName,
                         'description' => $subjectData['description'] ?? null,
                         'is_active' => true,
+                    ]
+                );
+            }
+        }
+
+        $facultyUsers = User::role('Faculty')->get();
+        $subjects = Subject::query()->orderBy('id')->get();
+        $terms = ['First Term', '2nd Term', '3rd Term'];
+
+        foreach ($facultyUsers as $index => $faculty) {
+            $baseOffset = $index * 3;
+
+            for ($i = 0; $i < 3; $i++) {
+                $subject = $subjects->get(($baseOffset + $i) % $subjects->count());
+
+                Load::updateOrCreate(
+                    [
+                        'program_id' => $subject->program_id,
+                        'subject_id' => $subject->id,
+                        'term' => $terms[$i],
+                        'user_id' => $faculty->id,
+                    ],
+                    [
+                        'academic_year' => AcademicYear::current()->value,
+                        'grading_sheet' => null,
+                        'submission_deadline' => now()->addWeeks(2),
                     ]
                 );
             }

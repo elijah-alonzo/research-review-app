@@ -80,7 +80,8 @@ class UsersTable
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make()->color('info'),
-                    DeleteAction::make(),
+                    DeleteAction::make()
+                        ->visible(fn (User $record): bool => $record->email !== 'root@spup.com'),
                 ])
                     ->iconButton()
                     ->icon('heroicon-m-ellipsis-vertical')
