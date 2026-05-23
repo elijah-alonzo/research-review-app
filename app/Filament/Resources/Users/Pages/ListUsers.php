@@ -11,6 +11,8 @@ class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
+    protected ?string $subheading = 'Browse, create, and manage users.';
+
     protected function getHeaderWidgets(): array
     {
         return [

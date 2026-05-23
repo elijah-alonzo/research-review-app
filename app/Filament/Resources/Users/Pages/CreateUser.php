@@ -11,6 +11,8 @@ use Spatie\Permission\Models\Role;
 class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
+    
+    protected ?string $subheading = 'Create a new user account.';
 
     protected function getRedirectUrl(): string
     {

@@ -12,6 +12,8 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
+    protected ?string $subheading = 'Edit user details.';
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');
