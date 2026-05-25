@@ -91,9 +91,12 @@ class LoadsTable
                     Action::make('download_grading_sheet')
                         ->label('Download')
                         ->icon('heroicon-m-arrow-down-tray')
-                        ->url(fn (Load $record): ?string => $record->grading_sheet
-                            ? Storage::disk('public')->url($record->grading_sheet)
-                            : null, true)
+                        ->action(function (Load $record) {
+                            return Storage::disk('public')->download(
+                                $record->grading_sheet,
+                                basename($record->grading_sheet)
+                            );
+                        })
                         ->visible(fn (Load $record): bool => filled($record->grading_sheet)),
                     DeleteAction::make()
                         ->visible(fn (Load $record): bool => auth()->user()?->can('delete', $record) ?? false),
