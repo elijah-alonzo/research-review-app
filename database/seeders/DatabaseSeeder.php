@@ -51,6 +51,21 @@ class DatabaseSeeder extends Seeder
             $allPermissions,
             fn (string $permission): bool => Str::contains($permission, [':Load', ':GradingSheet', ':Account'])
         ));
+        $facultyWidgetPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [
+                'View:AcademicContextWidget',
+                'View:MyLoadStatsWidget',
+                'View:MyPendingGradingSheetsWidget',
+                'View:MyUpcomingDeadlinesWidget',
+                'View:MyProgramSubjectsWidget',
+                'View:MyRecentActivityWidget',
+            ])
+        ));
+        $facultyPermissions = array_values(array_unique(array_merge(
+            $facultyPermissions,
+            $facultyWidgetPermissions,
+        )));
 
         $superAdminRole->syncPermissions($allPermissions);
         $adminRole->syncPermissions($adminPermissions);

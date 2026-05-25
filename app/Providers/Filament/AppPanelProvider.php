@@ -3,7 +3,13 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Widgets\AcademicContextWidget;
 use App\Filament\Widgets\DashboardStatsWidget;
+use App\Filament\Widgets\MyLoadStatsWidget;
+use App\Filament\Widgets\MyPendingGradingSheetsWidget;
+use App\Filament\Widgets\MyProgramSubjectsWidget;
+use App\Filament\Widgets\MyRecentActivityWidget;
+use App\Filament\Widgets\MyUpcomingDeadlinesWidget;
 use App\Filament\Widgets\UnsubmittedGradingSheetsWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -49,6 +55,12 @@ class AppPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                AcademicContextWidget::class,
+                MyLoadStatsWidget::class,
+                MyPendingGradingSheetsWidget::class,
+                MyUpcomingDeadlinesWidget::class,
+                MyProgramSubjectsWidget::class,
+                MyRecentActivityWidget::class,
                 DashboardStatsWidget::class,
                 UnsubmittedGradingSheetsWidget::class,
             ])
