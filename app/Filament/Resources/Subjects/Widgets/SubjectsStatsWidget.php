@@ -18,13 +18,13 @@ class SubjectsStatsWidget extends StatsOverviewWidget
     protected function getCards(): array
     {
         return [
-            Stat::make('Total Courses', Subject::count())
-                ->description('All courses in the system')
+            Stat::make('Total Subjects', Subject::count())
+                ->description('All subjects in the system')
                 ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-book-open'),
-            Stat::make('Active Courses', Subject::where('is_active', true)->count())
-                ->description('Courses currently active')
+            Stat::make('Active Subjects', Subject::where('is_active', true)->count())
+                ->description('Subjects currently active')
                 ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-check-badge'),

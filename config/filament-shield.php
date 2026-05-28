@@ -241,6 +241,9 @@ return [
     'custom_permissions' => [
         'ViewDashboardStats',
         'ManageFacultyLoads',
+        'ViewAny:GradingSheetApproval',
+        'View:GradingSheetApproval',
+        'Update:GradingSheetApproval',
     ],
 
     /*

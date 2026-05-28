@@ -43,6 +43,10 @@ class RoleResource extends Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'System Settings';
 
+    protected static ?string $navigationLabel = 'Roles Settings';
+
+    protected static ?int $navigationSort = 20;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     #[Override]

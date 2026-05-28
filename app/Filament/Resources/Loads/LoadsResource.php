@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Loads;
 use App\Filament\Resources\Loads\Pages\CreateLoads;
 use App\Filament\Resources\Loads\Pages\EditLoads;
 use App\Filament\Resources\Loads\Pages\ListLoads;
+use App\Filament\Resources\Loads\Pages\ViewLoads;
 use App\Filament\Resources\Loads\Schemas\LoadsForm;
 use App\Filament\Resources\Loads\Tables\LoadsTable;
 use App\Models\Load;
@@ -23,6 +24,8 @@ class LoadsResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookmarkSquare;
 
     protected static UnitEnum|string|null $navigationGroup = 'Academic Management';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $navigationLabel = 'Faculty Loads';
 
@@ -99,6 +102,7 @@ class LoadsResource extends Resource
         return [
             'index' => ListLoads::route('/'),
             'create' => CreateLoads::route('/create'),
+            'view' => ViewLoads::route('/{record}'),
             'edit' => EditLoads::route('/{record}/edit'),
         ];
     }

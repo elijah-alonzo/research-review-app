@@ -19,6 +19,8 @@ class SystemLogsResource extends Resource
 
     protected static ?string $navigationLabel = 'System Logs';
 
+    protected static ?int $navigationSort = 10;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     public static function canCreate(): bool

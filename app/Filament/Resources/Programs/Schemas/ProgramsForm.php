@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Programs\Schemas;
 
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -28,8 +28,18 @@ class ProgramsForm
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255)
+                            ->unique(ignoreRecord: true)
                             ->prefixIcon('heroicon-m-bookmark-square')
                             ->placeholder('Enter program name'),
+
+                        Select::make('degree')
+                            ->label('Degree')
+                            ->options([
+                                'Doctoral' => 'Doctoral',
+                                'Masteral' => 'Masteral',
+                            ])
+                            ->prefixIcon('heroicon-m-academic-cap')
+                            ->required(),
 
                         Toggle::make('is_active')
                             ->label('Active')
@@ -37,7 +47,7 @@ class ProgramsForm
                             ->onIcon('heroicon-m-check-circle')
                             ->offIcon('heroicon-m-x-circle'),
                     ])
-                    ->columns(2),
+                        ->columns(2),
             ]);
     }
 }

@@ -35,8 +35,8 @@ class DashboardStatsWidget extends StatsOverviewWidget
                 ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-academic-cap'),
-            Stat::make('Courses', Subject::count())
-                ->description('Offered courses')
+            Stat::make('Subjects', Subject::count())
+                ->description('Offered subjects')
                 ->color('primary')
                 ->chart([1, 4, 2, 4, 5, 6, 7])
                 ->descriptionIcon('heroicon-o-book-open'),

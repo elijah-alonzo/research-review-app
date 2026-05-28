@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources\Loads\Tables;
 
-use App\Enums\AcademicYear;
 use App\Models\Load;
-use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
 
 class LoadsTable
 {
@@ -51,31 +51,20 @@ class LoadsTable
                             });
                         }),
                 ]),
-                ColumnGroup::make('Course Information', [
+                ColumnGroup::make('Subject Information', [
                     TextColumn::make('program.name')
                         ->label('Program')
                         ->searchable(),
                     TextColumn::make('subject.name')
                         ->label('Subject')
                         ->searchable(),
-                    TextColumn::make('academic_year')
+                    TextColumn::make('academicYear.year')
                         ->label('Academic Year')
-                        ->formatStateUsing(fn (AcademicYear|string|null $state): string => $state instanceof AcademicYear ? $state->value : (string) $state)
                         ->badge()
                         ->color('gray'),
                     TextColumn::make('term')
                         ->label('Semester')
                         ->searchable(),
-                ]),
-                ColumnGroup::make('Submission Status', [
-                    TextColumn::make('submission_status')
-                        ->label('Status')
-                        ->badge()
-                        ->formatStateUsing(fn (string $state): string => ucfirst($state))
-                        ->color(fn (string $state): string => $state === 'submitted' ? 'success' : 'gray'),
-                    TextColumn::make('submission_deadline')
-                        ->label('Deadline')
-                        ->dateTime(),
                 ]),
                 TextColumn::make('updated_at')
                     ->label('Updated At')
@@ -84,21 +73,22 @@ class LoadsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('program_id')
+                    ->label('Program')
+                    ->relationship('program', 'name')
+                    ->searchable()
+                    ->preload(),
+                SelectFilter::make('academic_year_id')
+                    ->label('Academic Year')
+                    ->relationship('academicYear', 'year')
+                    ->searchable()
+                    ->preload(),
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersFormColumns(2)
             ->recordActions([
                 ActionGroup::make([
+                    ViewAction::make(),
                     EditAction::make()->color('info'),
-                    Action::make('download_grading_sheet')
-                        ->label('Download')
-                        ->icon('heroicon-m-arrow-down-tray')
-                        ->action(function (Load $record) {
-                            return Storage::disk('public')->download(
-                                $record->grading_sheet,
-                                basename($record->grading_sheet)
-                            );
-                        })
-                        ->visible(fn (Load $record): bool => filled($record->grading_sheet)),
                     DeleteAction::make()
                         ->visible(fn (Load $record): bool => auth()->user()?->can('delete', $record) ?? false),
                 ])

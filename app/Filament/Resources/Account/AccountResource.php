@@ -21,9 +21,11 @@ class AccountResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationLabel = 'Account';
+    protected static ?string $navigationLabel = 'Account Settings';
 
     protected static UnitEnum|string|null $navigationGroup = 'System Settings';
+
+    protected static ?int $navigationSort = 30;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 

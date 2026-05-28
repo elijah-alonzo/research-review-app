@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ProgramsTable
@@ -16,7 +18,7 @@ class ProgramsTable
     {
         return $table
             ->heading('Graduate School Programs')
-            ->description('Overview of the university’s graduate programs, including key details and course offerings.')
+            ->description('Overview of the university’s graduate programs, including key details and subject offerings.')
             ->columns([
                 TextColumn::make('code')
                     ->label('Program Code')
@@ -26,8 +28,15 @@ class ProgramsTable
                     ->color('success'),
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('degree')
+                    ->label('Degree')
+                    ->badge()
+                    ->icon(fn (string $state): string => $state === 'Doctoral'
+                        ? 'heroicon-m-shield-check'
+                        : 'heroicon-m-academic-cap')
+                    ->color(fn (string $state): string => $state === 'Doctoral' ? 'warning' : 'info'),
                 TextColumn::make('subjects_count')
-                    ->label('Courses')
+                    ->label('Subjects')
                     ->counts('subjects')
                     ->badge()
                     ->color('warning'),
@@ -46,8 +55,13 @@ class ProgramsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('degree')
+                    ->label('Degree')
+                    ->options([
+                        'Doctoral' => 'Doctoral',
+                        'Masteral' => 'Masteral',
+                    ]),
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),

@@ -34,7 +34,7 @@ class MyProgramSubjectsWidget extends TableWidget
                     ->color('info')
                     ->icon('heroicon-m-book-open')
                     ->searchable(),
-                TextColumn::make('academic_year')
+                TextColumn::make('academicYear.year')
                     ->label('Academic Year')
                     ->searchable(),
                 TextColumn::make('term')
@@ -49,8 +49,8 @@ class MyProgramSubjectsWidget extends TableWidget
     {
         return Load::query()
             ->where('user_id', auth()->id())
-            ->with(['program', 'subject'])
-            ->orderByDesc('academic_year')
+            ->with(['program', 'subject', 'academicYear'])
+            ->orderByDesc('academic_year_id')
             ->orderBy('term');
     }
 }

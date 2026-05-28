@@ -20,4 +20,13 @@ class EditGradingSheet extends EditRecord
     {
         return static::getResource()::getUrl('index');
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (array_key_exists('grading_sheet', $data) && filled($data['grading_sheet'])) {
+            $data['grading_sheet_status'] = 'under_review';
+        }
+
+        return $data;
+    }
 }

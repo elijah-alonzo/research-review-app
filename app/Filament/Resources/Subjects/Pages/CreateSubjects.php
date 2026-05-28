@@ -9,7 +9,7 @@ class CreateSubjects extends CreateRecord
 {
     protected static string $resource = SubjectsResource::class;
 
-    protected ?string $subheading = 'Create a new course offering.';
+    protected ?string $subheading = 'Create a new subject offering.';
 
     protected function getRedirectUrl(): string
     {

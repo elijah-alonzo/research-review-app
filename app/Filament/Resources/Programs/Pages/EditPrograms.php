@@ -10,7 +10,7 @@ class EditPrograms extends EditRecord
 {
     protected static string $resource = ProgramsResource::class;
 
-    protected ?string $subheading = 'Edit program details and manage its courses.';
+    protected ?string $subheading = 'Edit program details and manage its subjects.';
 
     protected function getHeaderActions(): array
     {

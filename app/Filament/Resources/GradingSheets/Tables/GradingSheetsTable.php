@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\GradingSheets\Tables;
 
-use App\Enums\AcademicYear;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ColumnGroup;
@@ -14,19 +13,18 @@ class GradingSheetsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->heading('Grading Sheets')
+            ->heading('My Grading Sheets')
             ->description('A list of your teaching loads where you can upload grading sheets.')
             ->columns([
-                ColumnGroup::make('Course Information', [
+                ColumnGroup::make('Subject Information', [
                     TextColumn::make('program.name')
                         ->label('Program')
                         ->searchable(),
                     TextColumn::make('subject.name')
                         ->label('Subject')
                         ->searchable(),
-                    TextColumn::make('academic_year')
+                    TextColumn::make('academicYear.year')
                         ->label('Academic Year')
-                        ->formatStateUsing(fn (AcademicYear|string|null $state): string => $state instanceof AcademicYear ? $state->value : (string) $state)
                         ->badge()
                         ->color('gray'),
                     TextColumn::make('term')
@@ -38,7 +36,11 @@ class GradingSheetsTable
                         ->label('Status')
                         ->badge()
                         ->formatStateUsing(fn (string $state): string => ucfirst($state))
-                        ->color(fn (string $state): string => $state === 'submitted' ? 'success' : 'gray'),
+                        ->color(fn (string $state): string => match ($state) {
+                            'submitted' => 'success',
+                            'reviewing' => 'warning',
+                            default => 'gray',
+                        }),
                     TextColumn::make('submission_deadline')
                         ->label('Deadline')
                         ->dateTime(),

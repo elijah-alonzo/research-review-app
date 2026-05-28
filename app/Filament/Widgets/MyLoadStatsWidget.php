@@ -24,10 +24,10 @@ class MyLoadStatsWidget extends StatsOverviewWidget
     {
         $baseQuery = Load::query()->where('user_id', auth()->id());
         $total = (clone $baseQuery)->count();
-        $submitted = (clone $baseQuery)->whereNotNull('grading_sheet')->count();
-        $pending = (clone $baseQuery)->whereNull('grading_sheet')->count();
+        $submitted = (clone $baseQuery)->where('grading_sheet_status', 'submitted')->count();
+        $pending = (clone $baseQuery)->where('grading_sheet_status', 'pending')->count();
         $dueSoon = (clone $baseQuery)
-            ->whereNull('grading_sheet')
+            ->where('grading_sheet_status', 'pending')
             ->whereBetween('submission_deadline', [now(), now()->addDays(14)])
             ->count();
 

@@ -11,21 +11,21 @@ class SubjectsRelationManager extends RelationManager
 {
     protected static string $relationship = 'subjects';
 
-    protected static ?string $title = 'Courses';
+    protected static ?string $title = 'Subjects';
 
     protected static ?string $recordTitleAttribute = 'name';
 
     public function table(Table $table): Table
     {
         return $table
-            ->description('These are the courses offered under this program.')
+            ->description('These are the subjects offered under this program.')
             ->columns([
                 TextColumn::make('code')
-                    ->label('Course Code')
+                    ->label('Subject Code')
                     ->badge()
                     ->searchable(),
                 TextColumn::make('name')
-                    ->label('Course')
+                    ->label('Subject')
                     ->searchable(),
                 TextColumn::make('description')
                     ->limit(50)

@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources\Loads\Schemas;
 
-use App\Enums\AcademicYear;
+use App\Models\AcademicYear;
 use App\Models\Load;
 use App\Models\Subject;
 use App\Models\User;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -74,10 +73,17 @@ class LoadsForm
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))
                             ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
 
-                        Select::make('academic_year')
+                        Select::make('academic_year_id')
                             ->label('Academic Year')
-                            ->options(AcademicYear::options())
-                            ->default(AcademicYear::current()->value)
+                            ->options(fn (): array => AcademicYear::query()
+                                ->current()
+                                ->orderByDesc('year')
+                                ->pluck('year', 'id')
+                                ->all())
+                            ->default(fn (): ?int => AcademicYear::query()
+                                ->current()
+                                ->orderByDesc('year')
+                                ->value('id'))
                             ->prefixIcon('heroicon-m-calendar-days')
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))
                             ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
@@ -100,13 +106,6 @@ class LoadsForm
                             })
                             ->getOptionLabelUsing(fn ($value): ?string => User::find($value)?->full_name)
                             ->prefixIcon('heroicon-m-user')
-                            ->required(fn (?Load $record): bool => self::canManageLoad($record))
-                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
-
-                        DateTimePicker::make('submission_deadline')
-                            ->label('Submission Deadline')
-                            ->prefixIcon('heroicon-m-calendar-days')
-                            ->native(false)
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))
                             ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)),
                     ])

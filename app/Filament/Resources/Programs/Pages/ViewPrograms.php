@@ -10,7 +10,7 @@ class ViewPrograms extends ViewRecord
 {
     protected static string $resource = ProgramsResource::class;
 
-    protected ?string $subheading = 'View program details and its associated courses.';
+    protected ?string $subheading = 'View program details and its associated subjects.';
 
     protected function getHeaderActions(): array
     {

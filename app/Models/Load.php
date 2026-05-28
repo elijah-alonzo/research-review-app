@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\AcademicYear;
+use App\Models\AcademicYear;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,14 +10,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'program_id',
     'subject_id',
-    'academic_year',
+    'academic_year_id',
     'term',
     'user_id',
     'grading_sheet',
+    'grading_sheet_status',
     'submission_deadline',
 ])]
 class Load extends Model
 {
+    public function academicYear(): BelongsTo
+    {
+        return $this->belongsTo(AcademicYear::class);
+    }
+
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
@@ -35,13 +41,18 @@ class Load extends Model
 
     public function getSubmissionStatusAttribute(): string
     {
-        return $this->grading_sheet ? 'submitted' : 'pending';
+        $status = $this->grading_sheet_status ?? 'pending';
+
+        return match ($status) {
+            'under_review' => 'reviewing',
+            'submitted' => 'submitted',
+            default => 'pending',
+        };
     }
 
     protected function casts(): array
     {
         return [
-            'academic_year' => AcademicYear::class,
             'submission_deadline' => 'datetime',
         ];
     }

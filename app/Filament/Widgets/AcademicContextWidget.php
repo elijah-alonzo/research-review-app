@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\AcademicYear;
+use App\Models\AcademicYear;
 use App\Models\Load;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -23,15 +23,15 @@ class AcademicContextWidget extends StatsOverviewWidget
 
     protected function getCards(): array
     {
-        $currentYear = AcademicYear::current()->value;
+        $currentYear = AcademicYear::current();
         $activeTerm = Load::query()
             ->where('user_id', auth()->id())
-            ->where('academic_year', $currentYear)
+            ->when($currentYear, fn ($query) => $query->where('academic_year_id', $currentYear->id))
             ->orderByDesc('submission_deadline')
             ->value('term');
 
         return [
-            Stat::make('Academic Year', $currentYear),
+            Stat::make('Academic Year', $currentYear?->year ?? 'N/A'),
             Stat::make('Active Semester', $activeTerm ?? 'N/A'),
         ];
     }

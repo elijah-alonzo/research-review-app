@@ -30,7 +30,7 @@ class MyUpcomingDeadlinesWidget extends TableWidget
                     ->icon('heroicon-m-academic-cap')
                     ->searchable(),
                 TextColumn::make('subject.name')
-                    ->label('Course')
+                    ->label('Subject')
                     ->badge()
                     ->color('info')
                     ->icon('heroicon-m-book-open')
@@ -50,7 +50,7 @@ class MyUpcomingDeadlinesWidget extends TableWidget
     {
         return Load::query()
             ->where('user_id', auth()->id())
-            ->whereNull('grading_sheet')
+            ->where('grading_sheet_status', 'pending')
             ->whereBetween('submission_deadline', [now(), now()->addDays(14)])
             ->with(['program', 'subject'])
             ->orderBy('submission_deadline');

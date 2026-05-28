@@ -23,6 +23,10 @@ class SubjectsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookOpen;
 
+    protected static ?string $navigationLabel = 'Subjects';
+
+    protected static ?int $navigationSort = 30;
+
     public static function form(Schema $schema): Schema
     {
         return SubjectsForm::configure($schema);
@@ -35,12 +39,12 @@ class SubjectsResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Course';
+        return 'Subject';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Courses';
+        return 'Subjects';
     }
 
     public static function getRelations(): array

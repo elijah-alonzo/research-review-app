@@ -11,7 +11,7 @@ class ListSubjects extends ListRecords
 {
     protected static string $resource = SubjectsResource::class;
 
-    protected ?string $subheading = 'Browse, create, and manage courses offered.';
+    protected ?string $subheading = 'Browse, create, and manage subjects offered.';
 
     protected function getHeaderWidgets(): array
     {

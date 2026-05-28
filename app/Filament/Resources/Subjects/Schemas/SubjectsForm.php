@@ -17,7 +17,7 @@ class SubjectsForm
             ->components([
                 Section::make('Subject Information')
                     ->columnSpanFull()
-                    ->description('These are the details and information for the courses offered.')
+                    ->description('These are the details and information for the subjects offered.')
                     ->schema([
                         Select::make('program_id')
                             ->label('Program')

@@ -20,7 +20,11 @@ class GradingSheetsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static ?string $navigationLabel = 'Grading Sheets';
+    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
+
+    protected static ?string $navigationLabel = 'My Grading Sheets';
+
+    protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema
     {

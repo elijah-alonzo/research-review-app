@@ -49,8 +49,9 @@ class AppPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->navigationGroups([
-                'Academic Management',
+                'Grading Sheet Management',
                 'User Management',
+                'Academic Management',
                 'System Settings',
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
@@ -80,7 +81,7 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->breadcrumbs(false)
-            ->font('Segoe UI')
+            ->font('Figtree')
             ->brandLogo(asset('sys-logo.png'))
             ->brandLogoHeight('3rem');
     }

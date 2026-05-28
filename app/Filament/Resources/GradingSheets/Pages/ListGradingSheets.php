@@ -22,6 +22,7 @@ class ListGradingSheets extends ListRecords
             return $query->whereRaw('1 = 0');
         }
 
-        return $query->where('user_id', $userId);
+        return $query->where('user_id', $userId)
+            ->with(['program', 'subject', 'academicYear']);
     }
 }

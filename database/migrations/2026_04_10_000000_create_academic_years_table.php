@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('programs', function (Blueprint $table) {
+        Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->string('name')->unique();
-            $table->enum('degree', ['Doctoral', 'Masteral']);
-            $table->text('description')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('year')->unique();
+            $table->enum('status', ['current', 'completed'])->default('current');
             $table->timestamps();
+
+            $table->index('status');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programs');
+        Schema::dropIfExists('academic_years');
     }
 };

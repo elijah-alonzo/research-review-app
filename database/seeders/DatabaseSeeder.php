@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\AcademicYear;
+use App\Models\AcademicYear as AcademicYearModel;
 use App\Models\Load;
 use App\Models\Program;
 use App\Models\Subject;
@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
+        $programCoordinatorRole = Role::firstOrCreate(['name' => 'Program Coordinator']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
@@ -67,10 +68,15 @@ class DatabaseSeeder extends Seeder
             $facultyPermissions,
             $facultyWidgetPermissions,
         )));
+        $programCoordinatorPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':GradingSheetApproval'])
+        ));
 
         $superAdminRole->syncPermissions($allPermissions);
         $adminRole->syncPermissions($adminPermissions);
         $associateDeanRole->syncPermissions($adminPermissions);
+        $programCoordinatorRole->syncPermissions($programCoordinatorPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
@@ -97,6 +103,14 @@ class DatabaseSeeder extends Seeder
                 'last_name' => 'Reyes',
                 'contact_number' => '123456789',
                 'role' => $associateDeanRole,
+            ],
+            [
+                'email' => 'programcoordinator@spup.com',
+                'first_name' => 'Taylor',
+                'middle_initial' => null,
+                'last_name' => 'Santos',
+                'contact_number' => '123456789',
+                'role' => $programCoordinatorRole,
             ],
             [
                 'email' => 'faculty1@spup.com',
@@ -150,10 +164,25 @@ class DatabaseSeeder extends Seeder
             $seededUsers[$user->email] = $user;
         }
 
+        $startYear = now()->month >= 6 ? now()->year : now()->year - 1;
+        $currentYearLabel = sprintf('%d-%d', $startYear, $startYear + 1);
+        $previousYearLabel = sprintf('%d-%d', $startYear - 1, $startYear);
+
+        $currentAcademicYear = AcademicYearModel::firstOrCreate(
+            ['year' => $currentYearLabel],
+            ['status' => AcademicYearModel::STATUS_CURRENT]
+        );
+
+        AcademicYearModel::firstOrCreate(
+            ['year' => $previousYearLabel],
+            ['status' => AcademicYearModel::STATUS_COMPLETED]
+        );
+
         $programs = [
             [
                 'code' => 'MIT',
                 'name' => 'Master in Information Technology',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MIT-ADB', 'name' => 'Advanced Database Systems'],
                     ['code' => 'MIT-NS', 'name' => 'Network Security'],
@@ -164,6 +193,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'DIT',
                 'name' => 'Doctor in Information Technology',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'DIT-ARM', 'name' => 'Advanced Research Methods'],
                     ['code' => 'DIT-DM', 'name' => 'Data Mining'],
@@ -174,6 +204,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MAP',
                 'name' => 'Master of Arts in Psychology',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MAP-PA', 'name' => 'Psychological Assessment'],
                     ['code' => 'MAP-AP', 'name' => 'Abnormal Psychology'],
@@ -184,6 +215,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'PHD-PSY',
                 'name' => 'Doctor of Philosophy in Psychology',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'PHD-PSY-AP', 'name' => 'Advanced Psychotherapy'],
                     ['code' => 'PHD-PSY-CP', 'name' => 'Cognitive Psychology'],
@@ -194,6 +226,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MBA',
                 'name' => 'Master in Business Administration',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MBA-FM', 'name' => 'Financial Management'],
                     ['code' => 'MBA-MM', 'name' => 'Marketing Management'],
@@ -204,6 +237,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'DBA',
                 'name' => 'Doctor in Business Administration',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'DBA-OL', 'name' => 'Organizational Leadership'],
                     ['code' => 'DBA-BA', 'name' => 'Business Analytics'],
@@ -214,6 +248,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MAED',
                 'name' => 'Master of Arts in Education',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MAED-CD', 'name' => 'Curriculum Development'],
                     ['code' => 'MAED-EL', 'name' => 'Educational Leadership'],
@@ -224,6 +259,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'EDD',
                 'name' => 'Doctor of Education',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'EDD-AEP', 'name' => 'Advanced Educational Policy'],
                     ['code' => 'EDD-IL', 'name' => 'Instructional Leadership'],
@@ -234,6 +270,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MSN',
                 'name' => 'Master of Science in Nursing',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MSN-ANP', 'name' => 'Advanced Nursing Practice'],
                     ['code' => 'MSN-HE', 'name' => 'Healthcare Ethics'],
@@ -244,6 +281,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'PHD-NURS',
                 'name' => 'Doctor of Philosophy in Nursing',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'PHD-NURS-NTD', 'name' => 'Nursing Theory Development'],
                     ['code' => 'PHD-NURS-HS', 'name' => 'Healthcare Systems'],
@@ -254,6 +292,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MPA',
                 'name' => 'Master in Public Administration',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MPA-PP', 'name' => 'Public Policy'],
                     ['code' => 'MPA-LG', 'name' => 'Local Governance'],
@@ -264,6 +303,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'DPA',
                 'name' => 'Doctor in Public Administration',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'DPA-GD', 'name' => 'Governance and Development'],
                     ['code' => 'DPA-PSL', 'name' => 'Public Sector Leadership'],
@@ -274,6 +314,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MSCE',
                 'name' => 'Master of Science in Civil Engineering',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MSCE-SE', 'name' => 'Structural Engineering'],
                     ['code' => 'MSCE-GE', 'name' => 'Geotechnical Engineering'],
@@ -284,6 +325,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'DENG',
                 'name' => 'Doctor of Engineering',
+                'degree' => 'Doctoral',
                 'subjects' => [
                     ['code' => 'DENG-AEM', 'name' => 'Advanced Engineering Mathematics'],
                     ['code' => 'DENG-EI', 'name' => 'Engineering Innovation'],
@@ -294,6 +336,7 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'MSCS',
                 'name' => 'Master of Science in Computer Science',
+                'degree' => 'Masteral',
                 'subjects' => [
                     ['code' => 'MSCS-AI', 'name' => 'Artificial Intelligence'],
                     ['code' => 'MSCS-ML', 'name' => 'Machine Learning'],
@@ -308,6 +351,7 @@ class DatabaseSeeder extends Seeder
                 ['code' => $programData['code']],
                 [
                     'name' => $programData['name'],
+                    'degree' => $programData['degree'],
                     'description' => $programData['description'] ?? null,
                     'is_active' => true,
                 ]
@@ -352,8 +396,9 @@ class DatabaseSeeder extends Seeder
                         'user_id' => $faculty->id,
                     ],
                     [
-                        'academic_year' => AcademicYear::current()->value,
+                        'academic_year_id' => $currentAcademicYear->id,
                         'grading_sheet' => null,
+                        'grading_sheet_status' => 'pending',
                         'submission_deadline' => now()->addWeeks(2),
                     ]
                 );
