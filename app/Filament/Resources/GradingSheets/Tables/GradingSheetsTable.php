@@ -30,6 +30,7 @@ class GradingSheetsTable
                         ->badge()
                         ->color('gray'),
                     TextColumn::make('term')
+                        ->label('Semester')
                         ->searchable(),
                 ]),
                 ColumnGroup::make('Submission Status', [

@@ -64,6 +64,7 @@ class LoadsTable
                         ->badge()
                         ->color('gray'),
                     TextColumn::make('term')
+                        ->label('Semester')
                         ->searchable(),
                 ]),
                 ColumnGroup::make('Submission Status', [

@@ -38,7 +38,7 @@ class MyProgramSubjectsWidget extends TableWidget
                     ->label('Academic Year')
                     ->searchable(),
                 TextColumn::make('term')
-                    ->label('Term')
+                    ->label('Semester')
                     ->searchable(),
             ])
             ->query($this->getProgramSubjectsQuery())

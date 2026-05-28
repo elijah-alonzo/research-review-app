@@ -63,11 +63,12 @@ class LoadsForm
                             ->disabled(fn ($get, ?Load $record): bool => blank($get('program_id')) || ! self::canManageLoad($record)),
 
                         Select::make('term')
-                            ->label('Term')
+                            ->label('Semester')
                             ->options([
-                                'First Term' => 'First Term',
-                                '2nd Term' => '2nd Term',
-                                '3rd Term' => '3rd Term',
+                                'First Semester' => 'First Semester',
+                                'Second Semester' => 'Second Semester',
+                                'Third Semester' => 'Third Semester',
+                                'Summer Semester' => 'Summer Semester',
                             ])
                             ->prefixIcon('heroicon-m-calendar')
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))

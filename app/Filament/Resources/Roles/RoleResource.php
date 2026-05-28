@@ -16,6 +16,7 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Panel;
@@ -51,7 +52,8 @@ class RoleResource extends Resource
             ->components([
                 Grid::make()
                     ->schema([
-                        Section::make()
+                        Section::make('Role Details')
+                            ->description('Set a role name. Permissions are managed below.')
                             ->schema([
                                 TextInput::make('name')
                                     ->label(__('filament-shield::filament-shield.field.name'))
@@ -62,11 +64,8 @@ class RoleResource extends Resource
                                     ->required()
                                     ->maxLength(255),
 
-                                TextInput::make('guard_name')
-                                    ->label(__('filament-shield::filament-shield.field.guard_name'))
-                                    ->default(Utils::getFilamentAuthGuard())
-                                    ->nullable()
-                                    ->maxLength(255),
+                                Hidden::make('guard_name')
+                                    ->default(Utils::getFilamentAuthGuard()),
 
                                 Select::make(config('permission.column_names.team_foreign_key'))
                                     ->label(__('filament-shield::filament-shield.field.team'))
@@ -86,7 +85,10 @@ class RoleResource extends Resource
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
-                static::getShieldFormComponents(),
+                Section::make('Permissions')
+                    ->description('Choose the areas this role can access.')
+                    ->schema([static::getShieldFormComponents()])
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -95,17 +97,13 @@ class RoleResource extends Resource
     {
         return $table
             ->heading('Roles and Permissions')
-            ->description('The roles that determine the user\'s access and their associated permissions')
+            ->description('Manage access by assigning permissions to roles.')
             ->columns([
                 TextColumn::make('name')
                     ->weight(FontWeight::Medium)
                     ->label(__('filament-shield::filament-shield.column.name'))
                     ->formatStateUsing(fn (string $state): string => Str::headline($state))
                     ->searchable(),
-                TextColumn::make('guard_name')
-                    ->badge()
-                    ->color('warning')
-                    ->label(__('filament-shield::filament-shield.column.guard_name')),
                 TextColumn::make('team.name')
                     ->default('Global')
                     ->badge()

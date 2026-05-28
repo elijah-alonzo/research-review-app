@@ -40,7 +40,7 @@ class UnsubmittedGradingSheetsWidget extends TableWidget
                     ->icon('heroicon-m-book-open')
                     ->searchable(),
                 TextColumn::make('term')
-                    ->label('Term')
+                    ->label('Semester')
                     ->searchable(),
                 TextColumn::make('submission_deadline')
                     ->label('Deadline')

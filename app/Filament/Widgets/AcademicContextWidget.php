@@ -32,7 +32,7 @@ class AcademicContextWidget extends StatsOverviewWidget
 
         return [
             Stat::make('Academic Year', $currentYear),
-            Stat::make('Active Term', $activeTerm ?? 'N/A'),
+            Stat::make('Active Semester', $activeTerm ?? 'N/A'),
         ];
     }
 }

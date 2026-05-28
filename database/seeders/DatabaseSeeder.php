@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
 
         $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
@@ -69,6 +70,7 @@ class DatabaseSeeder extends Seeder
 
         $superAdminRole->syncPermissions($allPermissions);
         $adminRole->syncPermissions($adminPermissions);
+        $associateDeanRole->syncPermissions($adminPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
@@ -87,6 +89,14 @@ class DatabaseSeeder extends Seeder
                 'last_name' => 'Bansig',
                 'contact_number' => '123456789',
                 'role' => $adminRole,
+            ],
+            [
+                'email' => 'associatedean@spup.com',
+                'first_name' => 'Alex',
+                'middle_initial' => null,
+                'last_name' => 'Reyes',
+                'contact_number' => '123456789',
+                'role' => $associateDeanRole,
             ],
             [
                 'email' => 'faculty1@spup.com',
@@ -326,12 +336,12 @@ class DatabaseSeeder extends Seeder
 
         $facultyUsers = User::role('Faculty')->get();
         $subjects = Subject::query()->orderBy('id')->get();
-        $terms = ['First Term', '2nd Term', '3rd Term'];
+        $terms = ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester'];
 
         foreach ($facultyUsers as $index => $faculty) {
-            $baseOffset = $index * 3;
+            $baseOffset = $index * count($terms);
 
-            for ($i = 0; $i < 3; $i++) {
+            for ($i = 0; $i < count($terms); $i++) {
                 $subject = $subjects->get(($baseOffset + $i) % $subjects->count());
 
                 Load::updateOrCreate(

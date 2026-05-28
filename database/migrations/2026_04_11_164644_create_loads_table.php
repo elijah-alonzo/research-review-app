@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('program_id')->constrained('programs')->cascadeOnDelete();
             $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
             $table->enum('academic_year', AcademicYear::values());
-            $table->enum('term', ['First Term', '2nd Term', '3rd Term']);
+            $table->enum('term', ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester']);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('grading_sheet')->nullable();
             $table->dateTime('submission_deadline');
