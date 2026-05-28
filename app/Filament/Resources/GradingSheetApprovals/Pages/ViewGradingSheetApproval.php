@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\GradingSheetApprovals\Pages;
 
 use App\Filament\Resources\GradingSheetApprovals\GradingSheetApprovalsResource;
+use App\Filament\Resources\GradingSheetApprovals\Tables\GradingSheetApprovalsTable;
 use App\Models\Load;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Placeholder;
@@ -32,6 +33,8 @@ class ViewGradingSheetApproval extends ViewRecord
                         'grading_sheet_status' => 'submitted',
                     ]);
 
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'approved');
+
                     $this->redirect(static::getResource()::getUrl('index'));
                 }),
             Action::make('reject')
@@ -44,6 +47,8 @@ class ViewGradingSheetApproval extends ViewRecord
                     $this->record->update([
                         'grading_sheet_status' => 'pending',
                     ]);
+
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'rejected');
 
                     $this->redirect(static::getResource()::getUrl('index'));
                 }),

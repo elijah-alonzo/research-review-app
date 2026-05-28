@@ -57,7 +57,9 @@ class Register extends BaseRegister
 
             $this->callHook('beforeRegister');
 
-            RegistrationRequest::create($data);
+            $request = RegistrationRequest::create($data);
+
+            $this->notifyRegistrationRequest($request);
 
             $this->callHook('afterRegister');
         });
@@ -71,6 +73,20 @@ class Register extends BaseRegister
         $this->redirect(filament()->getLoginUrl());
 
         return null;
+    }
+
+    protected function notifyRegistrationRequest(RegistrationRequest $request): void
+    {
+        $recipients = User::role(['Dean', 'Associate Dean', 'Admin'])->get();
+
+        if ($recipients->isEmpty()) {
+            return;
+        }
+
+        Notification::make()
+            ->title('New registration request')
+            ->body("{$request->full_name} submitted a registration request.")
+            ->sendToDatabase($recipients);
     }
 
     protected function mutateFormDataBeforeRegister(array $data): array
@@ -159,7 +175,7 @@ class Register extends BaseRegister
     {
         $value = $value !== null ? trim($value) : null;
 
-        if ($value === '') {
+        if ($value === null || $value === '') {
             return null;
         }
 

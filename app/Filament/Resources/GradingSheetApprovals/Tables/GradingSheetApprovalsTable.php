@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\GradingSheetApprovals\Tables;
 
 use App\Models\Load;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -61,18 +63,26 @@ class GradingSheetApprovalsTable
                         ->icon('heroicon-m-check-circle')
                         ->color('success')
                         ->visible(fn (Load $record): bool => self::canModerate($record))
-                        ->action(fn (Load $record) => $record->update([
-                            'grading_sheet_status' => 'submitted',
-                        ])),
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'submitted',
+                            ]);
+
+                            self::notifyStatusChange($record, 'approved');
+                        }),
                     Action::make('reject')
                         ->label('Reject')
                         ->icon('heroicon-m-x-circle')
                         ->color('danger')
                         ->requiresConfirmation()
                         ->visible(fn (Load $record): bool => self::canModerate($record))
-                        ->action(fn (Load $record) => $record->update([
-                            'grading_sheet_status' => 'pending',
-                        ])),
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'pending',
+                            ]);
+
+                            self::notifyStatusChange($record, 'rejected');
+                        }),
                     Action::make('download')
                         ->label('Download')
                         ->icon('heroicon-m-arrow-down-tray')
@@ -95,6 +105,29 @@ class GradingSheetApprovalsTable
             $record->grading_sheet,
             basename($record->grading_sheet)
         );
+    }
+
+    public static function notifyStatusChange(Load $record, string $status): void
+    {
+        $recipients = User::role(['Dean', 'Associate Dean', 'Admin'])->get();
+
+        if ($record->user) {
+            $recipients->push($record->user);
+        }
+
+        $recipients = $recipients->unique('id')->values();
+
+        if ($recipients->isEmpty()) {
+            return;
+        }
+
+        $statusLabel = $status === 'approved' ? 'approved' : 'rejected';
+        $facultyName = $record->user?->full_name ?? 'A faculty member';
+
+        Notification::make()
+            ->title("Grading sheet {$statusLabel}")
+            ->body("{$facultyName}'s grading sheet was {$statusLabel}.")
+            ->sendToDatabase($recipients);
     }
 
     protected static function canModerate(Load $record): bool
