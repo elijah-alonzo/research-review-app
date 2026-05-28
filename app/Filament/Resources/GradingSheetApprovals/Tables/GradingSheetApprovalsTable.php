@@ -7,8 +7,6 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class GradingSheetApprovalsTable
@@ -18,6 +16,7 @@ class GradingSheetApprovalsTable
         return $table
             ->heading('Grading Sheet Submissions')
             ->description('Review grading sheets and approve or reject submissions.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Faculty')
@@ -54,19 +53,6 @@ class GradingSheetApprovalsTable
                     ->label('Uploaded At')
                     ->dateTime(),
             ])
-            ->filters([
-                SelectFilter::make('program_id')
-                    ->label('Program')
-                    ->relationship('program', 'name')
-                    ->searchable()
-                    ->preload(),
-                SelectFilter::make('academic_year_id')
-                    ->label('Academic Year')
-                    ->relationship('academicYear', 'year')
-                    ->searchable()
-                    ->preload(),
-            ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(2)
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),

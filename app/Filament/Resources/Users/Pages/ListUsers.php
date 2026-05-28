@@ -6,6 +6,9 @@ use App\Filament\Resources\Users\UserResource;
 use App\Filament\Resources\Users\Widgets\UsersStatsWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\Permission\Models\Role;
 
 class ListUsers extends ListRecords
 {
@@ -25,5 +28,29 @@ class ListUsers extends ListRecords
         return [
             CreateAction::make(),
         ];
+    }
+
+    public function getTabs(): array
+    {
+        $tabs = [
+            'all' => Tab::make('All'),
+        ];
+
+        $roles = Role::query()
+            ->whereNotIn('name', [
+                'super admin',
+                'Super Admin',
+                'super-admin',
+                'Super-Admin',
+            ])
+            ->orderBy('name')
+            ->pluck('name');
+
+        foreach ($roles as $role) {
+            $tabs[$role] = Tab::make($role)
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('roles', fn (Builder $rolesQuery) => $rolesQuery->where('name', $role)));
+        }
+
+        return $tabs;
     }
 }

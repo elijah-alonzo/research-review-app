@@ -13,6 +13,7 @@ class SystemLogsTable
         return $table
             ->heading('System Logs')
             ->description('Audit trail of user actions and system changes.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Date')

@@ -15,6 +15,7 @@ class GradingSheetsTable
         return $table
             ->heading('My Grading Sheets')
             ->description('A list of your teaching loads where you can upload grading sheets.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 ColumnGroup::make('Subject Information', [
                     TextColumn::make('program.name')

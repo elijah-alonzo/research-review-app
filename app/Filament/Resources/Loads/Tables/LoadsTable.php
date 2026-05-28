@@ -22,6 +22,7 @@ class LoadsTable
         return $table
             ->heading('Faculty Teaching Loads')
             ->description('A list of your teaching loads of all users in the system.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 ColumnGroup::make('Faculty', [
                     ImageColumn::make('user.avatar')

@@ -17,6 +17,7 @@ class SubjectsTable
         return $table
             ->heading('Offered Subjects')
             ->description('Detailed listing of subjects available in the university’s graduate programs.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('code')
                     ->label('Subject Code')

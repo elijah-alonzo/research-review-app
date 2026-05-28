@@ -16,6 +16,7 @@ class AcademicYearsTable
         return $table
             ->heading('Academic Years')
             ->description('Manage academic year records and their current status.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('year')
                     ->label('Academic Year')

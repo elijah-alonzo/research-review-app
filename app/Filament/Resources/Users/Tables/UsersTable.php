@@ -19,6 +19,7 @@ class UsersTable
         return $table
             ->heading('Users')
             ->description('Overview of the users present in the system.')
+            ->defaultPaginationPageOption(50)
             ->columns([
                 ImageColumn::make('avatar')
                     ->circular()
