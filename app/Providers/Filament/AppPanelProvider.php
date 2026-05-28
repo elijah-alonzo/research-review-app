@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Auth\Register;
 use App\Filament\Widgets\AcademicContextWidget;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\MyLoadStatsWidget;
@@ -35,6 +36,7 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login(Login::class)
+            ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
