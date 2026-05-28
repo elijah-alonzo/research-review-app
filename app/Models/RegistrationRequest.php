@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Program;
 
 #[Fillable([
     'first_name',
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'last_name',
     'email',
     'contact_number',
+    'program_id',
     'password',
     'status',
     'approved_by',
@@ -24,6 +26,11 @@ class RegistrationRequest extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function program(): BelongsTo
+    {
+        return $this->belongsTo(Program::class);
     }
 
     public function getFullNameAttribute(): string

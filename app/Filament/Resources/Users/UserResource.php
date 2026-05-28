@@ -38,7 +38,16 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('email', '!=', 'root@spup.com');
+        $query = parent::getEloquentQuery()->where('email', '!=', 'root@spup.com');
+        $user = auth()->user();
+
+        if ($user?->hasRole('Program Coordinator')) {
+            return $query
+                ->where('program_id', $user->program_id)
+                ->whereHas('roles', fn (Builder $rolesQuery) => $rolesQuery->where('name', 'Faculty'));
+        }
+
+        return $query;
     }
 
     public static function getRelations(): array

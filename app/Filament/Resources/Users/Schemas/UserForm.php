@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use App\Models\Program;
 use Spatie\Permission\Models\Role;
 
 class UserForm
@@ -71,6 +72,7 @@ class UserForm
                             ->prefixIcon('heroicon-m-shield-check')
                             ->required()
                             ->default(fn (): ?string => Role::query()->orderBy('name')->value('name'))
+                            ->live()
                             ->afterStateHydrated(function ($set, $record): void {
                                 $role = $record?->roles?->pluck('name')->first();
 
@@ -79,6 +81,19 @@ class UserForm
                                 }
                             })
                             ->dehydrated()
+                            ->columnSpan(3),
+
+                        Select::make('program_id')
+                            ->label('Program')
+                            ->options(fn (): array => Program::query()
+                                ->orderBy('name')
+                                ->pluck('name', 'id')
+                                ->all())
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Select program')
+                            ->visible(fn ($get): bool => in_array($get('role'), ['Program Coordinator', 'Faculty'], true))
+                            ->required(fn ($get): bool => in_array($get('role'), ['Program Coordinator', 'Faculty'], true))
                             ->columnSpan(3),
 
                         TextInput::make('password')

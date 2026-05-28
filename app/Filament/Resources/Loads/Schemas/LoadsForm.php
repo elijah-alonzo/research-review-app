@@ -42,8 +42,12 @@ class LoadsForm
                             ->searchable()
                             ->preload()
                             ->prefixIcon('heroicon-m-academic-cap')
+                            ->default(fn (): ?int => Auth::user()?->hasRole('Program Coordinator')
+                                ? Auth::user()?->program_id
+                                : null)
                             ->required(fn (?Load $record): bool => self::canManageLoad($record))
-                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record))
+                            ->disabled(fn (?Load $record): bool => ! self::canManageLoad($record)
+                                || Auth::user()?->hasRole('Program Coordinator'))
                             ->live()
                             ->afterStateUpdated(function ($set): void {
                                 $set('subject_id', null);

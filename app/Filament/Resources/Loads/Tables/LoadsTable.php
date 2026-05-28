@@ -10,8 +10,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -73,19 +71,6 @@ class LoadsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                SelectFilter::make('program_id')
-                    ->label('Program')
-                    ->relationship('program', 'name')
-                    ->searchable()
-                    ->preload(),
-                SelectFilter::make('academic_year_id')
-                    ->label('Academic Year')
-                    ->relationship('academicYear', 'year')
-                    ->searchable()
-                    ->preload(),
-            ], layout: FiltersLayout::AboveContent)
-            ->filtersFormColumns(2)
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),

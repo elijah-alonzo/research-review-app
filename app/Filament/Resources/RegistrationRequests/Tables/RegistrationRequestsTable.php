@@ -34,6 +34,11 @@ class RegistrationRequestsTable
                 TextColumn::make('contact_number')
                     ->label('Contact Number')
                     ->searchable(),
+                TextColumn::make('program.name')
+                    ->label('Program')
+                    ->badge()
+                    ->color('info')
+                    ->searchable(),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -87,6 +92,7 @@ class RegistrationRequestsTable
                 'last_name' => $record->last_name,
                 'email' => $record->email,
                 'contact_number' => $record->contact_number,
+                'program_id' => $record->program_id,
                 'password' => $record->password,
             ]);
         }

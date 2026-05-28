@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('contact_number')->unique();
+            $table->foreignId('program_id')
+                ->nullable()
+                ->constrained('programs')
+                ->nullOnDelete();
             $table->string('password');
             $table->string('status')->default('pending');
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();

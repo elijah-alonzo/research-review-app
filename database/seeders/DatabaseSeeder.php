@@ -356,6 +356,15 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        $coordinatorProgram = Program::query()->where('code', 'MIT')->first();
+
+        User::query()
+            ->where('email', 'pc@sys.com')
+            ->update(['program_id' => $coordinatorProgram?->id]);
+        User::query()
+            ->where('email', 'faculty@sys.com')
+            ->update(['program_id' => $coordinatorProgram?->id]);
+
         $facultyUsers = User::role('Faculty')->get();
         $subjects = Subject::query()->orderBy('id')->get();
         $terms = ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester'];

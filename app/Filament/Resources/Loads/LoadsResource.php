@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
@@ -37,7 +38,20 @@ class LoadsResource extends Resource
             return false;
         }
 
-        return $user->hasRole('dean') || $user->can('ManageFacultyLoads');
+        return $user->hasAnyRole(['Dean', 'Associate Dean', 'Program Coordinator', 'Admin'])
+            || $user->can('ManageFacultyLoads');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user?->hasRole('Program Coordinator') && $user->program_id) {
+            return $query->where('program_id', $user->program_id);
+        }
+
+        return $query;
     }
 
     public static function canAccess(): bool

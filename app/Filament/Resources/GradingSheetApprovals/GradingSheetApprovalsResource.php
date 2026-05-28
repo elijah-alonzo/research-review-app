@@ -11,6 +11,7 @@ use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class GradingSheetApprovalsResource extends Resource
@@ -28,6 +29,18 @@ class GradingSheetApprovalsResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user?->hasRole('Program Coordinator') && $user->program_id) {
+            return $query->where('program_id', $user->program_id);
+        }
+
+        return $query;
     }
 
     public static function table(Table $table): Table

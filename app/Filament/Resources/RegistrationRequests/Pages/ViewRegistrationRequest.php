@@ -54,6 +54,9 @@ class ViewRegistrationRequest extends ViewRecord
                         Placeholder::make('contact_number')
                             ->label('Contact Number')
                             ->content(fn (RegistrationRequest $record): string => $record->contact_number),
+                        Placeholder::make('program')
+                            ->label('Program')
+                            ->content(fn (RegistrationRequest $record): string => $record->program?->name ?? 'N/A'),
                         Placeholder::make('status')
                             ->label('Status')
                             ->content(fn (RegistrationRequest $record): string => $record->status),
@@ -79,6 +82,7 @@ class ViewRegistrationRequest extends ViewRecord
                 'last_name' => $this->record->last_name,
                 'email' => $this->record->email,
                 'contact_number' => $this->record->contact_number,
+                'program_id' => $this->record->program_id,
                 'password' => $this->record->password,
             ]);
         }

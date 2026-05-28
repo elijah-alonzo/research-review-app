@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 class AcademicYearsResource extends Resource
@@ -45,6 +46,26 @@ class AcademicYearsResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return 'Academic Years';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return ! auth()->user()?->hasRole('Program Coordinator');
+    }
+
+    public static function canCreate(): bool
+    {
+        return ! auth()->user()?->hasRole('Program Coordinator');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return ! auth()->user()?->hasRole('Program Coordinator');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return ! auth()->user()?->hasRole('Program Coordinator');
     }
 
     public static function getPages(): array

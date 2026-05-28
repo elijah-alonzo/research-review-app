@@ -4,9 +4,11 @@ namespace App\Filament\Pages\Auth;
 
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Models\Program;
 use Filament\Auth\Http\Responses\Contracts\RegistrationResponse;
 use Filament\Auth\Pages\Register as BaseRegister;
 use Filament\Notifications\Notification;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
@@ -24,6 +26,7 @@ class Register extends BaseRegister
                 $this->getLastNameFormComponent(),
                 $this->getEmailFormComponent(),
                 $this->getContactNumberFormComponent(),
+                $this->getProgramFormComponent(),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
             ]);
@@ -124,6 +127,20 @@ class Register extends BaseRegister
             ->maxLength(30)
             ->unique(User::class, 'contact_number')
             ->unique(RegistrationRequest::class, 'contact_number');
+    }
+
+    protected function getProgramFormComponent(): Component
+    {
+        return Select::make('program_id')
+            ->label('Program')
+            ->options(fn (): array => Program::query()
+                ->orderBy('name')
+                ->pluck('name', 'id')
+                ->all())
+            ->searchable()
+            ->preload()
+            ->required()
+            ->placeholder('Select program');
     }
 
     protected function getPasswordFormComponent(): Component

@@ -43,12 +43,12 @@ class AdminStatsWidget extends StatsOverviewWidget
             Stat::make('Unsubmitted', $unsubmitted)
                 ->description('Pending grading sheets')
                 ->descriptionIcon('heroicon-o-document-text')
-                ->color('warning')
+                ->color('primary')
                 ->chart([1, 4, 2, 5, 3, 4, 5]),
             Stat::make('Requests', $registrationRequests)
                 ->description('Account registration requests')
                 ->descriptionIcon('heroicon-o-inbox')
-                ->color('info')
+                ->color('primary')
                 ->chart([0, 1, 0, 2, 1, 2, 1]),
         ];
     }
