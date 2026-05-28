@@ -4,20 +4,16 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Auth\Register;
+use App\Filament\Pages\Dashboard;
 use App\Filament\Widgets\AcademicContextWidget;
-use App\Filament\Widgets\DashboardStatsWidget;
-use App\Filament\Widgets\MyLoadStatsWidget;
-use App\Filament\Widgets\MyPendingGradingSheetsWidget;
-use App\Filament\Widgets\MyProgramSubjectsWidget;
-use App\Filament\Widgets\MyRecentActivityWidget;
-use App\Filament\Widgets\MyUpcomingDeadlinesWidget;
-use App\Filament\Widgets\UnsubmittedGradingSheetsWidget;
+use App\Filament\Widgets\AdminStatsWidget;
+use App\Filament\Widgets\MyAssignedGradingSheetsWidget;
+use Filament\Widgets\AccountWidget;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -59,13 +55,8 @@ class AppPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AcademicContextWidget::class,
-                MyLoadStatsWidget::class,
-                MyPendingGradingSheetsWidget::class,
-                MyUpcomingDeadlinesWidget::class,
-                MyProgramSubjectsWidget::class,
-                MyRecentActivityWidget::class,
-                DashboardStatsWidget::class,
-                UnsubmittedGradingSheetsWidget::class,
+                MyAssignedGradingSheetsWidget::class,
+                AdminStatsWidget::class,
             ])
             ->plugin(FilamentShieldPlugin::make()->navigationGroup('System Settings'))
             ->middleware([

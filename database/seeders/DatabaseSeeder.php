@@ -25,122 +25,100 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Permission::query()->count() === 0) {
-            Artisan::call('shield:generate', [
-                '--all' => true,
-                '--option' => 'permissions',
-                '--panel' => 'app',
-                '--no-interaction' => true,
-                '--quiet' => true,
-            ]);
-        }
+        Artisan::call('shield:generate', [
+            '--all' => true,
+            '--option' => 'permissions',
+            '--panel' => 'app',
+            '--no-interaction' => true,
+            '--quiet' => true,
+        ]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $deanRole = Role::firstOrCreate(['name' => 'Dean']);
         $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
         $programCoordinatorRole = Role::firstOrCreate(['name' => 'Program Coordinator']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
-        $restrictedPermissions = array_values(array_filter(
+        $restrictedForLeadership = array_values(array_filter(
             $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [':Role', ':SystemLog', ':SystemLogs'])
+            fn (string $permission): bool => Str::contains($permission, [':Role', ':Roles', ':SystemLog', ':SystemLogs'])
         ));
-        $adminPermissions = array_values(array_diff($allPermissions, $restrictedPermissions));
+        $leadershipPermissions = array_values(array_diff($allPermissions, $restrictedForLeadership));
+        $coordinatorRestrictions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [
+                ':Role',
+                ':Roles',
+                ':SystemLog',
+                ':SystemLogs',
+                ':User',
+                ':Users',
+                ':RegistrationRequest',
+                ':RegistrationRequests',
+            ])
+        ));
+        $programCoordinatorPermissions = array_values(array_diff($allPermissions, $coordinatorRestrictions));
         $facultyPermissions = array_values(array_filter(
             $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [':Load', ':GradingSheet', ':Account'])
+            fn (string $permission): bool => Str::contains($permission, [':GradingSheet', ':Account'])
+                && ! Str::contains($permission, [':GradingSheetApproval'])
         ));
         $facultyWidgetPermissions = array_values(array_filter(
             $allPermissions,
             fn (string $permission): bool => Str::contains($permission, [
                 'View:AcademicContextWidget',
-                'View:MyLoadStatsWidget',
-                'View:MyPendingGradingSheetsWidget',
-                'View:MyUpcomingDeadlinesWidget',
-                'View:MyProgramSubjectsWidget',
-                'View:MyRecentActivityWidget',
+                'View:MyAssignedGradingSheetsWidget',
             ])
         ));
-        $facultyPermissions = array_values(array_unique(array_merge(
-            $facultyPermissions,
-            $facultyWidgetPermissions,
-        )));
-        $programCoordinatorPermissions = array_values(array_filter(
-            $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [':GradingSheetApproval'])
-        ));
+        $facultyPermissions = array_values(array_unique(array_merge($facultyPermissions, $facultyWidgetPermissions)));
 
-        $superAdminRole->syncPermissions($allPermissions);
-        $adminRole->syncPermissions($adminPermissions);
-        $associateDeanRole->syncPermissions($adminPermissions);
+        $adminRole->syncPermissions($allPermissions);
+        $deanRole->syncPermissions($leadershipPermissions);
+        $associateDeanRole->syncPermissions($leadershipPermissions);
         $programCoordinatorRole->syncPermissions($programCoordinatorPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
             [
-                'email' => 'root@spup.com',
-                'first_name' => 'Root',
+                'email' => 'admin@sys.com',
+                'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'User',
-                'contact_number' => '123456789',
-                'role' => $superAdminRole,
-            ],
-            [
-                'email' => 'dean@spup.com',
-                'first_name' => 'Inicia',
-                'middle_initial' => 'C',
-                'last_name' => 'Bansig',
+                'last_name' => 'Admin',
                 'contact_number' => '123456789',
                 'role' => $adminRole,
             ],
             [
-                'email' => 'associatedean@spup.com',
-                'first_name' => 'Alex',
+                'email' => 'dean@sys.com',
+                'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'Reyes',
+                'last_name' => 'Dean',
+                'contact_number' => '123456789',
+                'role' => $deanRole,
+            ],
+            [
+                'email' => 'associate@sys.com',
+                'first_name' => 'System',
+                'middle_initial' => null,
+                'last_name' => 'Associate',
                 'contact_number' => '123456789',
                 'role' => $associateDeanRole,
             ],
             [
-                'email' => 'programcoordinator@spup.com',
-                'first_name' => 'Taylor',
+                'email' => 'pc@sys.com',
+                'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'Santos',
+                'last_name' => 'Coordinator',
                 'contact_number' => '123456789',
                 'role' => $programCoordinatorRole,
             ],
             [
-                'email' => 'faculty1@spup.com',
-                'first_name' => 'Marifel',
-                'middle_initial' => 'G',
-                'last_name' => 'Kummer',
-                'contact_number' => '123456789',
-                'role' => $facultyRole,
-            ],
-            [
-                'email' => 'faculty2@spup.com',
-                'first_name' => 'Evelyn',
-                'middle_initial' => 'E',
-                'last_name' => 'Pacquing',
-                'contact_number' => '123456789',
-                'role' => $facultyRole,
-            ],
-            [
-                'email' => 'faculty3@spup.com',
-                'first_name' => 'Charito',
+                'email' => 'faculty@sys.com',
+                'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'Guillermo',
-                'contact_number' => '123456789',
-                'role' => $facultyRole,
-            ],
-            [
-                'email' => 'faculty4@spup.com',
-                'first_name' => 'Genalin',
-                'middle_initial' => null,
-                'last_name' => 'Taguiam',
+                'last_name' => 'Faculty',
                 'contact_number' => '123456789',
                 'role' => $facultyRole,
             ],
