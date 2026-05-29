@@ -61,10 +61,18 @@ class DatabaseSeeder extends Seeder
             ])
         ));
         $programCoordinatorPermissions = array_values(array_diff($allPermissions, $coordinatorRestrictions));
+        $facultyLoadPermissions = [
+            'ViewAny:Load',
+            'View:Load',
+            'Update:Load',
+        ];
         $facultyPermissions = array_values(array_filter(
             $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [':GradingSheet', ':Account'])
-                && ! Str::contains($permission, [':GradingSheetApproval'])
+            fn (string $permission): bool => (
+                Str::contains($permission, [':GradingSheet', ':Account'])
+                || in_array($permission, $facultyLoadPermissions, true)
+            )
+                && ! Str::contains($permission, [':GradingSheetApproval', ':AcademicYear'])
         ));
         $facultyWidgetPermissions = array_values(array_filter(
             $allPermissions,
