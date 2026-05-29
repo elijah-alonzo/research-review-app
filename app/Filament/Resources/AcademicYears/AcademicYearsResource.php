@@ -28,6 +28,17 @@ class AcademicYearsResource extends Resource
 
     protected static ?int $navigationSort = 40;
 
+    protected static function canManageAcademicYears(): bool
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['Admin', 'Dean', 'Associate Dean']);
+    }
+
     public static function form(Schema $schema): Schema
     {
         return AcademicYearsForm::configure($schema);
@@ -50,22 +61,32 @@ class AcademicYearsResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return ! auth()->user()?->hasRole('Program Coordinator');
+        return static::canManageAcademicYears();
     }
 
     public static function canCreate(): bool
     {
-        return ! auth()->user()?->hasRole('Program Coordinator');
+        return static::canManageAcademicYears();
     }
 
     public static function canEdit(Model $record): bool
     {
-        return ! auth()->user()?->hasRole('Program Coordinator');
+        return static::canManageAcademicYears();
     }
 
     public static function canDelete(Model $record): bool
     {
-        return ! auth()->user()?->hasRole('Program Coordinator');
+        return static::canManageAcademicYears();
+    }
+
+    public static function canAccess(): bool
+    {
+        return static::canManageAcademicYears();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::canManageAcademicYears();
     }
 
     public static function getPages(): array
