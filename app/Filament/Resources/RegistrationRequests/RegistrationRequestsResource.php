@@ -53,7 +53,7 @@ class RegistrationRequestsResource extends Resource
             return false;
         }
 
-        return $user->hasAnyRole(['Super Admin', 'Admin', 'Associate Dean']);
+        return $user->hasAnyRole(['Dean', 'Staff', 'Registrar']);
     }
 
     public static function getPages(): array

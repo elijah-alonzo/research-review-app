@@ -20,7 +20,7 @@ class AdminStatsWidget extends StatsOverviewWidget
             return false;
         }
 
-        return $user->hasAnyRole(['Admin', 'Dean', 'Associate Dean']);
+        return $user->hasAnyRole(['Dean', 'Staff', 'Registrar']);
     }
 
     protected function getColumns(): int

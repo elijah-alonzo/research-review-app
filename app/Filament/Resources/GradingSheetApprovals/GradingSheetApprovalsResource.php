@@ -36,7 +36,7 @@ class GradingSheetApprovalsResource extends Resource
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
-        if ($user?->hasRole('Program Coordinator') && $user->program_id) {
+        if ($user?->hasRole('Registrar') && $user->program_id) {
             return $query->where('program_id', $user->program_id);
         }
 

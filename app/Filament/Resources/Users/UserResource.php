@@ -41,7 +41,7 @@ class UserResource extends Resource
         $query = parent::getEloquentQuery()->where('email', '!=', 'root@spup.com');
         $user = auth()->user();
 
-        if ($user?->hasRole('Program Coordinator')) {
+        if ($user?->hasRole('Registrar')) {
             return $query
                 ->where('program_id', $user->program_id)
                 ->whereHas('roles', fn (Builder $rolesQuery) => $rolesQuery->where('name', 'Faculty'));

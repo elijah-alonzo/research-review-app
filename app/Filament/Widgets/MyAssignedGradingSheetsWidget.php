@@ -48,17 +48,13 @@ class MyAssignedGradingSheetsWidget extends TableWidget
                 TextColumn::make('grading_sheet_status')
                     ->label('Status')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => $state === 'under_review'
-                        ? 'Reviewing'
-                        : str($state)->replace('_', ' ')->title()->toString())
+                    ->formatStateUsing(fn (string $state): string => str($state)->replace('_', ' ')->title()->toString())
                     ->color(fn (string $state): string => match ($state) {
                         'submitted' => 'success',
-                        'under_review' => 'warning',
+                        'to_verify' => 'warning',
+                        'to_endorse' => 'info',
                         default => 'gray',
                     }),
-                TextColumn::make('submission_deadline')
-                    ->label('Deadline')
-                    ->dateTime(),
             ])
             ->query($this->getAssignedQuery())
             ->defaultPaginationPageOption(10);

@@ -92,8 +92,8 @@ class UserForm
                             ->searchable()
                             ->preload()
                             ->placeholder('Select program')
-                            ->visible(fn ($get): bool => in_array($get('role'), ['Program Coordinator', 'Faculty'], true))
-                            ->required(fn ($get): bool => in_array($get('role'), ['Program Coordinator', 'Faculty'], true))
+                            ->visible(fn ($get): bool => in_array($get('role'), ['Registrar', 'Faculty'], true))
+                            ->required(fn ($get): bool => in_array($get('role'), ['Registrar', 'Faculty'], true))
                             ->columnSpan(3),
 
                         TextInput::make('password')

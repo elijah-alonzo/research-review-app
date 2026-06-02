@@ -33,7 +33,7 @@ class EditGradingSheet extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         if (array_key_exists('grading_sheet', $data) && filled($data['grading_sheet'])) {
-            $data['grading_sheet_status'] = 'under_review';
+            $data['grading_sheet_status'] = 'to_verify';
         }
 
         return $data;
@@ -41,11 +41,11 @@ class EditGradingSheet extends EditRecord
 
     protected function afterSave(): void
     {
-        if ($this->record->grading_sheet_status !== 'under_review') {
+        if ($this->record->grading_sheet_status !== 'to_verify') {
             return;
         }
 
-        if ($this->previousStatus === 'under_review') {
+        if ($this->previousStatus === 'to_verify') {
             return;
         }
 
@@ -57,19 +57,12 @@ class EditGradingSheet extends EditRecord
 
         Notification::make()
             ->title('Grading sheet submitted')
-            ->body('A grading sheet has been submitted for review.')
+            ->body('A grading sheet has been submitted for verification.')
             ->sendToDatabase($recipients);
     }
 
     protected function getReviewRecipients()
     {
-        $admins = User::role(['Dean', 'Associate Dean', 'Admin'])->get();
-        $coordinators = User::role('Program Coordinator')
-            ->when($this->record->program_id, fn ($query) => $query->where('program_id', $this->record->program_id))
-            ->get();
-
-        return $admins->merge($coordinators)
-            ->unique('id')
-            ->values();
+        return User::role(['Dean', 'Staff', 'Registrar'])->get();
     }
 }

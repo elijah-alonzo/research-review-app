@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'user_id',
     'grading_sheet',
     'grading_sheet_status',
-    'submission_deadline',
 ])]
 class Load extends Model
 {
@@ -44,16 +43,10 @@ class Load extends Model
         $status = $this->grading_sheet_status ?? 'pending';
 
         return match ($status) {
-            'under_review' => 'reviewing',
+            'to_verify' => 'to verify',
+            'to_endorse' => 'to endorse',
             'submitted' => 'submitted',
             default => 'pending',
         };
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'submission_deadline' => 'datetime',
-        ];
     }
 }

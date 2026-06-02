@@ -35,10 +35,9 @@ class DatabaseSeeder extends Seeder
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $deanRole = Role::firstOrCreate(['name' => 'Dean']);
-        $associateDeanRole = Role::firstOrCreate(['name' => 'Associate Dean']);
-        $programCoordinatorRole = Role::firstOrCreate(['name' => 'Program Coordinator']);
+        $staffRole = Role::firstOrCreate(['name' => 'Staff']);
+        $registrarRole = Role::firstOrCreate(['name' => 'Registrar']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
@@ -47,20 +46,6 @@ class DatabaseSeeder extends Seeder
             fn (string $permission): bool => Str::contains($permission, [':Role', ':Roles', ':SystemLog', ':SystemLogs'])
         ));
         $leadershipPermissions = array_values(array_diff($allPermissions, $restrictedForLeadership));
-        $coordinatorRestrictions = array_values(array_filter(
-            $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [
-                ':Role',
-                ':Roles',
-                ':SystemLog',
-                ':SystemLogs',
-                ':User',
-                ':Users',
-                ':RegistrationRequest',
-                ':RegistrationRequests',
-            ])
-        ));
-        $programCoordinatorPermissions = array_values(array_diff($allPermissions, $coordinatorRestrictions));
         $facultyLoadPermissions = [
             'ViewAny:Load',
             'View:Load',
@@ -83,21 +68,12 @@ class DatabaseSeeder extends Seeder
         ));
         $facultyPermissions = array_values(array_unique(array_merge($facultyPermissions, $facultyWidgetPermissions)));
 
-        $adminRole->syncPermissions($allPermissions);
         $deanRole->syncPermissions($leadershipPermissions);
-        $associateDeanRole->syncPermissions($leadershipPermissions);
-        $programCoordinatorRole->syncPermissions($programCoordinatorPermissions);
+        $staffRole->syncPermissions($leadershipPermissions);
+        $registrarRole->syncPermissions($leadershipPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
-            [
-                'email' => 'admin@sys.com',
-                'first_name' => 'System',
-                'middle_initial' => null,
-                'last_name' => 'Admin',
-                'contact_number' => '123456789',
-                'role' => $adminRole,
-            ],
             [
                 'email' => 'dean@sys.com',
                 'first_name' => 'System',
@@ -107,20 +83,20 @@ class DatabaseSeeder extends Seeder
                 'role' => $deanRole,
             ],
             [
-                'email' => 'associate@sys.com',
+                'email' => 'registrar@sys.com',
                 'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'Associate',
+                'last_name' => 'Registrar',
                 'contact_number' => '123456789',
-                'role' => $associateDeanRole,
+                'role' => $registrarRole,
             ],
             [
-                'email' => 'pc@sys.com',
+                'email' => 'staff@sys.com',
                 'first_name' => 'System',
                 'middle_initial' => null,
-                'last_name' => 'Coordinator',
+                'last_name' => 'Staff',
                 'contact_number' => '123456789',
-                'role' => $programCoordinatorRole,
+                'role' => $staffRole,
             ],
             [
                 'email' => 'faculty@sys.com',
@@ -367,7 +343,7 @@ class DatabaseSeeder extends Seeder
         $coordinatorProgram = Program::query()->where('code', 'MIT')->first();
 
         User::query()
-            ->where('email', 'pc@sys.com')
+            ->where('email', 'registrar@sys.com')
             ->update(['program_id' => $coordinatorProgram?->id]);
         User::query()
             ->where('email', 'faculty@sys.com')
@@ -394,7 +370,6 @@ class DatabaseSeeder extends Seeder
                         'academic_year_id' => $currentAcademicYear->id,
                         'grading_sheet' => null,
                         'grading_sheet_status' => 'pending',
-                        'submission_deadline' => now()->addWeeks(2),
                     ]
                 );
             }

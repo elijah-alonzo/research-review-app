@@ -19,9 +19,8 @@ return new class extends Migration
             $table->enum('term', ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester']);
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('grading_sheet')->nullable();
-            $table->enum('grading_sheet_status', ['pending', 'under_review', 'submitted'])
+            $table->enum('grading_sheet_status', ['pending', 'to_verify', 'to_endorse', 'submitted'])
                 ->default('pending');
-            $table->dateTime('submission_deadline');
             $table->timestamps();
 
             $table->unique(['program_id', 'subject_id', 'term', 'user_id', 'academic_year_id']);

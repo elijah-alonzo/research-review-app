@@ -39,12 +39,10 @@ class GradingSheetsTable
                         ->formatStateUsing(fn (string $state): string => ucfirst($state))
                         ->color(fn (string $state): string => match ($state) {
                             'submitted' => 'success',
-                            'reviewing' => 'warning',
+                            'to verify' => 'warning',
+                            'to endorse' => 'info',
                             default => 'gray',
                         }),
-                    TextColumn::make('submission_deadline')
-                        ->label('Deadline')
-                        ->dateTime(),
                 ]),
                 TextColumn::make('updated_at')
                     ->label('Updated At')

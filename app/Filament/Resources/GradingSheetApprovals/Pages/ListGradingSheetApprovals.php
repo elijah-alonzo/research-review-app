@@ -20,8 +20,10 @@ class ListGradingSheetApprovals extends ListRecords
             'all' => Tab::make('All'),
             'pending' => Tab::make('Pending')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('grading_sheet_status', 'pending')),
-            'review' => Tab::make('Review')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('grading_sheet_status', 'under_review')),
+            'verify' => Tab::make('To Verify')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('grading_sheet_status', 'to_verify')),
+            'endorse' => Tab::make('To Endorse')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('grading_sheet_status', 'to_endorse')),
             'submitted' => Tab::make('Submitted')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('grading_sheet_status', 'submitted')),
         ];

@@ -38,7 +38,7 @@ class LoadsResource extends Resource
             return false;
         }
 
-        return $user->hasAnyRole(['Dean', 'Associate Dean', 'Program Coordinator', 'Admin'])
+        return $user->hasAnyRole(['Dean', 'Staff', 'Registrar'])
             || $user->can('ManageFacultyLoads');
     }
 
@@ -47,7 +47,7 @@ class LoadsResource extends Resource
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
-        if ($user?->hasRole('Program Coordinator') && $user->program_id) {
+        if ($user?->hasRole('Registrar') && $user->program_id) {
             return $query->where('program_id', $user->program_id);
         }
 

@@ -43,7 +43,7 @@ class ProgramsResource extends Resource
         $query = parent::getEloquentQuery();
         $user = auth()->user();
 
-        if ($user?->hasRole('Program Coordinator') && $user->program_id) {
+        if ($user?->hasRole('Registrar') && $user->program_id) {
             return $query->whereKey($user->program_id);
         }
 

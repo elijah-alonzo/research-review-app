@@ -77,7 +77,7 @@ class Register extends BaseRegister
 
     protected function notifyRegistrationRequest(RegistrationRequest $request): void
     {
-        $recipients = User::role(['Dean', 'Associate Dean', 'Admin'])->get();
+        $recipients = User::role(['Dean', 'Staff', 'Registrar'])->get();
 
         if ($recipients->isEmpty()) {
             return;

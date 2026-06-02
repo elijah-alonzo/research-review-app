@@ -8,6 +8,7 @@ use App\Models\Load;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Placeholder;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
@@ -18,22 +19,22 @@ class ViewGradingSheetApproval extends ViewRecord
 {
     protected static string $resource = GradingSheetApprovalsResource::class;
 
-    protected ?string $subheading = 'Review the submitted grading sheet and approve or reject it.';
+    protected ?string $subheading = 'Review the submitted grading sheet and verify or endorse it.';
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('approve')
-                ->label('Approve')
+            Action::make('verify')
+                ->label('Verify')
                 ->icon('heroicon-m-check-circle')
                 ->color('success')
-                ->visible(fn (): bool => $this->canModerate())
+                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_verify')
                 ->action(function (): void {
                     $this->record->update([
-                        'grading_sheet_status' => 'submitted',
+                        'grading_sheet_status' => 'to_endorse',
                     ]);
 
-                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'approved');
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'verified');
 
                     $this->redirect(static::getResource()::getUrl('index'));
                 }),
@@ -42,13 +43,42 @@ class ViewGradingSheetApproval extends ViewRecord
                 ->icon('heroicon-m-x-circle')
                 ->color('danger')
                 ->requiresConfirmation()
-                ->visible(fn (): bool => $this->canModerate())
+                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_verify')
                 ->action(function (): void {
                     $this->record->update([
                         'grading_sheet_status' => 'pending',
                     ]);
 
                     GradingSheetApprovalsTable::notifyStatusChange($this->record, 'rejected');
+
+                    $this->redirect(static::getResource()::getUrl('index'));
+                }),
+            Action::make('endorse')
+                ->label('Endorse')
+                ->icon('heroicon-m-check-badge')
+                ->color('success')
+                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_endorse')
+                ->action(function (): void {
+                    $this->record->update([
+                        'grading_sheet_status' => 'submitted',
+                    ]);
+
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'endorsed');
+
+                    $this->redirect(static::getResource()::getUrl('index'));
+                }),
+            Action::make('disapprove')
+                ->label('Disapprove')
+                ->icon('heroicon-m-x-circle')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_endorse')
+                ->action(function (): void {
+                    $this->record->update([
+                        'grading_sheet_status' => 'pending',
+                    ]);
+
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'disapproved');
 
                     $this->redirect(static::getResource()::getUrl('index'));
                 }),
@@ -66,6 +96,10 @@ class ViewGradingSheetApproval extends ViewRecord
         return $schema
             ->columns(1)
             ->components([
+                View::make('filament.grading-sheets.status-tracker')
+                    ->viewData([
+                        'current' => $this->record->grading_sheet_status,
+                    ]),
                 Section::make('Grading Sheet Details')
                     ->columns(2)
                     ->schema([
@@ -86,14 +120,11 @@ class ViewGradingSheetApproval extends ViewRecord
                             ->content(fn (Load $record): string => $record->academicYear?->year ?? 'N/A'),
                         Placeholder::make('status')
                             ->label('Status')
-                            ->content(fn (Load $record): string => $record->submission_status),
+                            ->content(fn (Load $record): string => str($record->submission_status)->title()->toString()),
                     ]),
-                Section::make('Grading Sheet File')
-                    ->schema([
-                        Placeholder::make('grading_sheet_preview')
-                            ->label('Preview')
-                            ->content(fn (Load $record): HtmlString => $this->renderPreview($record)),
-                    ]),
+                Placeholder::make('grading_sheet_preview')
+                    ->label('Grading Sheet Preview')
+                    ->content(fn (Load $record): HtmlString => $this->renderPreview($record)),
             ]);
     }
 
@@ -108,7 +139,7 @@ class ViewGradingSheetApproval extends ViewRecord
 
         if ($extension === 'pdf') {
             return new HtmlString(
-                '<iframe src="'.$url.'" style="width:100%; height:700px; border:0;" title="Grading Sheet"></iframe>'
+                '<iframe src="'.$url.'#toolbar=0&navpanes=0&scrollbar=0" style="width:100%; height:700px; border:0;" title="Grading Sheet"></iframe>'
             );
         }
 
@@ -123,8 +154,7 @@ class ViewGradingSheetApproval extends ViewRecord
             return false;
         }
 
-        return $this->record->grading_sheet_status === 'under_review'
-            && $user->can('Update:GradingSheetApproval');
+        return $user->can('Update:GradingSheetApproval');
     }
 
     protected function downloadGradingSheet()

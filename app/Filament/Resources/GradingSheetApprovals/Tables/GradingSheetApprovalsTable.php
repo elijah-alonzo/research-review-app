@@ -17,7 +17,7 @@ class GradingSheetApprovalsTable
     {
         return $table
             ->heading('Grading Sheet Submissions')
-            ->description('Review grading sheets and approve or reject submissions.')
+            ->description('Review grading sheets and move them through verification and endorsement.')
             ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('user.name')
@@ -40,17 +40,13 @@ class GradingSheetApprovalsTable
                 TextColumn::make('grading_sheet_status')
                     ->label('Status')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => $state === 'under_review'
-                        ? 'Reviewing'
-                        : str($state)->replace('_', ' ')->title()->toString())
+                    ->formatStateUsing(fn (string $state): string => str($state)->replace('_', ' ')->title()->toString())
                     ->color(fn (string $state): string => match ($state) {
                         'submitted' => 'success',
-                        'under_review' => 'warning',
+                        'to_verify' => 'warning',
+                        'to_endorse' => 'info',
                         default => 'gray',
                     }),
-                TextColumn::make('submission_deadline')
-                    ->label('Deadline')
-                    ->dateTime(),
                 TextColumn::make('updated_at')
                     ->label('Uploaded At')
                     ->dateTime(),
@@ -58,30 +54,55 @@ class GradingSheetApprovalsTable
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    Action::make('approve')
-                        ->label('Approve')
+                    Action::make('verify')
+                        ->label('Verify')
                         ->icon('heroicon-m-check-circle')
                         ->color('success')
-                        ->visible(fn (Load $record): bool => self::canModerate($record))
+                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_verify')
                         ->action(function (Load $record): void {
                             $record->update([
-                                'grading_sheet_status' => 'submitted',
+                                'grading_sheet_status' => 'to_endorse',
                             ]);
 
-                            self::notifyStatusChange($record, 'approved');
+                            self::notifyStatusChange($record, 'verified');
                         }),
                     Action::make('reject')
                         ->label('Reject')
                         ->icon('heroicon-m-x-circle')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->visible(fn (Load $record): bool => self::canModerate($record))
+                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_verify')
                         ->action(function (Load $record): void {
                             $record->update([
                                 'grading_sheet_status' => 'pending',
                             ]);
 
                             self::notifyStatusChange($record, 'rejected');
+                        }),
+                    Action::make('endorse')
+                        ->label('Endorse')
+                        ->icon('heroicon-m-check-badge')
+                        ->color('success')
+                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_endorse')
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'submitted',
+                            ]);
+
+                            self::notifyStatusChange($record, 'endorsed');
+                        }),
+                    Action::make('disapprove')
+                        ->label('Disapprove')
+                        ->icon('heroicon-m-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_endorse')
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'pending',
+                            ]);
+
+                            self::notifyStatusChange($record, 'disapproved');
                         }),
                     Action::make('download')
                         ->label('Download')
@@ -109,7 +130,7 @@ class GradingSheetApprovalsTable
 
     public static function notifyStatusChange(Load $record, string $status): void
     {
-        $recipients = User::role(['Dean', 'Associate Dean', 'Admin'])->get();
+        $recipients = User::role(['Dean', 'Staff', 'Registrar'])->get();
 
         if ($record->user) {
             $recipients->push($record->user);
@@ -121,7 +142,12 @@ class GradingSheetApprovalsTable
             return;
         }
 
-        $statusLabel = $status === 'approved' ? 'approved' : 'rejected';
+        $statusLabel = match ($status) {
+            'verified' => 'verified',
+            'endorsed' => 'endorsed',
+            'disapproved' => 'disapproved',
+            default => 'rejected',
+        };
         $facultyName = $record->user?->full_name ?? 'A faculty member';
 
         Notification::make()
@@ -130,7 +156,7 @@ class GradingSheetApprovalsTable
             ->sendToDatabase($recipients);
     }
 
-    protected static function canModerate(Load $record): bool
+    protected static function canModerate(): bool
     {
         $user = auth()->user();
 
@@ -138,7 +164,6 @@ class GradingSheetApprovalsTable
             return false;
         }
 
-        return $record->grading_sheet_status === 'under_review'
-            && $user->can('Update:GradingSheetApproval');
+        return $user->can('Update:GradingSheetApproval');
     }
 }
