@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\GradingSheets\Schemas;
 
+use App\Models\Load;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 
 class GradingSheetsForm
@@ -12,6 +14,11 @@ class GradingSheetsForm
     {
         return $schema
             ->components([
+                View::make('filament.grading-sheets.status-tracker')
+                    ->viewData(fn (?Load $record): array => [
+                        'current' => $record?->grading_sheet_status ?? 'pending',
+                    ])
+                    ->columnSpanFull(),
                 Section::make('Grading Sheet Upload')
                     ->columnSpanFull()
                     ->description('Upload the grading sheet file for this load.')

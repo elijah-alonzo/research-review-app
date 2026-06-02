@@ -4,6 +4,7 @@ namespace App\Filament\Resources\GradingSheets;
 
 use App\Filament\Resources\GradingSheets\Pages\EditGradingSheet;
 use App\Filament\Resources\GradingSheets\Pages\ListGradingSheets;
+use App\Filament\Resources\GradingSheets\Pages\ViewGradingSheet;
 use App\Filament\Resources\GradingSheets\Schemas\GradingSheetsForm;
 use App\Filament\Resources\GradingSheets\Tables\GradingSheetsTable;
 use App\Models\Load;
@@ -57,6 +58,7 @@ class GradingSheetsResource extends Resource
     {
         return [
             'index' => ListGradingSheets::route('/'),
+            'view' => ViewGradingSheet::route('/{record}'),
             'edit' => EditGradingSheet::route('/{record}/edit'),
         ];
     }

@@ -99,31 +99,11 @@ class ViewGradingSheetApproval extends ViewRecord
                 View::make('filament.grading-sheets.status-tracker')
                     ->viewData([
                         'current' => $this->record->grading_sheet_status,
-                    ]),
-                Section::make('Grading Sheet Details')
-                    ->columns(2)
-                    ->schema([
-                        Placeholder::make('faculty')
-                            ->label('Faculty')
-                            ->content(fn (Load $record): string => $record->user?->full_name ?? 'Unassigned'),
-                        Placeholder::make('program')
-                            ->label('Program')
-                            ->content(fn (Load $record): string => $record->program?->name ?? 'N/A'),
-                        Placeholder::make('subject')
-                            ->label('Subject')
-                            ->content(fn (Load $record): string => $record->subject?->name ?? 'N/A'),
-                        Placeholder::make('semester')
-                            ->label('Semester')
-                            ->content(fn (Load $record): string => (string) $record->term),
-                        Placeholder::make('academic_year')
-                            ->label('Academic Year')
-                            ->content(fn (Load $record): string => $record->academicYear?->year ?? 'N/A'),
-                        Placeholder::make('status')
-                            ->label('Status')
-                            ->content(fn (Load $record): string => str($record->submission_status)->title()->toString()),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
                 Placeholder::make('grading_sheet_preview')
                     ->label('Grading Sheet Preview')
+                    ->columnSpanFull()
                     ->content(fn (Load $record): HtmlString => $this->renderPreview($record)),
             ]);
     }

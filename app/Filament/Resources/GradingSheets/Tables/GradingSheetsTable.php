@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\GradingSheets\Tables;
 
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -55,9 +55,9 @@ class GradingSheetsTable
             ])
             ->recordActions([
                 ActionGroup::make([
-                    EditAction::make()
-                        ->label('Upload')
-                        ->icon('heroicon-m-arrow-up-tray')
+                    ViewAction::make()
+                        ->label('View')
+                        ->icon('heroicon-m-eye')
                         ->color('info'),
                 ])
                     ->iconButton()
