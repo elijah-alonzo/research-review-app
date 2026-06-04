@@ -82,7 +82,7 @@ class UsersTable
                     ViewAction::make(),
                     EditAction::make()->color('info'),
                     DeleteAction::make()
-                        ->visible(fn (User $record): bool => $record->email !== 'root@spup.com'),
+                        ->visible(fn (User $record): bool => $record->email !== 'admin@sys.com'),
                 ])
                     ->iconButton()
                     ->icon('heroicon-m-ellipsis-vertical')

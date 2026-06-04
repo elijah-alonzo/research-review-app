@@ -3,18 +3,21 @@
         [
             'key' => 'pending',
             'label' => 'Pending',
+            'description' => 'Awaiting initial review',
         ],
         [
             'key' => 'to_endorse',
             'label' => 'Endorsed',
+            'description' => 'Approved by endorser',
         ],
         [
             'key' => 'to_verify',
             'label' => 'Verified',
+            'description' => 'Confirmed and validated',
         ],
     ];
 
-    $currentStatus = $current ?? 'pending';
+    $currentStatus = $current ?? $state ?? 'pending';
     $activeIndex = collect($steps)->search(fn (array $step) => $step['key'] === $currentStatus);
     $activeIndex = $activeIndex === false ? (int) ($currentStatus === 'submitted') * count($steps) : $activeIndex;
 @endphp
@@ -46,6 +49,12 @@
                         <span class="fi-sc-wizard-header-step-label">
                             {{ $step['label'] }}
                         </span>
+
+                        @if (!empty($step['description']))
+                            <span class="fi-sc-wizard-header-step-description">
+                                {{ $step['description'] }}
+                            </span>
+                        @endif
                     </div>
                 </div>
 

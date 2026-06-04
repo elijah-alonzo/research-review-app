@@ -29,8 +29,6 @@ class GradingSheetApprovalsResource extends Resource
 
     protected static ?int $navigationSort = 20;
 
-    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
-
     public static function form(Schema $schema): Schema
     {
         return $schema->components([]);
@@ -76,14 +74,6 @@ class GradingSheetApprovalsResource extends Resource
     public static function canCreate(): bool
     {
         return false;
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            ViewGradingSheetApproval::class,
-            ViewGradingSheetApprovalDetails::class,
-        ]);
     }
 
     public static function getPages(): array

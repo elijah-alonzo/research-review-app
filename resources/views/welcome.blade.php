@@ -8,7 +8,7 @@
     <section class="hero">
         <div class="content">
             <span class="eyebrow">Graduate School</span>
-            <h1><span>Grading Sheet</span> Submission Portal</h1>
+            <h1><span>Grading Sheet</span> Tracking and Submission Portal</h1>
             <p>
                 The official portal for the submission and management of grading sheets for the Graduate School of St. Paul University Philippines. This system provides graduate school faculty members with a secure, efficient, and centralized platform for encoding, reviewing, and submitting student grades online. Designed to streamline academic processes, the portal ensures accurate record-keeping, timely submission of grades, and convenient access for authorized users while supporting the university's commitment to academic excellence, innovation, and quality service in graduate education.
             </p>

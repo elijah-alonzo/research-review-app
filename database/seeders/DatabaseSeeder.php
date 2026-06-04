@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\AcademicYear as AcademicYearModel;
 use App\Models\Load;
 use App\Models\Program;
-use App\Models\Subject;
+use App\Models\Subject as SubjectModel;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -37,58 +37,99 @@ class DatabaseSeeder extends Seeder
 
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $deanRole = Role::firstOrCreate(['name' => 'Dean']);
+        $programCoordinatorRole = Role::firstOrCreate(['name' => 'Program Coordinator']);
         $staffRole = Role::firstOrCreate(['name' => 'Staff']);
         $registrarRole = Role::firstOrCreate(['name' => 'Registrar']);
         $facultyRole = Role::firstOrCreate(['name' => 'Faculty']);
 
         $allPermissions = Permission::query()->pluck('name')->all();
-        $restrictedForLeadership = array_values(array_filter(
+        $accountPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':Account'])
+        ));
+
+        $systemLogsAndRolesPermissions = array_values(array_filter(
             $allPermissions,
             fn (string $permission): bool => Str::contains($permission, [':Role', ':Roles', ':SystemLog', ':SystemLogs'])
         ));
-        $leadershipPermissions = array_values(array_diff($allPermissions, $restrictedForLeadership));
-        $facultyLoadPermissions = [
-            'ViewAny:Load',
-            'View:Load',
-            'Update:Load',
-        ];
-        $gradingSheetApprovalPermissions = array_values(array_filter(
+
+        $pendingGradingSheetsPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':PendingGradingSheet'])
+        ));
+
+        $endorsedGradingSheetsPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':EndorsedGradingSheet'])
+        ));
+
+        $gradingSheetSubmissionsPermissions = array_values(array_filter(
             $allPermissions,
             fn (string $permission): bool => Str::contains($permission, [':GradingSheetApproval'])
         ));
-        $gradingSheetApprovalViewPermissions = array_values(array_filter(
-            $gradingSheetApprovalPermissions,
-            fn (string $permission): bool => Str::startsWith($permission, ['View:GradingSheetApproval', 'ViewAny:GradingSheetApproval'])
-        ));
-        $deanPermissions = array_values(array_filter(
-            $leadershipPermissions,
-            fn (string $permission): bool => ! in_array($permission, $gradingSheetApprovalPermissions, true)
-        ));
-        $deanPermissions = array_values(array_unique(array_merge(
-            $deanPermissions,
-            $gradingSheetApprovalViewPermissions
-        )));
-        $facultyPermissions = array_values(array_filter(
-            $allPermissions,
-            fn (string $permission): bool => (
-                Str::contains($permission, [':GradingSheet', ':Account'])
-                || in_array($permission, $facultyLoadPermissions, true)
-            )
-                && ! Str::contains($permission, [':GradingSheetApproval', ':AcademicYear'])
-        ));
-        $facultyWidgetPermissions = array_values(array_filter(
-            $allPermissions,
-            fn (string $permission): bool => Str::contains($permission, [
-                'View:AcademicContextWidget',
-                'View:MyAssignedGradingSheetsWidget',
-            ])
-        ));
-        $facultyPermissions = array_values(array_unique(array_merge($facultyPermissions, $facultyWidgetPermissions)));
 
-        $adminRole->syncPermissions($allPermissions);
-        $deanRole->syncPermissions($deanPermissions);
-        $staffRole->syncPermissions($leadershipPermissions);
-        $registrarRole->syncPermissions($leadershipPermissions);
+        $myGradingSheetsPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':GradingSheet'])
+                && ! Str::contains($permission, [':GradingSheetApproval', ':PendingGradingSheet', ':EndorsedGradingSheet'])
+        ));
+
+        // Admin: everything.
+        $adminPermissions = $allPermissions;
+
+        // Dean + Program Coordinator: everything except SystemLogs/Roles + Pending/Endorsed resources.
+        $deanAndCoordinatorPermissions = array_values(array_diff(
+            $allPermissions,
+            $systemLogsAndRolesPermissions,
+            $pendingGradingSheetsPermissions,
+            $endorsedGradingSheetsPermissions
+        ));
+
+        $registrationRequestsPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':RegistrationRequest'])
+        ));
+
+        $academicManagementPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':AcademicYear', ':Program', ':Subject', ':Load', 'ManageFacultyLoads'])
+        ));
+
+        // Staff: access to pending resource, registration requests, and academic management.
+        $staffPermissions = array_values(array_unique(array_merge(
+            $pendingGradingSheetsPermissions,
+            $registrationRequestsPermissions,
+            $academicManagementPermissions,
+            $accountPermissions,
+            ['View:AcademicContextWidget']
+        )));
+
+        // Registrar: ONLY endorsed grading sheets (+ account).
+        $registrarPermissions = array_values(array_unique(array_merge(
+            $endorsedGradingSheetsPermissions,
+            $accountPermissions,
+            ['View:AcademicContextWidget']
+        )));
+
+        // Faculty: ONLY my grading sheets (+ account).
+        $facultyPermissions = array_values(array_unique(array_merge(
+            $myGradingSheetsPermissions,
+            $accountPermissions,
+            ['View:MyAssignedGradingSheetsWidget', 'View:AcademicContextWidget']
+        )));
+
+        // Ensure Account access for everyone.
+        $deanAndCoordinatorPermissions = array_values(array_unique(array_merge(
+            $deanAndCoordinatorPermissions, 
+            $accountPermissions,
+            ['View:AcademicContextWidget']
+        )));
+
+        $adminRole->syncPermissions($adminPermissions);
+        $deanRole->syncPermissions($deanAndCoordinatorPermissions);
+        $programCoordinatorRole->syncPermissions($deanAndCoordinatorPermissions);
+        $staffRole->syncPermissions($staffPermissions);
+        $registrarRole->syncPermissions($registrarPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
@@ -107,6 +148,14 @@ class DatabaseSeeder extends Seeder
                 'last_name' => 'Dean',
                 'contact_number' => '123456789',
                 'role' => $deanRole,
+            ],
+            [
+                'email' => 'programcoordinator@sys.com',
+                'first_name' => 'System',
+                'middle_initial' => null,
+                'last_name' => 'Program Coordinator',
+                'contact_number' => '123456789',
+                'role' => $programCoordinatorRole,
             ],
             [
                 'email' => 'registrar@sys.com',
@@ -348,11 +397,11 @@ class DatabaseSeeder extends Seeder
             foreach ($programData['subjects'] as $subjectData) {
                 $subjectName = $subjectData['name'];
 
-                if (Subject::where('name', $subjectName)->exists()) {
+                if (SubjectModel::query()->where('name', $subjectName)->exists()) {
                     $subjectName = $programData['code'].' - '.$subjectName;
                 }
 
-                Subject::updateOrCreate(
+                SubjectModel::updateOrCreate(
                     [
                         'code' => $subjectData['code'],
                     ],
@@ -376,7 +425,9 @@ class DatabaseSeeder extends Seeder
             ->update(['program_id' => $coordinatorProgram?->id]);
 
         $facultyUsers = User::role('Faculty')->get();
-        $subjects = Subject::query()->orderBy('id')->get();
+        /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Subject> $subjectsQuery */
+        $subjectsQuery = SubjectModel::query();
+        $subjects = $subjectsQuery->orderBy('id')->get();
         $terms = ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester'];
 
         foreach ($facultyUsers as $index => $faculty) {

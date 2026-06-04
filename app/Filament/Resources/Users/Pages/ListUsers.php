@@ -42,6 +42,8 @@ class ListUsers extends ListRecords
                 'Super Admin',
                 'super-admin',
                 'Super-Admin',
+                'Admin',
+                'admin',
             ])
             ->orderBy('name')
             ->pluck('name');

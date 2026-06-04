@@ -71,7 +71,7 @@ return [
     */
 
     'super_admin' => [
-        'enabled' => true,
+        'enabled' => false,
         'name' => 'Super Admin',
         'define_via_gate' => false,
         'intercept_gate' => 'before',
@@ -244,6 +244,14 @@ return [
         'ViewAny:GradingSheetApproval',
         'View:GradingSheetApproval',
         'Update:GradingSheetApproval',
+        'ViewAny:PendingGradingSheet',
+        'View:PendingGradingSheet',
+        'Update:PendingGradingSheet',
+        'ViewAny:EndorsedGradingSheet',
+        'View:EndorsedGradingSheet',
+        'Update:EndorsedGradingSheet',
+        'View:MyAssignedGradingSheetsWidget',
+        'View:AcademicContextWidget',
     ],
 
     /*

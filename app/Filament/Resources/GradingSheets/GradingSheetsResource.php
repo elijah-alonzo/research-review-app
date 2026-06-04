@@ -28,7 +28,7 @@ class GradingSheetsResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
-    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Schema $schema): Schema
     {

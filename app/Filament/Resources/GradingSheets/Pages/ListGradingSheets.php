@@ -3,26 +3,27 @@
 namespace App\Filament\Resources\GradingSheets\Pages;
 
 use App\Filament\Resources\GradingSheets\GradingSheetsResource;
-use Filament\Resources\Pages\ListRecords;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Load;
+use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\Auth;
 
-class ListGradingSheets extends ListRecords
+class ListGradingSheets extends Page
 {
     protected static string $resource = GradingSheetsResource::class;
 
-    protected ?string $subheading = 'Browse, create, and manage your grading sheets.';
+    protected string $view = 'filament.grading-sheets.grading-sheets';
 
-    protected function getTableQuery(): Builder
+    public function getViewData(): array
     {
-        $query = parent::getTableQuery();
-        $userId = Auth::id();
+        $loads = Load::query()
+            ->where('user_id', Auth::id())
+            ->with(['program', 'subject', 'academicYear'])
+            ->orderByDesc('academic_year_id')
+            ->orderBy('term')
+            ->get();
 
-        if (! $userId) {
-            return $query->whereRaw('1 = 0');
-        }
-
-        return $query->where('user_id', $userId)
-            ->with(['program', 'subject', 'academicYear']);
+        return [
+            'loads' => $loads,
+        ];
     }
 }
