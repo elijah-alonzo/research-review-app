@@ -17,7 +17,7 @@ class GradingSheetApprovalsTable
     {
         return $table
             ->heading('Grading Sheet Submissions')
-            ->description('Review grading sheets and move them through verification and endorsement.')
+            ->description('Review grading sheets and move them through endorsement and verification.')
             ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('user.name')
@@ -54,39 +54,14 @@ class GradingSheetApprovalsTable
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
-                    Action::make('verify')
-                        ->label('Verify')
-                        ->icon('heroicon-m-check-circle')
-                        ->color('success')
-                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_verify')
-                        ->action(function (Load $record): void {
-                            $record->update([
-                                'grading_sheet_status' => 'to_endorse',
-                            ]);
-
-                            self::notifyStatusChange($record, 'verified');
-                        }),
-                    Action::make('reject')
-                        ->label('Reject')
-                        ->icon('heroicon-m-x-circle')
-                        ->color('danger')
-                        ->requiresConfirmation()
-                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_verify')
-                        ->action(function (Load $record): void {
-                            $record->update([
-                                'grading_sheet_status' => 'pending',
-                            ]);
-
-                            self::notifyStatusChange($record, 'rejected');
-                        }),
                     Action::make('endorse')
                         ->label('Endorse')
                         ->icon('heroicon-m-check-badge')
                         ->color('success')
-                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_endorse')
+                        ->visible(fn (Load $record): bool => self::canEndorse() && $record->grading_sheet_status === 'to_endorse')
                         ->action(function (Load $record): void {
                             $record->update([
-                                'grading_sheet_status' => 'submitted',
+                                'grading_sheet_status' => 'to_verify',
                             ]);
 
                             self::notifyStatusChange($record, 'endorsed');
@@ -96,13 +71,38 @@ class GradingSheetApprovalsTable
                         ->icon('heroicon-m-x-circle')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->visible(fn (Load $record): bool => self::canModerate() && $record->grading_sheet_status === 'to_endorse')
+                        ->visible(fn (Load $record): bool => self::canEndorse() && $record->grading_sheet_status === 'to_endorse')
                         ->action(function (Load $record): void {
                             $record->update([
                                 'grading_sheet_status' => 'pending',
                             ]);
 
                             self::notifyStatusChange($record, 'disapproved');
+                        }),
+                    Action::make('verify')
+                        ->label('Verify')
+                        ->icon('heroicon-m-check-circle')
+                        ->color('success')
+                        ->visible(fn (Load $record): bool => self::canVerify() && $record->grading_sheet_status === 'to_verify')
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'submitted',
+                            ]);
+
+                            self::notifyStatusChange($record, 'verified');
+                        }),
+                    Action::make('reject')
+                        ->label('Reject')
+                        ->icon('heroicon-m-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn (Load $record): bool => self::canVerify() && $record->grading_sheet_status === 'to_verify')
+                        ->action(function (Load $record): void {
+                            $record->update([
+                                'grading_sheet_status' => 'pending',
+                            ]);
+
+                            self::notifyStatusChange($record, 'rejected');
                         }),
                     Action::make('download')
                         ->label('Download')
@@ -130,7 +130,7 @@ class GradingSheetApprovalsTable
 
     public static function notifyStatusChange(Load $record, string $status): void
     {
-        $recipients = User::role(['Dean', 'Staff', 'Registrar'])->get();
+        $recipients = User::role(['Admin', 'Dean', 'Staff', 'Registrar'])->get();
 
         if ($record->user) {
             $recipients->push($record->user);
@@ -156,7 +156,7 @@ class GradingSheetApprovalsTable
             ->sendToDatabase($recipients);
     }
 
-    protected static function canModerate(): bool
+    protected static function canEndorse(): bool
     {
         $user = auth()->user();
 
@@ -164,6 +164,19 @@ class GradingSheetApprovalsTable
             return false;
         }
 
-        return $user->can('Update:GradingSheetApproval');
+        return $user->can('Update:GradingSheetApproval')
+            && ($user->hasRole('Staff') || $user->hasRole('Admin'));
+    }
+
+    protected static function canVerify(): bool
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->can('Update:GradingSheetApproval')
+            && ($user->hasRole('Registrar') || $user->hasRole('Admin'));
     }
 }

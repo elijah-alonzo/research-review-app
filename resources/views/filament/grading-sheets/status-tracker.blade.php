@@ -6,14 +6,14 @@
             'description' => 'Waiting for faculty submission',
         ],
         [
-            'key' => 'to_verify',
-            'label' => 'Verified',
-            'description' => 'Registrar reviews the grading sheet',
+            'key' => 'to_endorse',
+            'label' => 'To Endorse',
+            'description' => 'Staff endorses the grading sheet',
         ],
         [
-            'key' => 'to_endorse',
-            'label' => 'Endorsed',
-            'description' => 'Staff endorses the review',
+            'key' => 'to_verify',
+            'label' => 'To Verify',
+            'description' => 'Registrar verifies the endorsed grading sheet',
         ],
     ];
 

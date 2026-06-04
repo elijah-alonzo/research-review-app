@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
         $deanRole = Role::firstOrCreate(['name' => 'Dean']);
         $staffRole = Role::firstOrCreate(['name' => 'Staff']);
         $registrarRole = Role::firstOrCreate(['name' => 'Registrar']);
@@ -51,6 +52,22 @@ class DatabaseSeeder extends Seeder
             'View:Load',
             'Update:Load',
         ];
+        $gradingSheetApprovalPermissions = array_values(array_filter(
+            $allPermissions,
+            fn (string $permission): bool => Str::contains($permission, [':GradingSheetApproval'])
+        ));
+        $gradingSheetApprovalViewPermissions = array_values(array_filter(
+            $gradingSheetApprovalPermissions,
+            fn (string $permission): bool => Str::startsWith($permission, ['View:GradingSheetApproval', 'ViewAny:GradingSheetApproval'])
+        ));
+        $deanPermissions = array_values(array_filter(
+            $leadershipPermissions,
+            fn (string $permission): bool => ! in_array($permission, $gradingSheetApprovalPermissions, true)
+        ));
+        $deanPermissions = array_values(array_unique(array_merge(
+            $deanPermissions,
+            $gradingSheetApprovalViewPermissions
+        )));
         $facultyPermissions = array_values(array_filter(
             $allPermissions,
             fn (string $permission): bool => (
@@ -68,12 +85,21 @@ class DatabaseSeeder extends Seeder
         ));
         $facultyPermissions = array_values(array_unique(array_merge($facultyPermissions, $facultyWidgetPermissions)));
 
-        $deanRole->syncPermissions($leadershipPermissions);
+        $adminRole->syncPermissions($allPermissions);
+        $deanRole->syncPermissions($deanPermissions);
         $staffRole->syncPermissions($leadershipPermissions);
         $registrarRole->syncPermissions($leadershipPermissions);
         $facultyRole->syncPermissions($facultyPermissions);
 
         $users = [
+            [
+                'email' => 'admin@sys.com',
+                'first_name' => 'System',
+                'middle_initial' => null,
+                'last_name' => 'Admin',
+                'contact_number' => '123456789',
+                'role' => $adminRole,
+            ],
             [
                 'email' => 'dean@sys.com',
                 'first_name' => 'System',

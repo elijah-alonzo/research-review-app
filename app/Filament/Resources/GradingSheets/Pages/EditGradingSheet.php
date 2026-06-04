@@ -33,7 +33,7 @@ class EditGradingSheet extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         if (array_key_exists('grading_sheet', $data) && filled($data['grading_sheet'])) {
-            $data['grading_sheet_status'] = 'to_verify';
+            $data['grading_sheet_status'] = 'to_endorse';
         }
 
         return $data;
@@ -41,11 +41,11 @@ class EditGradingSheet extends EditRecord
 
     protected function afterSave(): void
     {
-        if ($this->record->grading_sheet_status !== 'to_verify') {
+        if ($this->record->grading_sheet_status !== 'to_endorse') {
             return;
         }
 
-        if ($this->previousStatus === 'to_verify') {
+        if ($this->previousStatus === 'to_endorse') {
             return;
         }
 
@@ -57,12 +57,12 @@ class EditGradingSheet extends EditRecord
 
         Notification::make()
             ->title('Grading sheet submitted')
-            ->body('A grading sheet has been submitted for verification.')
+            ->body('A grading sheet has been submitted for endorsement.')
             ->sendToDatabase($recipients);
     }
 
     protected function getReviewRecipients()
     {
-        return User::role(['Dean', 'Staff', 'Registrar'])->get();
+        return User::role(['Admin', 'Dean', 'Staff', 'Registrar'])->get();
     }
 }

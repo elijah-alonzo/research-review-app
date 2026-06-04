@@ -36,6 +36,7 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
+            ->sidebarCollapsibleOnDesktop()
             ->profile(null)
             ->darkmode(false)
             ->globalSearch(false)

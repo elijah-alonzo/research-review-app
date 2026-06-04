@@ -19,48 +19,19 @@ class ViewGradingSheetApproval extends ViewRecord
 {
     protected static string $resource = GradingSheetApprovalsResource::class;
 
-    protected ?string $subheading = 'Review the submitted grading sheet and verify or endorse it.';
+    protected ?string $subheading = 'Review the submitted grading sheet and endorse or verify it.';
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('verify')
-                ->label('Verify')
-                ->icon('heroicon-m-check-circle')
-                ->color('success')
-                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_verify')
-                ->action(function (): void {
-                    $this->record->update([
-                        'grading_sheet_status' => 'to_endorse',
-                    ]);
-
-                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'verified');
-
-                    $this->redirect(static::getResource()::getUrl('index'));
-                }),
-            Action::make('reject')
-                ->label('Reject')
-                ->icon('heroicon-m-x-circle')
-                ->color('danger')
-                ->requiresConfirmation()
-                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_verify')
-                ->action(function (): void {
-                    $this->record->update([
-                        'grading_sheet_status' => 'pending',
-                    ]);
-
-                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'rejected');
-
-                    $this->redirect(static::getResource()::getUrl('index'));
-                }),
             Action::make('endorse')
                 ->label('Endorse')
                 ->icon('heroicon-m-check-badge')
                 ->color('success')
-                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_endorse')
+                ->visible(fn (): bool => $this->canEndorse() && $this->record->grading_sheet_status === 'to_endorse')
                 ->action(function (): void {
                     $this->record->update([
-                        'grading_sheet_status' => 'submitted',
+                        'grading_sheet_status' => 'to_verify',
                     ]);
 
                     GradingSheetApprovalsTable::notifyStatusChange($this->record, 'endorsed');
@@ -72,13 +43,42 @@ class ViewGradingSheetApproval extends ViewRecord
                 ->icon('heroicon-m-x-circle')
                 ->color('danger')
                 ->requiresConfirmation()
-                ->visible(fn (): bool => $this->canModerate() && $this->record->grading_sheet_status === 'to_endorse')
+                ->visible(fn (): bool => $this->canEndorse() && $this->record->grading_sheet_status === 'to_endorse')
                 ->action(function (): void {
                     $this->record->update([
                         'grading_sheet_status' => 'pending',
                     ]);
 
                     GradingSheetApprovalsTable::notifyStatusChange($this->record, 'disapproved');
+
+                    $this->redirect(static::getResource()::getUrl('index'));
+                }),
+            Action::make('verify')
+                ->label('Verify')
+                ->icon('heroicon-m-check-circle')
+                ->color('success')
+                ->visible(fn (): bool => $this->canVerify() && $this->record->grading_sheet_status === 'to_verify')
+                ->action(function (): void {
+                    $this->record->update([
+                        'grading_sheet_status' => 'submitted',
+                    ]);
+
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'verified');
+
+                    $this->redirect(static::getResource()::getUrl('index'));
+                }),
+            Action::make('reject')
+                ->label('Reject')
+                ->icon('heroicon-m-x-circle')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->visible(fn (): bool => $this->canVerify() && $this->record->grading_sheet_status === 'to_verify')
+                ->action(function (): void {
+                    $this->record->update([
+                        'grading_sheet_status' => 'pending',
+                    ]);
+
+                    GradingSheetApprovalsTable::notifyStatusChange($this->record, 'rejected');
 
                     $this->redirect(static::getResource()::getUrl('index'));
                 }),
@@ -126,7 +126,7 @@ class ViewGradingSheetApproval extends ViewRecord
         return new HtmlString('<a href="'.$url.'" target="_blank" rel="noopener">Open grading sheet</a>');
     }
 
-    protected function canModerate(): bool
+    protected function canEndorse(): bool
     {
         $user = auth()->user();
 
@@ -134,7 +134,20 @@ class ViewGradingSheetApproval extends ViewRecord
             return false;
         }
 
-        return $user->can('Update:GradingSheetApproval');
+        return $user->can('Update:GradingSheetApproval')
+            && ($user->hasRole('Staff') || $user->hasRole('Admin'));
+    }
+
+    protected function canVerify(): bool
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->can('Update:GradingSheetApproval')
+            && ($user->hasRole('Registrar') || $user->hasRole('Admin'));
     }
 
     protected function downloadGradingSheet()
