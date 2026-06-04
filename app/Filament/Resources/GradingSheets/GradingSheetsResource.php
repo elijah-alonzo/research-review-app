@@ -16,7 +16,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class GradingSheetsResource extends Resource
 {
@@ -24,7 +23,6 @@ class GradingSheetsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
 
     protected static ?string $navigationLabel = 'My Grading Sheets';
 
