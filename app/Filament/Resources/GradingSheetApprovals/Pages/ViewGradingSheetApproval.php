@@ -19,6 +19,8 @@ class ViewGradingSheetApproval extends ViewRecord
 {
     protected static string $resource = GradingSheetApprovalsResource::class;
 
+    protected static ?string $navigationLabel = 'Preview';
+
     protected ?string $subheading = 'Review the submitted grading sheet and endorse or verify it.';
 
     protected function getHeaderActions(): array

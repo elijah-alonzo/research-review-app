@@ -11,6 +11,8 @@ class EditGradingSheet extends EditRecord
 {
     protected static string $resource = GradingSheetsResource::class;
 
+    protected static ?string $navigationLabel = 'Upload';
+
     protected ?string $subheading = 'Submit your grading sheet file.';
 
     protected ?string $previousStatus = null;

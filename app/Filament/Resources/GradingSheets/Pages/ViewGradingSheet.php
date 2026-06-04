@@ -17,6 +17,8 @@ class ViewGradingSheet extends ViewRecord
 {
     protected static string $resource = GradingSheetsResource::class;
 
+    protected static ?string $navigationLabel = 'Preview';
+
     protected ?string $subheading = 'Review the grading sheet before uploading a new file.';
 
     protected function getHeaderActions(): array
@@ -26,6 +28,7 @@ class ViewGradingSheet extends ViewRecord
                 ->label('Upload')
                 ->icon('heroicon-m-arrow-up-tray')
                 ->color('info')
+                ->visible(fn (): bool => $this->record->grading_sheet_status === 'pending')
                 ->url(fn (): string => static::getResource()::getUrl('edit', ['record' => $this->record])),
         ];
     }

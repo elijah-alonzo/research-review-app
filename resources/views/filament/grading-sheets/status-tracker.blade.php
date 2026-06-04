@@ -3,17 +3,14 @@
         [
             'key' => 'pending',
             'label' => 'Pending',
-            'description' => 'Waiting for faculty submission',
         ],
         [
             'key' => 'to_endorse',
-            'label' => 'To Endorse',
-            'description' => 'Staff endorses the grading sheet',
+            'label' => 'Endorsed',
         ],
         [
             'key' => 'to_verify',
-            'label' => 'To Verify',
-            'description' => 'Registrar verifies the endorsed grading sheet',
+            'label' => 'Verified',
         ],
     ];
 
@@ -48,9 +45,6 @@
                     <div class="fi-sc-wizard-header-step-text">
                         <span class="fi-sc-wizard-header-step-label">
                             {{ $step['label'] }}
-                        </span>
-                        <span class="fi-sc-wizard-header-step-description">
-                            {{ $step['description'] }}
                         </span>
                     </div>
                 </div>
