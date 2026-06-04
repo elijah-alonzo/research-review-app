@@ -23,7 +23,7 @@ class GradingSheetApprovalsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-check';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
+    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheets';
 
     protected static ?string $navigationLabel = 'Grading Sheet Submissions';
 

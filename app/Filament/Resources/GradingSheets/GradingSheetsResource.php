@@ -16,6 +16,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class GradingSheetsResource extends Resource
@@ -24,7 +26,7 @@ class GradingSheetsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheet Management';
+    protected static UnitEnum|string|null $navigationGroup = 'Grading Sheets';
 
     protected static ?string $navigationLabel = 'My Grading Sheets';
 
@@ -40,6 +42,14 @@ class GradingSheetsResource extends Resource
     public static function table(Table $table): Table
     {
         return GradingSheetsTable::configure($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $userId = Auth::id();
+
+        return $query->where('user_id', $userId);
     }
 
     public static function getModelLabel(): string

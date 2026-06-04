@@ -1,7 +1,131 @@
 @extends('layout')
 
 @section('header_actions')
-    <a class="primary-button" href="/app/login">Login</a>
+    <div class="login-dropdown">
+        <button class="primary-button dropdown-toggle" onclick="toggleLoginDropdown()">
+            Login
+            <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="dropdown-menu" id="loginDropdown">
+            <a href="/app/login" class="dropdown-item">
+                <span class="panel-name">Graduate School</span>
+                <span class="panel-desc">Admin & Leadership</span>
+            </a>
+            <a href="/faculty/login" class="dropdown-item">
+                <span class="panel-name">Faculty</span>
+                <span class="panel-desc">Submit Grading Sheets</span>
+            </a>
+            <a href="/registrar/login" class="dropdown-item">
+                <span class="panel-name">Registrar</span>
+                <span class="panel-desc">Verify Submissions</span>
+            </a>
+        </div>
+    </div>
+    
+    <style>
+        .login-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .dropdown-icon {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .login-dropdown.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 280px;
+            margin-top: 0.5rem;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .login-dropdown.active .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 1.25rem;
+            color: #374151;
+            text-decoration: none;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.15s ease;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .dropdown-item:active {
+            background-color: #f3f4f6;
+        }
+
+        .panel-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .panel-desc {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* Close dropdown when clicking outside */
+        body.dropdown-open {
+            /* Prevent scroll if needed */
+        }
+    </style>
+
+    <script>
+        function toggleLoginDropdown() {
+            const dropdown = document.getElementById('loginDropdown').parentElement;
+            dropdown.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('loginDropdown').parentElement;
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Close dropdown when clicking on a link
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.getElementById('loginDropdown').parentElement.classList.remove('active');
+            });
+        });
+    </script>
 @endsection
 
 @section('content')
