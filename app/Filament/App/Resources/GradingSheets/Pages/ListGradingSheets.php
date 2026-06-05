@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Admin\Resources\GradingSheets\Pages;
+namespace App\Filament\App\Resources\GradingSheets\Pages;
 
-use App\Filament\Admin\Resources\GradingSheets\GradingSheetsResource;
+use App\Filament\App\Resources\GradingSheets\GradingSheetsResource;
 use App\Models\Load;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\Auth;

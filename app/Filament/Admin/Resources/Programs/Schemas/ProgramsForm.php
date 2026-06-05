@@ -47,7 +47,7 @@ class ProgramsForm
                             ->onIcon('heroicon-m-check-circle')
                             ->offIcon('heroicon-m-x-circle'),
                     ])
-                        ->columns(2),
+                    ->columns(2),
             ]);
     }
 }

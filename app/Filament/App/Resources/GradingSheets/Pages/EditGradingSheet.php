@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Resources\GradingSheets\Pages;
+namespace App\Filament\App\Resources\GradingSheets\Pages;
 
-use App\Filament\Admin\Resources\GradingSheets\GradingSheetsResource;
+use App\Filament\App\Pages\Dashboard;
+use App\Filament\App\Resources\GradingSheets\GradingSheetsResource;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -24,7 +25,7 @@ class EditGradingSheet extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return static::getResource()::getUrl('index');
+        return Dashboard::getUrl();
     }
 
     protected function beforeSave(): void

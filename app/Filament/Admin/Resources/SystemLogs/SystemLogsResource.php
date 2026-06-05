@@ -7,8 +7,8 @@ use App\Filament\Admin\Resources\SystemLogs\Tables\SystemLogsTable;
 use App\Models\SystemLog;
 use BackedEnum;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use UnitEnum;
 
 class SystemLogsResource extends Resource

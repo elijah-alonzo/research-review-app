@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 use App\Filament\Admin\Resources\Account\AccountResource as AdminAccountResource;
-use App\Filament\App\Resources\Account\AccountResource as AppAccountResource;
 use App\Filament\Admin\Resources\Loads\LoadsResource;
+use App\Filament\App\Resources\Account\AccountResource as AppAccountResource;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Pages\Dashboard;
 use Filament\Widgets\AccountWidget;

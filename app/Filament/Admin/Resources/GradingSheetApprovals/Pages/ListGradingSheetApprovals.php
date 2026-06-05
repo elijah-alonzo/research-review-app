@@ -35,5 +35,4 @@ class ListGradingSheetApprovals extends ListRecords
             ->with(['user', 'program', 'subject', 'academicYear'])
             ->orderByDesc('updated_at');
     }
-
 }

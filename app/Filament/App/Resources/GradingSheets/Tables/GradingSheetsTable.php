@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\GradingSheets\Tables;
+namespace App\Filament\App\Resources\GradingSheets\Tables;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\ViewAction;

@@ -2,16 +2,17 @@
 
 namespace App\Filament\Admin\Pages\Auth;
 
+use App\Models\Program;
 use App\Models\RegistrationRequest;
 use App\Models\User;
-use App\Models\Program;
+use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Auth\Http\Responses\Contracts\RegistrationResponse;
 use Filament\Auth\Pages\Register as BaseRegister;
-use Filament\Notifications\Notification;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
@@ -36,7 +37,7 @@ class Register extends BaseRegister
     {
         try {
             $this->rateLimit(2);
-        } catch (\DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException $exception) {
+        } catch (TooManyRequestsException $exception) {
             $this->getRateLimitedNotification($exception)?->send();
 
             return null;

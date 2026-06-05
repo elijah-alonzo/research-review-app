@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Admin\Resources\GradingSheets\Schemas;
+namespace App\Filament\App\Resources\GradingSheets\Schemas;
 
 use App\Models\Load;
 use Filament\Forms\Components\FileUpload;

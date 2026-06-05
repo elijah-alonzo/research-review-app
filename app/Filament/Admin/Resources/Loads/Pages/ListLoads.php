@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Resources\Loads\Pages;
 use App\Filament\Admin\Resources\Loads\LoadsResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ListLoads extends ListRecords
 {
@@ -33,5 +33,4 @@ class ListLoads extends ListRecords
 
         return $query->with(['program', 'subject', 'user', 'academicYear']);
     }
-
 }

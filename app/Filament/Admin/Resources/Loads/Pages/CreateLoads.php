@@ -15,5 +15,4 @@ class CreateLoads extends CreateRecord
     {
         return static::getResource()::getUrl('index');
     }
-
 }

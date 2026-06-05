@@ -5,13 +5,13 @@ namespace App\Filament\Admin\Resources\Account;
 use App\Filament\Admin\Resources\Account\Pages\EditAccount;
 use App\Filament\Admin\Resources\Account\Pages\ViewAccount;
 use App\Models\User;
-use Filament\Navigation\NavigationItem;
-use UnitEnum;
 use BackedEnum;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use UnitEnum;
 
 class AccountResource extends Resource
 {
@@ -103,7 +103,7 @@ class AccountResource extends Resource
             NavigationItem::make(static::getNavigationLabel())
                 ->group(static::getNavigationGroup())
                 ->icon(static::getNavigationIcon())
-                ->isActiveWhen(fn (): bool => request()->routeIs(static::getRouteBaseName() . '.*'))
+                ->isActiveWhen(fn (): bool => request()->routeIs(static::getRouteBaseName().'.*'))
                 ->url(static::getNavigationUrl()),
         ];
     }

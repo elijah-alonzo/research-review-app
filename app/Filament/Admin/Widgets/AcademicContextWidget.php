@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\AcademicYear;
-use App\Models\Load;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -24,6 +23,7 @@ class AcademicContextWidget extends StatsOverviewWidget
     protected function getCards(): array
     {
         $currentYear = AcademicYear::current();
+
         return [
             Stat::make('Academic Year', $currentYear?->year ?? 'N/A')
                 ->description('Current academic year')

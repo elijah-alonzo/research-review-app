@@ -6,7 +6,6 @@ use App\Filament\App\Pages\Auth\Login;
 use App\Filament\App\Pages\Auth\Register;
 use App\Filament\App\Pages\Dashboard;
 use App\Filament\App\Widgets\AcademicContextWidget;
-use App\Filament\App\Widgets\MyAssignedGradingSheetsWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -33,28 +32,16 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
-            ->sidebarFullyCollapsibleOnDesktop()
-            ->profile(null)
             ->darkmode(false)
+            ->topNavigation()
             ->globalSearch(false)
-            ->collapsibleNavigationGroups(false)
             ->viteTheme('resources/css/filament/app/theme.css')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->navigationGroups([
-                'Grading Sheet Management',
-                'User Management',
-                'Academic Management',
-                'System Settings',
-            ])
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\Filament\App\Widgets')
-            ->widgets([
-                AcademicContextWidget::class,
-                MyAssignedGradingSheetsWidget::class,
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

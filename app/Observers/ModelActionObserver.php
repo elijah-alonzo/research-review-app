@@ -35,6 +35,7 @@ class ModelActionObserver
     {
         if ($this->isPasswordChange($model)) {
             $this->logPasswordChange($model);
+
             return;
         }
 

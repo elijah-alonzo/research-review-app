@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\Auth\Login;
-use App\Filament\Admin\Pages\Auth\Register;
 use App\Filament\Admin\Pages\Dashboard;
 use App\Filament\Admin\Widgets\AcademicContextWidget;
 use App\Filament\Admin\Widgets\AdminStatsWidget;
@@ -30,7 +29,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login(Login::class)
-            ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
@@ -54,7 +52,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
             ->widgets([
                 AcademicContextWidget::class,
-                MyAssignedGradingSheetsWidget::class,
                 AdminStatsWidget::class,
             ])
             ->plugin(FilamentShieldPlugin::make()->navigationGroup('System Settings'))

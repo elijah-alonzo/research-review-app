@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Resources\Programs\Pages;
 use App\Filament\Admin\Resources\Programs\ProgramsResource;
 use App\Filament\Admin\Resources\Programs\Widgets\ProgramsStatsWidget;
 use Filament\Actions\CreateAction;
-use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ListPrograms extends ListRecords
 {

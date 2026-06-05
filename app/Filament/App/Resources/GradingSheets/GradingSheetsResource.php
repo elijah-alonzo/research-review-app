@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Admin\Resources\GradingSheets;
+namespace App\Filament\App\Resources\GradingSheets;
 
-use App\Filament\Admin\Resources\GradingSheets\Pages\EditGradingSheet;
-use App\Filament\Admin\Resources\GradingSheets\Pages\ListGradingSheets;
-use App\Filament\Admin\Resources\GradingSheets\Pages\ViewGradingSheet;
-use App\Filament\Admin\Resources\GradingSheets\Pages\ViewGradingSheetDetails;
-use App\Filament\Admin\Resources\GradingSheets\Schemas\GradingSheetsForm;
-use App\Filament\Admin\Resources\GradingSheets\Tables\GradingSheetsTable;
+use App\Filament\App\Resources\GradingSheets\Pages\EditGradingSheet;
+use App\Filament\App\Resources\GradingSheets\Pages\ListGradingSheets;
+use App\Filament\App\Resources\GradingSheets\Pages\ViewGradingSheet;
+use App\Filament\App\Resources\GradingSheets\Pages\ViewGradingSheetDetails;
+use App\Filament\App\Resources\GradingSheets\Schemas\GradingSheetsForm;
+use App\Filament\App\Resources\GradingSheets\Tables\GradingSheetsTable;
 use App\Models\Load;
 use BackedEnum;
 use Filament\Pages\Enums\SubNavigationPosition;
@@ -23,12 +23,13 @@ class GradingSheetsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-
     protected static ?string $navigationLabel = 'My Grading Sheets';
 
     protected static ?int $navigationSort = 10;
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {

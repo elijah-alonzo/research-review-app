@@ -19,7 +19,7 @@ class Login extends BaseLogin
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      */
     protected function getCredentialsFromFormData(array $data): array

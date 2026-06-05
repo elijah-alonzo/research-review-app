@@ -5,9 +5,11 @@ namespace Database\Seeders;
 use App\Models\AcademicYear as AcademicYearModel;
 use App\Models\Load;
 use App\Models\Program;
+use App\Models\Subject;
 use App\Models\Subject as SubjectModel;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
@@ -120,7 +122,7 @@ class DatabaseSeeder extends Seeder
 
         // Ensure Account access for everyone.
         $deanAndCoordinatorPermissions = array_values(array_unique(array_merge(
-            $deanAndCoordinatorPermissions, 
+            $deanAndCoordinatorPermissions,
             $accountPermissions,
             ['View:AcademicContextWidget']
         )));
@@ -425,7 +427,7 @@ class DatabaseSeeder extends Seeder
             ->update(['program_id' => $coordinatorProgram?->id]);
 
         $facultyUsers = User::role('Faculty')->get();
-        /** @var \Illuminate\Database\Eloquent\Builder<\App\Models\Subject> $subjectsQuery */
+        /** @var Builder<Subject> $subjectsQuery */
         $subjectsQuery = SubjectModel::query();
         $subjects = $subjectsQuery->orderBy('id')->get();
         $terms = ['First Semester', 'Second Semester', 'Third Semester', 'Summer Semester'];

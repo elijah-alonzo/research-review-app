@@ -6,8 +6,8 @@ use App\Filament\Admin\Resources\RegistrationRequests\RegistrationRequestsResour
 use App\Models\RegistrationRequest;
 use App\Models\User;
 use Filament\Actions\Action;
-use Filament\Resources\Pages\ViewRecord;
 use Filament\Forms\Components\Placeholder;
+use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Spatie\Permission\Models\Role;

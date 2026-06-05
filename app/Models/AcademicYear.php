@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AcademicYear extends Model
 {
     public const STATUS_CURRENT = 'current';
+
     public const STATUS_COMPLETED = 'completed';
 
     public function loads(): HasMany
