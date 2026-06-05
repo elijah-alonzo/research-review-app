@@ -23,7 +23,7 @@ class ViewPendingGradingSheetDetails extends ViewPendingGradingSheet
         return $schema
             ->columns(1)
             ->components([
-                View::make('app.grading-sheets.status-tracker')
+                View::make('public.progress')
                     ->viewData([
                         'current' => $this->record->grading_sheet_status,
                     ])

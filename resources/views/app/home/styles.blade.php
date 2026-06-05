@@ -173,8 +173,8 @@
     }
 
     .section-header-icon {
-        width: 1.125rem;
-        height: 1.125rem;
+        width: 1.5rem;
+        height: 1.5rem;
         color: var(--accent);
         flex-shrink: 0;
     }
@@ -412,31 +412,6 @@
         color: rgb(107, 114, 128);
         margin-top: 0.125rem;
     }
-
-/* ── Section Header Icon Box ── */
-.section-header-icon-box {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.5rem;
-    background: var(--accent-light);
-    border: 1px solid var(--accent-medium);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.section-header-icon {
-    width: 1.125rem;
-    height: 1.125rem;
-    color: var(--accent);
-}
-
-.section-subtitle {
-    font-size: 1rem;
-    color: rgb(107, 114, 128);
-    margin-top: 0.1rem;
-}
 
 /* ── Card Header Actions ── */
 .grading-sheet-card-header-actions {
