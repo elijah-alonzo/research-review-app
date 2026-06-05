@@ -2,11 +2,13 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\App\Pages\Auth\Login;
-use App\Filament\App\Pages\Auth\Register;
-use App\Filament\App\Pages\Dashboard;
-use App\Filament\App\Widgets\AcademicContextWidget;
-use App\Filament\App\Widgets\MyAssignedGradingSheetsWidget;
+use App\Filament\Admin\Pages\Auth\Login;
+use App\Filament\Admin\Pages\Auth\Register;
+use App\Filament\Admin\Pages\Dashboard;
+use App\Filament\Admin\Widgets\AcademicContextWidget;
+use App\Filament\Admin\Widgets\AdminStatsWidget;
+use App\Filament\Admin\Widgets\MyAssignedGradingSheetsWidget;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -20,14 +22,13 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AppPanelProvider extends PanelProvider
+class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('app')
-            ->path('app')
+            ->id('admin')
+            ->path('admin')
             ->login(Login::class)
             ->registration(Register::class)
             ->passwordReset()
@@ -39,8 +40,8 @@ class AppPanelProvider extends PanelProvider
             ->globalSearch(false)
             ->collapsibleNavigationGroups(false)
             ->viteTheme('resources/css/filament/app/theme.css')
-            ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\Filament\App\Resources')
-            ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\Filament\App\Pages')
+            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
+            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
             ->pages([
                 Dashboard::class,
             ])
@@ -50,11 +51,13 @@ class AppPanelProvider extends PanelProvider
                 'Academic Management',
                 'System Settings',
             ])
-            ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\Filament\App\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
             ->widgets([
                 AcademicContextWidget::class,
                 MyAssignedGradingSheetsWidget::class,
+                AdminStatsWidget::class,
             ])
+            ->plugin(FilamentShieldPlugin::make()->navigationGroup('System Settings'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

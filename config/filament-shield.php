@@ -1,8 +1,9 @@
 <?php
 
 declare(strict_types=1);
-use App\Filament\Resources\Account\AccountResource;
-use App\Filament\Resources\Loads\LoadsResource;
+use App\Filament\Admin\Resources\Account\AccountResource as AdminAccountResource;
+use App\Filament\App\Resources\Account\AccountResource as AppAccountResource;
+use App\Filament\Admin\Resources\Loads\LoadsResource;
 use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
 use Filament\Pages\Dashboard;
 use Filament\Widgets\AccountWidget;
@@ -171,7 +172,11 @@ return [
     'resources' => [
         'subject' => 'model',
         'manage' => [
-            AccountResource::class => [
+            AdminAccountResource::class => [
+                'view',
+                'update',
+            ],
+            AppAccountResource::class => [
                 'view',
                 'update',
             ],
