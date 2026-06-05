@@ -58,7 +58,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->breadcrumbs(false)
             ->font('Figtree')
-            ->brandLogo(asset('sys-logo.png'))
-            ->brandLogoHeight('3rem');
+            // ->brandLogo(asset('sys-spup.png'))
+            ->brandLogoHeight('4rem');
     }
 }

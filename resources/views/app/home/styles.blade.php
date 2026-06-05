@@ -31,11 +31,6 @@
         top: 1.5rem;
     }
 
-    .dark .profile-card {
-        background: rgb(17 24 39);
-        border-color: rgba(255, 255, 255, 0.08);
-    }
-
     .profile-banner {
         height: 72px;
         background: linear-gradient(135deg, #03522a 0%, #056b37 60%, #047a40 100%);
@@ -55,8 +50,8 @@
     }
 
     .profile-avatar-gradient {
-        width: 80px;
-        height: 80px;
+        width: 160px;
+        height: 160px;
         border-radius: 50%;
         background: var(--accent);
         display: flex;
@@ -70,33 +65,21 @@
         box-shadow: 0 4px 10px rgba(3, 82, 42, 0.25);
     }
 
-    .dark .profile-avatar-gradient {
-        border-color: rgb(17 24 39);
-    }
-
     .profile-avatar-img {
-        width: 80px;
-        height: 80px;
+        width: 160px;
+        height: 160px;
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid white;
         box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
-
-    .dark .profile-avatar-img {
-        border-color: rgb(17 24 39);
-    }
-
+    
     .profile-name {
         font-size: 1.5rem;
         font-weight: 700;
         color: rgb(17, 24, 39);
         margin-bottom: 0.25rem;
         line-height: 1.3;
-    }
-
-    .dark .profile-name {
-        color: white;
     }
 
     .profile-role-badge {
@@ -111,11 +94,6 @@
         letter-spacing: 0.01em;
     }
 
-    .dark .profile-role-badge {
-        background: rgba(3, 82, 42, 0.2);
-        color: #4ade80;
-    }
-
     .profile-details-list {
         width: 100%;
         border-top: 1px solid rgba(0,0,0,0.06);
@@ -127,20 +105,12 @@
         text-align: left;
     }
 
-    .dark .profile-details-list {
-        border-top-color: rgba(255,255,255,0.05);
-    }
-
     .profile-detail-item {
         display: flex;
         align-items: center;
         gap: 0.6rem;
         font-size: 0.8125rem;
         color: rgb(75, 85, 99);
-    }
-
-    .dark .profile-detail-item {
-        color: rgb(156, 163, 175);
     }
 
     .profile-detail-icon {
@@ -208,11 +178,6 @@
         box-shadow: 0 4px 12px rgba(3, 82, 42, 0.08), 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    .dark .grading-sheet-card {
-        background: rgb(17 24 39);
-        border-color: rgba(255, 255, 255, 0.08);
-    }
-
     .grading-sheet-card-header {
         padding: 0.875rem 1.125rem;
         display: flex;
@@ -231,22 +196,12 @@
         overflow: hidden;
     }
 
-    .dark .grading-sheet-card-body {
-        border-top-color: rgba(255, 255, 255, 0.05);
-        background: rgba(31, 41, 55, 0.3);
-    }
-
     .grading-sheet-card-footer {
         padding: 0.75rem 1.125rem;
         background: rgba(249, 250, 251, 0.6);
         border-top: 1px solid rgba(0, 0, 0, 0.05);
         display: flex;
         justify-content: flex-end;
-    }
-
-    .dark .grading-sheet-card-footer {
-        background: rgba(31, 41, 55, 0.3);
-        border-top-color: rgba(255, 255, 255, 0.05);
     }
 
     /* ── Buttons ── */
@@ -291,17 +246,6 @@
         border-color: rgb(209, 213, 219);
     }
 
-    .dark .view-btn {
-        background: rgb(31, 41, 55);
-        border-color: rgb(55, 65, 81);
-        color: rgb(209, 213, 219);
-    }
-
-    .dark .view-btn:hover {
-        background: rgb(55, 65, 81);
-        color: white;
-    }
-
     /* ── Empty State ── */
     .empty-state {
         background: white;
@@ -311,11 +255,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .dark .empty-state {
-        background: rgb(17 24 39);
-        border-color: rgba(255, 255, 255, 0.12);
     }
 
     .empty-state-content {
@@ -334,10 +273,6 @@
         justify-content: center;
     }
 
-    .dark .empty-state-icon-wrapper {
-        background: var(--accent-medium);
-    }
-
     .empty-state-icon {
         width: 36px;
         height: 36px;
@@ -351,19 +286,11 @@
         color: rgb(17, 24, 39);
     }
 
-    .dark .empty-state-title {
-        color: white;
-    }
-
     .empty-state-description {
         margin: 0;
         font-size: 0.9rem;
         line-height: 1.6;
         color: rgb(107, 114, 128);
-    }
-
-    .dark .empty-state-description {
-        color: rgb(156, 163, 175);
     }
 
     /* ── Status Tracker Overflow Fix ── */

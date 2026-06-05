@@ -21,24 +21,12 @@
 }
 
 .fi-simple-main-ctn {
-    background: linear-gradient(
-        135deg,
-        #03542b 0%,
-        #226443 35%,
-        #237345 65%,
-        #014d26 100%
-    );
+    background: #03522a;
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
 }
 
 .fi-topbar {
-    background: linear-gradient(
-        135deg,
-        #03542b 0%,
-        #226443 35%,
-        #237345 65%,
-        #014d26 100%
-    );
+    background: #03522a;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -48,45 +36,39 @@
 }
 
 /* Sidebar hover state — green icon & text, subtle lift */
-.fi-sidebar-item > .fi-sidebar-item-btn {
+.fi-sidebar-item>.fi-sidebar-item-btn {
     transition:
         transform 0.2s ease,
         background 0.2s ease;
 }
 
-.fi-sidebar-item > .fi-sidebar-item-btn:hover {
+.fi-sidebar-item>.fi-sidebar-item-btn:hover {
     background: var(--primary-500) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     transform: scale(1.04);
 }
 
-.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-sidebar-item-label,
-.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
-.fi-sidebar-item > .fi-sidebar-item-btn:hover .fi-icon {
+.fi-sidebar-item>.fi-sidebar-item-btn:hover .fi-sidebar-item-label,
+.fi-sidebar-item>.fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
+.fi-sidebar-item>.fi-sidebar-item-btn:hover .fi-icon {
     color: #ffffff;
 }
 
 /* Sidebar active/selected state — yellow icon & text */
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+.fi-sidebar-item.fi-active>.fi-sidebar-item-btn {
     background: var(--primary-500);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     border-radius: 0.5rem;
 }
 
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
-.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon {
+.fi-sidebar-item.fi-active>.fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active>.fi-sidebar-item-btn .fi-icon {
     color: var(--brand-yellow);
 }
 
 .fi-section-header {
     border-radius: 0.5rem 0.5rem 0 0;
-    background: linear-gradient(
-        135deg,
-        #03542b 0%,
-        #226443 35%,
-        #237345 65%,
-        #014d26 100%
-    );
+    background: #03522a;
 }
 
 .fi-section-header-heading {
@@ -102,13 +84,7 @@
 }
 
 .fi-ta-header {
-    background: linear-gradient(
-        135deg,
-        #03542b 0%,
-        #226443 35%,
-        #237345 65%,
-        #014d26 100%
-    );
+    background: #03522a;
     border-radius: 0.5rem 0.5rem 0 0;
 }
 
