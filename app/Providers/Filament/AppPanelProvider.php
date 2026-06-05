@@ -32,6 +32,7 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->emailChangeVerification()
+            ->profile()
             ->darkmode(false)
             ->topNavigation()
             ->globalSearch(false)
