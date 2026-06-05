@@ -33,7 +33,7 @@
 
     .profile-banner {
         height: 72px;
-        background: linear-gradient(135deg, #03522a 0%, #056b37 60%, #047a40 100%);
+        background: #03522a;
     }
 
     .profile-body {
@@ -73,7 +73,7 @@
         border: 3px solid white;
         box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
-    
+
     .profile-name {
         font-size: 1.5rem;
         font-weight: 700;
