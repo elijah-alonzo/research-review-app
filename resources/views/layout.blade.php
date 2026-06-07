@@ -320,7 +320,7 @@
 
             <header>
                 <div class="brand">
-                    <img src="/sys-logo.png" alt="SPUP Logo">
+                    <img src="images/sys-spup.png" alt="SPUP Logo">
                 </div>
                 @yield('header_actions')
             </header>

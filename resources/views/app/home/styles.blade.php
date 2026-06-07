@@ -271,6 +271,30 @@
         border-color: rgba(3, 82, 42, 0.2);
     }
 
+    /* ── Profile Actions ── */
+    .profile-actions {
+        width: 100%;
+        margin-top: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .profile-actions form {
+        width: 100%;
+    }
+
+    .logout-btn {
+        color: rgb(220, 38, 38);
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    .logout-btn:hover {
+        background: rgba(220, 38, 38, 0.05);
+        color: rgb(185, 28, 28);
+        border-color: rgba(220, 38, 38, 0.35);
+    }
+
     /* ── Empty State ── */
     .empty-state {
         background: white;

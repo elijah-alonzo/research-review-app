@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         Artisan::call('shield:generate', [
             '--all' => true,
             '--option' => 'permissions',
-            '--panel' => 'app',
+            '--panel' => 'admin',
             '--no-interaction' => true,
             '--quiet' => true,
         ]);

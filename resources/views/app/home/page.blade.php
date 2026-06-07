@@ -42,11 +42,19 @@
                     </div>
                 </div>
 
-                <div style="width: 100%; margin-top: 1.25rem;">
+                <div class="profile-actions">
                     <a href="{{ filament()->getProfileUrl() }}" class="profile-edit-btn">
                         <x-filament::icon icon="heroicon-m-user-circle" class="btn-icon" />
                         Manage Account
                     </a>
+
+                    <form action="{{ filament()->getLogoutUrl() }}" method="POST">
+                        @csrf
+                        <button type="submit" class="profile-edit-btn logout-btn">
+                            <x-filament::icon icon="heroicon-m-arrow-right-on-rectangle" class="btn-icon" />
+                            Sign Out
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

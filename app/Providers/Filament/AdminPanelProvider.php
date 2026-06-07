@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->emailChangeVerification()
             ->sidebarCollapsibleOnDesktop()
             ->profile()
+            ->topbar(false)
             ->darkmode(false)
             ->globalSearch(false)
             ->collapsibleNavigationGroups(false)
@@ -71,7 +72,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->breadcrumbs(false)
             ->font('Figtree')
-            ->brandLogo(asset('sys-logo.png'))
+            ->brandLogo(asset('images/sys-spup.png'))
             ->brandLogoHeight('3rem');
     }
 }
