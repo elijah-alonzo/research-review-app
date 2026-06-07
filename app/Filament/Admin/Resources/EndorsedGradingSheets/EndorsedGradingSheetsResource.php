@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources\EndorsedGradingSheets;
 
 use App\Filament\Admin\Resources\EndorsedGradingSheets\Pages\ListEndorsedGradingSheets;
 use App\Filament\Admin\Resources\EndorsedGradingSheets\Pages\ViewEndorsedGradingSheet;
-use App\Filament\Admin\Resources\EndorsedGradingSheets\Pages\ViewEndorsedGradingSheetDetails;
 use App\Filament\Admin\Resources\EndorsedGradingSheets\Tables\EndorsedGradingSheetsTable;
 use App\Models\Load;
 use BackedEnum;
@@ -78,7 +77,6 @@ class EndorsedGradingSheetsResource extends Resource
         return [
             'index' => ListEndorsedGradingSheets::route('/'),
             'view' => ViewEndorsedGradingSheet::route('/{record}'),
-            'details' => ViewEndorsedGradingSheetDetails::route('/{record}/details'),
         ];
     }
 }

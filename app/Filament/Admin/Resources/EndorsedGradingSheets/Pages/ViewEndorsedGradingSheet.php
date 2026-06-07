@@ -62,16 +62,21 @@ class ViewEndorsedGradingSheet extends ViewRecord
     public function form(Schema $schema): Schema
     {
         return $schema
-            ->columns(1)
+            ->columns(3)
             ->components([
                 View::make('public.progress')
                     ->viewData([
                         'current' => $this->record->grading_sheet_status,
                     ])
                     ->columnSpanFull(),
+                View::make('admin.view.page')
+                    ->viewData([
+                        'record' => $this->record,
+                    ])
+                    ->columnSpan(1),
                 Placeholder::make('grading_sheet_preview')
                     ->label('Grading Sheet Preview')
-                    ->columnSpanFull()
+                    ->columnSpan(2)
                     ->content(fn (Load $record): HtmlString => $this->renderPreview($record)),
             ]);
     }

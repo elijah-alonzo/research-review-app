@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources\GradingSheetApprovals;
 
 use App\Filament\Admin\Resources\GradingSheetApprovals\Pages\ListGradingSheetApprovals;
 use App\Filament\Admin\Resources\GradingSheetApprovals\Pages\ViewGradingSheetApproval;
-use App\Filament\Admin\Resources\GradingSheetApprovals\Pages\ViewGradingSheetApprovalDetails;
 use App\Filament\Admin\Resources\GradingSheetApprovals\Tables\GradingSheetApprovalsTable;
 use App\Models\Load;
 use BackedEnum;
@@ -79,7 +78,6 @@ class GradingSheetApprovalsResource extends Resource
         return [
             'index' => ListGradingSheetApprovals::route('/'),
             'view' => ViewGradingSheetApproval::route('/{record}'),
-            'details' => ViewGradingSheetApprovalDetails::route('/{record}/details'),
         ];
     }
 }

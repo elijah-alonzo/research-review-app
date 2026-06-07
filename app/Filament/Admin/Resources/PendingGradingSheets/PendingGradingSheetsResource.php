@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources\PendingGradingSheets;
 
 use App\Filament\Admin\Resources\PendingGradingSheets\Pages\ListPendingGradingSheets;
 use App\Filament\Admin\Resources\PendingGradingSheets\Pages\ViewPendingGradingSheet;
-use App\Filament\Admin\Resources\PendingGradingSheets\Pages\ViewPendingGradingSheetDetails;
 use App\Filament\Admin\Resources\PendingGradingSheets\Tables\PendingGradingSheetsTable;
 use App\Models\Load;
 use BackedEnum;
@@ -78,7 +77,6 @@ class PendingGradingSheetsResource extends Resource
         return [
             'index' => ListPendingGradingSheets::route('/'),
             'view' => ViewPendingGradingSheet::route('/{record}'),
-            'details' => ViewPendingGradingSheetDetails::route('/{record}/details'),
         ];
     }
 }
