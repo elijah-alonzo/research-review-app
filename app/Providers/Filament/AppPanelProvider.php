@@ -31,7 +31,6 @@ class AppPanelProvider extends PanelProvider
             ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
-            ->topbar(false)
             ->emailChangeVerification()
             ->profile()
             ->darkmode(false)
@@ -61,6 +60,6 @@ class AppPanelProvider extends PanelProvider
             ->breadcrumbs(false)
             ->font('Figtree')
             ->brandLogo(asset('images/sys-logo.png'))
-            ->brandLogoHeight('3rem');
+            ->brandLogoHeight('4rem');
     }
 }

@@ -30,6 +30,10 @@
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
 }
 
+.fi-simple-page .fi-logo {
+    display: none;
+}
+
 .fi-topbar {
     background: #03522a;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
