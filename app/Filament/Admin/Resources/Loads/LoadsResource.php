@@ -38,7 +38,7 @@ class LoadsResource extends Resource
             return false;
         }
 
-        return $user->hasAnyRole(['Dean', 'Staff', 'Registrar'])
+        return $user->hasAnyRole(['Admin', 'Dean', 'Staff', 'Registrar'])
             || $user->can('ManageFacultyLoads');
     }
 

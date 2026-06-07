@@ -36,7 +36,7 @@ class AcademicYearsResource extends Resource
             return false;
         }
 
-        return $user->hasAnyRole(['Dean', 'Staff', 'Registrar']);
+        return $user->hasAnyRole(['Admin', 'Dean', 'Staff', 'Registrar']);
     }
 
     public static function form(Schema $schema): Schema
