@@ -41,6 +41,13 @@
                         <span class="profile-detail-text">{{ $user->program?->name ?? 'Unassigned Program' }}</span>
                     </div>
                 </div>
+
+                <div style="width: 100%; margin-top: 1.25rem;">
+                    <a href="{{ filament()->getProfileUrl() }}" class="profile-edit-btn">
+                        <x-filament::icon icon="heroicon-m-user-circle" class="btn-icon" />
+                        Manage Account
+                    </a>
+                </div>
             </div>
         </div>
     </div>

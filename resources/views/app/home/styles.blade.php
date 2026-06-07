@@ -246,6 +246,31 @@
         border-color: rgb(209, 213, 219);
     }
 
+    .profile-edit-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.825rem;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        transition: all 0.15s ease-in-out;
+        cursor: pointer;
+        text-decoration: none;
+        width: 100%;
+        background: white;
+        border: 1px solid rgb(229, 231, 235);
+        color: rgb(75, 85, 99);
+        box-sizing: border-box;
+    }
+
+    .profile-edit-btn:hover {
+        background: var(--accent-light);
+        color: var(--accent);
+        border-color: rgba(3, 82, 42, 0.2);
+    }
+
     /* ── Empty State ── */
     .empty-state {
         background: white;
